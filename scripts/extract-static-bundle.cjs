@@ -4,16 +4,28 @@ const zlib = require('zlib');
 
 const projectRoot = path.resolve(__dirname, '..');
 const sourceRoot = '/Users/syakir/Project/Prudential BSN Takaful/pru-bsn-client-form/quotation created/design_handoff_prubsn_quotation';
+const yusufSourceRoot = '/Users/syakir/Project/Prudential BSN Takaful/pru-bsn-client-form/quotation created/Yusuf design_handoff_prubsn_quotation';
 
 const pages = [
   {
     source: path.join(sourceRoot, 'prubsn-quotation-prototype.html'),
     output: path.join(projectRoot, 'index.html'),
-    assetDir: 'assets/quotation'
+    assetDir: 'assets/quotation',
+    staticQuotation: true
   },
   {
     source: path.join(sourceRoot, 'client-detail-form.html'),
     output: path.join(projectRoot, 'client-detail-form.html'),
+    assetDir: 'assets/form'
+  },
+  {
+    source: path.join(yusufSourceRoot, 'yusuf-quotation-prototype.html'),
+    output: path.join(projectRoot, 'yusuf', 'index.html'),
+    assetDir: 'assets/quotation'
+  },
+  {
+    source: path.join(yusufSourceRoot, 'yusuf-client-detail-form.html'),
+    output: path.join(projectRoot, 'yusuf', 'yusuf-client-detail-form.html'),
     assetDir: 'assets/form'
   }
 ];
@@ -46,7 +58,8 @@ function writePage(page) {
   let template = JSON.parse(scriptPayload(wrapper, '__bundler/template'));
   const extRaw = scriptPayload(wrapper, '__bundler/ext_resources');
   const externalResources = extRaw.trim() ? JSON.parse(extRaw) : [];
-  const outputAssets = path.join(projectRoot, page.assetDir);
+  const outputRoot = path.dirname(page.output);
+  const outputAssets = path.join(outputRoot, page.assetDir);
   fs.mkdirSync(outputAssets, { recursive: true });
 
   const urls = {};
@@ -74,7 +87,7 @@ function writePage(page) {
   const resourceScript = `<script>window.__resources=${JSON.stringify(resourceMap).replace(/<\//g, '<\\/')};<\/script>`;
   template = template.replace(/<head([^>]*)>/i, `<head$1>${resourceScript}`);
 
-  if (path.basename(page.output) === 'index.html') {
+  if (page.staticQuotation) {
     template = template
       .replace(/<script>window\.__resources=[\s\S]*?<\/script>/i, '')
       .replace(/<script\s+src="assets\/quotation\/[^"]+\.js"><\/script>/i, '')
@@ -115,4 +128,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   console.log(`${path.basename(page.output)}: ${Buffer.byteLength(template)} bytes, ${Object.keys(manifest).length} assets`);
 }
 
-for (const page of pages) writePage(page);
+for (const page of pages) {
+  if (!fs.existsSync(page.source)) {
+    console.log(`Skipped missing source: ${page.source}`);
+    continue;
+  }
+  writePage(page);
+}

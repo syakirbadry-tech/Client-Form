@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html><head><script>window.__resources={"https://unpkg.com/react@18.3.1/umd/react.production.min.js":"assets/form/51c25813-8b18-4c80-a72d-09ec06d2687e.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"assets/form/96706eb7-6a2a-4902-a886-8dcaf65f9548.js"};</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="assets/form/6e2a9a15-ff92-404e-a770-e1060fc8c664.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <style>/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/form/d3e68e98-3ec8-4474-80ce-31067b3e0f37.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/form/8069d3a3-ecd5-4d70-8395-36d904900d8c.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/form/6a3035d7-4a52-4d5c-84db-2f03c00d5f27.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/form/fc5c6b93-07d9-4877-88b1-797ed1b1b266.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/form/547ee957-592c-462b-93e4-e370e0552067.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/form/0bae5b90-4b3e-4a7f-8293-4159bb0dadb0.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/form/f2529dd8-44f5-4f7e-9a42-034f4b26cbda.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/form/d3e68e98-3ec8-4474-80ce-31067b3e0f37.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/form/8069d3a3-ecd5-4d70-8395-36d904900d8c.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/form/6a3035d7-4a52-4d5c-84db-2f03c00d5f27.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/form/fc5c6b93-07d9-4877-88b1-797ed1b1b266.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/form/547ee957-592c-462b-93e4-e370e0552067.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/form/0bae5b90-4b3e-4a7f-8293-4159bb0dadb0.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/form/f2529dd8-44f5-4f7e-9a42-034f4b26cbda.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/form/d3e68e98-3ec8-4474-80ce-31067b3e0f37.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/form/8069d3a3-ecd5-4d70-8395-36d904900d8c.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/form/6a3035d7-4a52-4d5c-84db-2f03c00d5f27.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/form/fc5c6b93-07d9-4877-88b1-797ed1b1b266.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/form/547ee957-592c-462b-93e4-e370e0552067.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/form/0bae5b90-4b3e-4a7f-8293-4159bb0dadb0.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/form/f2529dd8-44f5-4f7e-9a42-034f4b26cbda.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/form/d3e68e98-3ec8-4474-80ce-31067b3e0f37.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/form/8069d3a3-ecd5-4d70-8395-36d904900d8c.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/form/6a3035d7-4a52-4d5c-84db-2f03c00d5f27.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/form/fc5c6b93-07d9-4877-88b1-797ed1b1b266.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/form/547ee957-592c-462b-93e4-e370e0552067.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/form/0bae5b90-4b3e-4a7f-8293-4159bb0dadb0.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/form/f2529dd8-44f5-4f7e-9a42-034f4b26cbda.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/form/cc3a5a07-7381-4dd3-9609-c2b96ebb9372.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/form/fa704650-d956-489b-8738-b25f804c8c2e.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/form/fb50acc1-998d-49a8-9fb6-06558266e2de.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/form/f37a7fe2-5c65-4f63-84f9-7bdc7b703ce7.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/form/cc3a5a07-7381-4dd3-9609-c2b96ebb9372.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/form/fa704650-d956-489b-8738-b25f804c8c2e.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/form/fb50acc1-998d-49a8-9fb6-06558266e2de.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/form/f37a7fe2-5c65-4f63-84f9-7bdc7b703ce7.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+  <style>
+    body { margin: 0; background: linear-gradient(160deg, #FBF2F5 0%, #F7F3F0 45%, #EFF7F6 100%); font-family: 'Inter', sans-serif; }
+    input, select, textarea { font-family: 'Inter', sans-serif; }
+    input:focus, select:focus, textarea:focus { outline: 2px solid #178D93; outline-offset: 1px; }
+    a { color: #178D93; }
+    a:hover { color: #0F6368; }
+    @keyframes fadeSlide { from { opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
+    .om-step-panel { animation: fadeSlide .35s ease; }
+  </style>
+</helmet>
+
+<div style="{{ outerWrapStyle }}">
+  <div style="width:100%; max-width:1060px;">
+
+    <div style="{{ headerStyle }}">
+      <div style="position:absolute; top:-40px; right:-40px; width:160px; height:160px; border-radius:50%; background:rgba(255,255,255,0.25);"></div>
+      <div style="position:relative; font-family:'Playfair Display', serif; font-weight:700; font-size:29px; color:#C9A227; letter-spacing:0.5px;">ASG ANSAR GROUP</div>
+      <div style="position:relative; font-size:15px; font-weight:700; color:#178D93; margin-top:6px;">PruBSN AnugerahMax</div>
+      <div style="position:relative; font-size:13.5px; color:#79736c; margin-top:10px;">Client Registration Form</div>
+
+      <div style="position:relative; max-width:480px; margin:22px auto 0; height:6px; background:rgba(255,255,255,0.6); border-radius:99px; overflow:hidden;">
+        <div style="height:100%; background:#178D93; border-radius:99px; transition:width .4s ease; width:{{ progressPct }};"></div>
+      </div>
+    </div>
+
+    <div style="{{ formCardStyle }}" data-screen-label="form">
+
+      <div style="{{ sidebarStyle }}">
+        <sc-for list="{{ stepList }}" as="s" hint-placeholder-count="7">
+          <div sc-camel-on-click="{{ s.goTo }}" style="{{ s.navStyle }}">
+            <div style="{{ s.dotStyle }}">{{ s.dotLabel }}</div>
+            <div style="{{ s.labelStyle }}">{{ s.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="{{ contentPaneStyle }}">
+
+        <sc-if value="{{ success }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:16px;">
+            <div style="width:64px; height:64px; border-radius:50%; background:#178D93; color:#fff; display:flex; align-items:center; justify-content:center; font-size:32px; box-shadow:0 8px 24px rgba(23,141,147,0.35);">✓</div>
+            <div style="font-family:'Playfair Display', serif; font-weight:700; font-size:26px; color:#178D93;">Application Submitted</div>
+            <div style="font-size:14.5px; color:#6B6560; max-width:400px; line-height:1.6;">Thank you, {{ submittedName }}. Your registration has been received and saved. Our team will reach out shortly to complete your {{ submittedPlan }} enrollment.</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ notSuccess }}" hint-placeholder-val="{{ true }}">
+          <div style="font-size:12.5px; font-weight:600; color:#C9A227; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:4px;">Step {{ stepNumber }} of 7</div>
+          <div style="font-family:'Playfair Display', serif; font-weight:700; font-size:27px; color:#178D93; margin-bottom:22px;">{{ currentStepLabel }}</div>
+
+          <sc-if value="{{ errorMsg }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FDEAEA; color:#B3261E; padding:11px 15px; border-radius:9px; font-size:13.5px; margin-bottom:18px;">{{ errorMsg }}</div>
+          </sc-if>
+
+          <div style="flex:1;" class="om-step-panel" key="{{ stepNumber }}">
+
+            <sc-if value="{{ step0 }}" hint-placeholder-val="{{ false }}">
+              <div style="{{ gridStyle }}">
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Full Name *</span>
+                  <input name="fullName" value="{{ data.fullName }}" sc-camel-on-change="{{ onChange }}" placeholder="Enter your full name" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">NRIC *</span>
+                  <input name="nric" value="{{ data.nric }}" sc-camel-on-change="{{ onChange }}" placeholder="e.g., 900101-01-1234" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Date of Birth *</span>
+                  <input type="date" name="dob" value="{{ data.dob }}" sc-camel-on-change="{{ onChange }}" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Gender *</span>
+                  <sc-raw-select name="gender" value="{{ data.gender }}" sc-camel-on-change="{{ onChange }}" style="{{ inputStyle }}">
+                    <option value="">Select an option</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </sc-raw-select>
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Race *</span>
+                  <sc-raw-select name="race" value="{{ data.race }}" sc-camel-on-change="{{ onChange }}" style="{{ inputStyle }}">
+                    <option value="">Select an option</option>
+                    <option value="Malay">Malay</option>
+                    <option value="Chinese">Chinese</option>
+                    <option value="Indian">Indian</option>
+                    <option value="Others">Others</option>
+                  </sc-raw-select>
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Religion *</span>
+                  <sc-raw-select name="religion" value="{{ data.religion }}" sc-camel-on-change="{{ onChange }}" style="{{ inputStyle }}">
+                    <option value="">Select an option</option>
+                    <option value="Islam">Islam</option>
+                    <option value="Christianity">Christianity</option>
+                    <option value="Buddhism">Buddhism</option>
+                    <option value="Hinduism">Hinduism</option>
+                    <option value="Others">Others</option>
+                  </sc-raw-select>
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Email *</span>
+                  <input type="email" name="email" value="{{ data.email }}" sc-camel-on-change="{{ onChange }}" placeholder="your.email@example.com" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Phone Number *</span>
+                  <input name="phone" value="{{ data.phone }}" sc-camel-on-change="{{ onChange }}" placeholder="+60 12-345 6789" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px; grid-column:1 / -1;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Residential Address *</span>
+                  <textarea name="address" value="{{ data.address }}" sc-camel-on-change="{{ onChange }}" placeholder="Enter your full residential address" rows="3" style="{{ textareaStyle }}"></textarea>
+                </label>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ step1 }}" hint-placeholder-val="{{ false }}">
+              <div style="{{ gridStyle }}">
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Employment Type *</span>
+                  <sc-raw-select name="employmentType" value="{{ data.employmentType }}" sc-camel-on-change="{{ onChange }}" style="{{ inputStyle }}">
+                    <option value="">Select an option</option>
+                    <option value="Employee">Employee</option>
+                    <option value="Self-employed">Self-employed</option>
+                    <option value="Business Owner">Business Owner</option>
+                  </sc-raw-select>
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Occupation *</span>
+                  <input name="occupation" value="{{ data.occupation }}" sc-camel-on-change="{{ onChange }}" placeholder="Your job title" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Field of Work</span>
+                  <input name="fieldOfWork" value="{{ data.fieldOfWork }}" sc-camel-on-change="{{ onChange }}" placeholder="e.g., Finance, Healthcare" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Employer's Name</span>
+                  <input name="employerName" value="{{ data.employerName }}" sc-camel-on-change="{{ onChange }}" placeholder="Company name" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Monthly Income (RM) *</span>
+                  <input type="number" name="monthlyIncome" value="{{ data.monthlyIncome }}" sc-camel-on-change="{{ onChange }}" placeholder="5000" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px; grid-column:1 / -1;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Work Place Address</span>
+                  <textarea name="workAddress" value="{{ data.workAddress }}" sc-camel-on-change="{{ onChange }}" placeholder="Enter your workplace address" rows="3" style="{{ textareaStyle }}"></textarea>
+                </label>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ step2 }}" hint-placeholder-val="{{ false }}">
+              <div style="{{ gridStyle }}">
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Marital Status *</span>
+                  <sc-raw-select name="maritalStatus" value="{{ data.maritalStatus }}" sc-camel-on-change="{{ onChange }}" style="{{ inputStyle }}">
+                    <option value="">Select an option</option>
+                    <option value="Single">Single</option>
+                    <option value="Married">Married</option>
+                    <option value="Divorced">Divorced</option>
+                    <option value="Widowed">Widowed</option>
+                  </sc-raw-select>
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Spouse Name</span>
+                  <input name="spouseName" value="{{ data.spouseName }}" sc-camel-on-change="{{ onChange }}" placeholder="Spouse's full name" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Spouse NRIC</span>
+                  <input name="spouseNric" value="{{ data.spouseNric }}" sc-camel-on-change="{{ onChange }}" placeholder="Spouse's NRIC" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Number of Children</span>
+                  <input type="number" name="numChildren" value="{{ data.numChildren }}" sc-camel-on-change="{{ onChange }}" placeholder="0" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px; grid-column:1 / -1;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Children Details</span>
+                  <textarea name="childrenDetails" value="{{ data.childrenDetails }}" sc-camel-on-change="{{ onChange }}" placeholder="Name, age, and other details of your children" rows="3" style="{{ textareaStyle }}"></textarea>
+                </label>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ step3 }}" hint-placeholder-val="{{ false }}">
+              <div style="{{ gridStyle }}">
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Height (cm) *</span>
+                  <input type="number" name="height" value="{{ data.height }}" sc-camel-on-change="{{ onChange }}" placeholder="170" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Weight (kg) *</span>
+                  <input type="number" name="weight" value="{{ data.weight }}" sc-camel-on-change="{{ onChange }}" placeholder="70" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px; grid-column:1 / -1;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Smoking Status *</span>
+                  <sc-raw-select name="smokingStatus" value="{{ data.smokingStatus }}" sc-camel-on-change="{{ onChange }}" style="{{ inputStyle }}">
+                    <option value="">Select an option</option>
+                    <option value="Non-smoker">Non-smoker</option>
+                    <option value="Smoker">Smoker</option>
+                    <option value="Former Smoker">Former Smoker</option>
+                  </sc-raw-select>
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px; grid-column:1 / -1;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Pre-existing Medical Conditions</span>
+                  <textarea name="preExisting" value="{{ data.preExisting }}" sc-camel-on-change="{{ onChange }}" placeholder="List any pre-existing conditions (e.g., diabetes, hypertension)" rows="2" style="{{ textareaStyle }}"></textarea>
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px; grid-column:1 / -1;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Current Medications</span>
+                  <textarea name="medications" value="{{ data.medications }}" sc-camel-on-change="{{ onChange }}" placeholder="List any medications you are currently taking" rows="2" style="{{ textareaStyle }}"></textarea>
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px; grid-column:1 / -1;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Allergies</span>
+                  <textarea name="allergies" value="{{ data.allergies }}" sc-camel-on-change="{{ onChange }}" placeholder="List any known allergies" rows="2" style="{{ textareaStyle }}"></textarea>
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px; grid-column:1 / -1;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Previous Surgery/Hospitalization</span>
+                  <textarea name="surgery" value="{{ data.surgery }}" sc-camel-on-change="{{ onChange }}" placeholder="Details of any previous surgeries or hospitalizations" rows="2" style="{{ textareaStyle }}"></textarea>
+                </label>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ step4 }}" hint-placeholder-val="{{ false }}">
+              <div style="{{ planGridStyle }}">
+                <div sc-camel-on-click="{{ selectEssential }}" style="{{ essentialCardStyle }}">
+                  <sc-if value="{{ isEssential }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:absolute; top:12px; right:14px; width:22px; height:22px; border-radius:50%; background:#178D93; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px;">✓</div>
+                  </sc-if>
+                  <div style="font-family:'Playfair Display', serif; font-weight:700; font-size:19px; color:#178D93;">PruBSN AnugerahMax</div>
+                  <div style="font-size:25px; font-weight:700; color:#C9A227; margin-top:8px;">RM 290<span style="font-size:13px; color:#6B6560; font-weight:500;">/month</span></div>
+                  <div style="font-size:13px; color:#6B6560; margin-top:6px;">Family Takaful — 20-year term</div>
+                  <div style="font-size:12.5px; color:#3d3a37; margin-top:14px; line-height:1.9;">
+                    ✓ RM 200/day hospital room<br>
+                    ✓ RM 200,000 annual limit, doubles to RM 400K<br>
+                    ✓ No lifetime limit<br>
+                    ✓ RM 4,000 death/TPD benefit
+                  </div>
+                </div>
+                <div sc-camel-on-click="{{ selectPlatinum }}" style="{{ platinumCardStyle }}">
+                  <sc-if value="{{ isPlatinum }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:absolute; top:12px; right:14px; width:22px; height:22px; border-radius:50%; background:#178D93; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px;">✓</div>
+                  </sc-if>
+                  <div style="position:absolute; top:12px; left:14px; background:#C9A227; color:#fff; font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:99px; letter-spacing:0.4px;">INVESTMENT-LINKED</div>
+                  <div style="font-family:'Playfair Display', serif; font-weight:700; font-size:19px; color:#178D93; margin-top:10px;">PruBSN Asas360</div>
+                  <div style="font-size:25px; font-weight:700; color:#C9A227; margin-top:8px;">RM 337<span style="font-size:13px; color:#6B6560; font-weight:500;">/month</span></div>
+                  <div style="font-size:13px; color:#6B6560; margin-top:6px;">Investment-Linked — 59-year term</div>
+                  <div style="font-size:12.5px; color:#3d3a37; margin-top:14px; line-height:1.9;">
+                    ✓ RM 200/day hospital room<br>
+                    ✓ No annual limit — RM 1,000,000 Smart Value Point<br>
+                    ✓ 80/20 split beyond SVP<br>
+                    ✓ RM 25,000 death/TPD + cash value
+                  </div>
+                </div>
+              </div>
+
+              <div style="font-family:'Playfair Display', serif; font-weight:700; font-size:17px; color:#178D93; margin-bottom:16px;">Beneficiary Information</div>
+              <div style="{{ gridStyle }}">
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Beneficiary Name *</span>
+                  <input name="beneficiaryName" value="{{ data.beneficiaryName }}" sc-camel-on-change="{{ onChange }}" placeholder="Full name of beneficiary" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Beneficiary NRIC *</span>
+                  <input name="beneficiaryNric" value="{{ data.beneficiaryNric }}" sc-camel-on-change="{{ onChange }}" placeholder="Beneficiary's NRIC" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Relationship *</span>
+                  <input name="beneficiaryRelationship" value="{{ data.beneficiaryRelationship }}" sc-camel-on-change="{{ onChange }}" placeholder="e.g., Spouse, Parent, Child" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Benefit Weightage (%) *</span>
+                  <input type="number" name="benefitWeightage" value="{{ data.benefitWeightage }}" sc-camel-on-change="{{ onChange }}" placeholder="100" style="{{ inputStyle }}">
+                </label>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ step5 }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#FBF2E9; border:1px solid #F0DCC4; border-radius:10px; padding:14px 16px; font-size:13px; color:#7a5a1f; margin-bottom:22px;">
+                <b>Note:</b> All document uploads are required. Please ensure your files are clear and legible. Accepted formats: PDF, PNG, HEIC, JPG.
+              </div>
+              <div style="display:flex; flex-direction:column; gap:18px;">
+                <sc-for list="{{ uploadFields }}" as="u" hint-placeholder-count="3">
+                  <label style="border:2px dashed #B9DEE0; border-radius:12px; padding:22px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; cursor:pointer; background:#FAFEFE; text-align:center;">
+                    <div style="font-size:13.5px; font-weight:700; color:#178D93;">{{ u.label }} *</div>
+                    <div style="{{ u.iconStyle }}">{{ u.icon }}</div>
+                    <div style="font-size:12.5px; color:#8a857f;">{{ u.filename }}</div>
+                    <input type="file" name="{{ u.name }}" sc-camel-on-change="{{ onFileChange }}" accept=".pdf,.png,.jpg,.jpeg,.heic" style="display:none;">
+                  </label>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ step6 }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#FBF2E9; border:1px solid #F0DCC4; border-radius:10px; padding:14px 16px; font-size:13px; color:#7a5a1f; margin-bottom:22px;">
+                <b>Note:</b> Your bank details will be used for premium deductions and claim payments. Please ensure the information is accurate.
+              </div>
+              <div style="{{ gridStyle }}">
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Bank Name *</span>
+                  <input name="bankName" value="{{ data.bankName }}" sc-camel-on-change="{{ onChange }}" placeholder="e.g., Maybank, CIMB, Public Bank" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Account Number *</span>
+                  <input name="accountNumber" value="{{ data.accountNumber }}" sc-camel-on-change="{{ onChange }}" placeholder="Your bank account number" style="{{ inputStyle }}">
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px; grid-column:1 / -1;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Account Holder Name *</span>
+                  <input name="accountHolderName" value="{{ data.accountHolderName }}" sc-camel-on-change="{{ onChange }}" placeholder="Name as shown on bank account" style="{{ inputStyle }}">
+                </label>
+              </div>
+
+              <div style="background:#F2FAFA; border-radius:12px; padding:18px 20px; margin-bottom:8px;">
+                <div style="font-size:13px; font-weight:700; color:#178D93; margin-bottom:8px;">Summary</div>
+                <div style="font-size:13px; color:#3d3a37; line-height:1.8;">
+                  Applicant: {{ data.fullName }}<br>
+                  Plan: {{ selectedPlanLabel }}<br>
+                  Monthly Premium: {{ selectedPlanPriceLabel }}
+                </div>
+              </div>
+            </sc-if>
+
+          </div>
+
+          <div style="{{ footerNavStyle }}">
+            <button sc-camel-on-click="{{ goPrev }}" disabled="{{ isFirstStep }}" style="{{ prevButtonStyle }}">← Previous</button>
+            <sc-if value="{{ isLastStep }}" hint-placeholder-val="{{ false }}">
+              <button sc-camel-on-click="{{ submitForm }}" disabled="{{ submitting }}" style="{{ submitButtonStyle }}">{{ submitLabel }}</button>
+            </sc-if>
+            <sc-if value="{{ notLastStep }}" hint-placeholder-val="{{ true }}">
+              <button sc-camel-on-click="{{ goNext }}" style="{{ nextButtonStyle }}">Next →</button>
+            </sc-if>
+          </div>
+        </sc-if>
+
+      </div>
+    </div>
+
+    <div style="text-align:center; font-size:12px; color:#a19c96; margin-top:22px; line-height:1.8;">
+      © 2024 ASG ANSAR GROUP | Alor Setar, Kedah<br>
+      PruBSN AnugerahMax – Professional Insurance Solutions
+    </div>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script="">
+const STEP_LABELS = [
+  'Personal Information',
+  'Employment Details',
+  'Family Information',
+  'Medical History',
+  'Plan Selection',
+  'Documents Upload',
+  'Bank Details'
+];
+
+const SUBMIT_URL = 'https://prubsn-submission-service.syakirbadry.workers.dev/submit';
+
+function deriveDobFromNric(digits) {
+  if (digits.length !== 6) return null;
+  const yy = parseInt(digits.slice(0, 2), 10);
+  const mm = parseInt(digits.slice(2, 4), 10);
+  const dd = parseInt(digits.slice(4, 6), 10);
+  if (mm < 1 || mm > 12 || dd < 1 || dd > 31) return null;
+  const currentYY = new Date().getFullYear() % 100;
+  const century = yy <= currentYY ? 2000 : 1900;
+  const year = century + yy;
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${year}-${pad(mm)}-${pad(dd)}`;
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+class Component extends DCLogic {
+  state = {
+    step: 0,
+    data: {
+      fullName: '', nric: '', dob: '', gender: '', race: '', religion: '', email: '', phone: '', address: '',
+      employmentType: '', occupation: '', fieldOfWork: '', employerName: '', monthlyIncome: '', workAddress: '',
+      maritalStatus: '', spouseName: '', spouseNric: '', numChildren: '', childrenDetails: '',
+      height: '', weight: '', smokingStatus: '', preExisting: '', medications: '', allergies: '', surgery: '',
+      plan: '',
+      beneficiaryName: '', beneficiaryNric: '', beneficiaryRelationship: '', benefitWeightage: '',
+      bankName: '', accountNumber: '', accountHolderName: ''
+    },
+    files: { nricFront: null, nricRear: null, selfie: null },
+    errorMsg: '',
+    submitting: false,
+    success: false,
+    submittedName: '',
+    submittedPlan: '',
+    isMobile: (typeof window !== 'undefined' && window.innerWidth <= 700)
+  };
+
+  componentDidMount() {
+    this._onResize = () => this.setState({ isMobile: window.innerWidth <= 700 });
+    window.addEventListener('resize', this._onResize);
+  }
+
+  componentWillUnmount() {
+    if (this._onResize) window.removeEventListener('resize', this._onResize);
+  }
+
+  onChange = (e) => {
+    const { name, value } = e.target;
+    if (name === 'nric') {
+      const digits = value.replace(/\D/g, '').slice(0, 6);
+      const dob = deriveDobFromNric(digits);
+      this.setState(s => ({
+        data: { ...s.data, nric: value, ...(dob ? { dob } : {}) },
+        errorMsg: ''
+      }));
+      return;
+    }
+    this.setState(s => ({ data: { ...s.data, [name]: value }, errorMsg: '' }));
+  };
+
+  onFileChange = (e) => {
+    const { name, files } = e.target;
+    if (files && files[0]) {
+      this.setState(s => ({ files: { ...s.files, [name]: files[0] }, errorMsg: '' }));
+    }
+  };
+
+  selectEssential = () => this.setState(s => ({ data: { ...s.data, plan: 'PruBSN AnugerahMax' } }));
+  selectPlatinum = () => this.setState(s => ({ data: { ...s.data, plan: 'PruBSN Asas360' } }));
+
+  validateStep(step, data, files) {
+    const req = (fields) => fields.every(f => String(data[f] || '').trim() !== '');
+    if (step === 0) return req(['fullName','nric','dob','gender','race','religion','email','phone','address']) || 'Please fill all required fields.';
+    if (step === 1) return req(['employmentType','occupation','monthlyIncome']) || 'Please fill all required fields.';
+    if (step === 2) return req(['maritalStatus']) || 'Please fill all required fields.';
+    if (step === 3) return req(['height','weight','smokingStatus']) || 'Please fill all required fields.';
+    if (step === 4) return (data.plan && req(['beneficiaryName','beneficiaryNric','beneficiaryRelationship','benefitWeightage'])) || 'Please select a plan and complete beneficiary information.';
+    if (step === 5) return !!(files.nricFront && files.nricRear && files.selfie) || 'Please upload all required documents.';
+    if (step === 6) return req(['bankName','accountNumber','accountHolderName']) || 'Please fill all required fields.';
+    return true;
+  }
+
+  goNext = () => {
+    const check = this.validateStep(this.state.step, this.state.data, this.state.files);
+    if (check !== true) { this.setState({ errorMsg: check }); return; }
+    this.setState(s => ({ step: Math.min(6, s.step + 1), errorMsg: '' }));
+  };
+
+  goPrev = () => {
+    this.setState(s => ({ step: Math.max(0, s.step - 1), errorMsg: '' }));
+  };
+
+  goToStep = (idx) => {
+    if (idx <= this.state.step) this.setState({ step: idx, errorMsg: '' });
+  };
+
+  submitForm = async () => {
+    const check = this.validateStep(6, this.state.data, this.state.files);
+    if (check !== true) { this.setState({ errorMsg: check }); return; }
+    this.setState({ submitting: true, errorMsg: '' });
+    const d = this.state.data;
+    const planPrice = d.plan === 'PruBSN Asas360' ? 337 : 290;
+
+    try {
+      const documents = {};
+      const fileFields = [['nricFront', this.state.files.nricFront], ['nricRear', this.state.files.nricRear], ['selfie', this.state.files.selfie]];
+      for (const [key, file] of fileFields) {
+        if (!file) continue;
+        documents[key] = {
+          base64: await fileToBase64(file),
+          mimeType: file.type || 'application/octet-stream',
+          filename: file.name || key
+        };
+      }
+
+      const payload = {
+        version: '1.2',
+        metadata: {
+          submissionId: (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : `sub-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+          submittedAt: new Date().toISOString()
+        },
+        applicant: {
+          fullName: d.fullName,
+          nric: d.nric,
+          dateOfBirth: d.dob,
+          gender: d.gender,
+          race: d.race,
+          religion: d.religion,
+          email: d.email,
+          mobileNumber: d.phone,
+          address: d.address,
+          occupation: d.occupation
+        },
+        employment: {
+          employmentType: d.employmentType,
+          fieldOfWork: d.fieldOfWork,
+          employerName: d.employerName,
+          workAddress: d.workAddress,
+          monthlyIncome: Number(d.monthlyIncome) || 0
+        },
+        family: {
+          maritalStatus: d.maritalStatus,
+          spouseName: d.spouseName,
+          spouseNric: d.spouseNric,
+          numChildren: Number(d.numChildren) || 0,
+          childrenDetails: d.childrenDetails
+        },
+        medicalHistory: {
+          preExistingConditions: d.preExisting,
+          currentMedications: d.medications,
+          allergies: d.allergies,
+          previousSurgeryOrHospitalisation: d.surgery,
+          smokingStatus: d.smokingStatus,
+          height: Number(d.height) || 0,
+          weight: Number(d.weight) || 0
+        },
+        beneficiaries: [{
+          name: d.beneficiaryName,
+          nric: d.beneficiaryNric,
+          relationship: d.beneficiaryRelationship,
+          percentage: Number(d.benefitWeightage) || 0
+        }],
+        selectedPlan: d.plan,
+        selectedPlanDetails: {
+          monthlyContribution: `RM ${planPrice.toFixed(2)}`
+        },
+        bank: {
+          bankName: d.bankName,
+          accountNumber: d.accountNumber,
+          accountHolderName: d.accountHolderName
+        },
+        documents
+      };
+
+      const res = await fetch(SUBMIT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok || !result.success) {
+        throw new Error(result.error || 'Failed to submit your application.');
+      }
+
+      this.setState({ submitting: false, success: true, submittedName: d.fullName, submittedPlan: d.plan });
+    } catch (err) {
+      this.setState({ submitting: false, errorMsg: err.message || 'Something went wrong submitting your application.' });
+    }
+  };
+
+  renderVals() {
+    const s = this.state;
+    const step = s.step;
+
+    const isMobile = s.isMobile;
+
+    const inputStyle = { width: '100%', boxSizing: 'border-box', padding: '11px 13px', borderRadius: '9px', border: '1.5px solid #E4DED8', fontSize: '16px', color: '#2c2a28', background: '#fff' };
+    const textareaStyle = { ...inputStyle, resize: 'vertical', fontFamily: 'inherit' };
+
+    const gridStyle = { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '14px' : '20px' };
+    const planGridStyle = { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '16px', marginBottom: isMobile ? '20px' : '26px' };
+    const planCardBase = { border: '2px solid #e8e2d8', borderRadius: '12px', padding: '20px 22px', position: 'relative', cursor: 'pointer', transition: 'all .2s ease', background: '#fff' };
+    const essentialCardStyle = s.data.plan === 'PruBSN AnugerahMax' ? { ...planCardBase, border: '2px solid #178D93', background: '#F2FAFA', boxShadow: '0 6px 18px rgba(23,141,147,0.15)' } : planCardBase;
+    const platinumCardStyle = s.data.plan === 'PruBSN Asas360' ? { ...planCardBase, border: '2px solid #178D93', background: '#F2FAFA', boxShadow: '0 6px 18px rgba(23,141,147,0.15)' } : planCardBase;
+
+    const outerWrapStyle = { minHeight: '100vh', display: 'flex', justifyContent: 'center', padding: isMobile ? '14px 8px' : '32px 16px', boxSizing: 'border-box' };
+    const headerStyle = { background: 'linear-gradient(120deg, #F2D3E2 0%, #F6E1D8 100%)', borderRadius: '18px 18px 0 0', padding: isMobile ? '26px 18px 20px' : '38px 32px 30px', textAlign: 'center', position: 'relative', overflow: 'hidden' };
+    const formCardStyle = { background: '#ffffff', borderRadius: '0 0 18px 18px', boxShadow: '0 12px 36px rgba(23,141,147,0.10)', display: 'flex', flexDirection: isMobile ? 'column' : 'row', minHeight: isMobile ? 'auto' : '540px' };
+    const sidebarStyle = isMobile
+      ? { width: '100%', flexShrink: 0, background: '#FBF2F5', borderRadius: '0', padding: '10px 8px', boxSizing: 'border-box', display: 'flex', flexDirection: 'row', gap: '6px', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }
+      : { width: '230px', flexShrink: 0, background: '#FBF2F5', borderRadius: '0 0 0 18px', padding: '22px 14px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: '6px' };
+    const contentPaneStyle = { flex: 1, padding: isMobile ? '22px 18px' : '38px 42px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', minWidth: 0 };
+    const footerNavStyle = { display: 'flex', flexDirection: isMobile ? 'column-reverse' : 'row', justifyContent: 'space-between', gap: isMobile ? '10px' : '0', marginTop: isMobile ? '22px' : '30px', paddingTop: isMobile ? '16px' : '22px', borderTop: '1px solid #F0EBE6' };
+
+    const stepList = STEP_LABELS.map((label, i) => {
+      const active = i === step;
+      const done = i < step;
+      const clickable = i <= step;
+      return {
+        label,
+        goTo: () => this.goToStep(i),
+        navStyle: isMobile ? {
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', padding: '7px 9px', borderRadius: '10px',
+          cursor: clickable ? 'pointer' : 'default', minWidth: '62px', flexShrink: 0,
+          background: active ? '#178D93' : (done ? '#F3E7D3' : 'transparent'),
+          color: active ? '#fff' : (done ? '#8a6d1f' : '#8a857f'),
+          transition: 'all .2s ease'
+        } : {
+          display: 'flex', alignItems: 'center', gap: '10px', padding: '11px 10px', borderRadius: '10px',
+          cursor: clickable ? 'pointer' : 'default',
+          background: active ? '#178D93' : (done ? '#F3E7D3' : 'transparent'),
+          color: active ? '#fff' : (done ? '#8a6d1f' : '#8a857f'),
+          transition: 'all .2s ease'
+        },
+        dotStyle: {
+          width: '24px', height: '24px', borderRadius: '50%', flexShrink: 0, fontSize: '11px', fontWeight: 700,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: active ? 'rgba(255,255,255,0.25)' : (done ? '#E9C46A' : '#EFE9E3'),
+          color: active ? '#fff' : (done ? '#fff' : '#a19c96')
+        },
+        dotLabel: done ? '✓' : String(i + 1),
+        labelStyle: isMobile
+          ? { fontSize: '9.5px', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '62px', textAlign: 'center' }
+          : { fontSize: '13.5px', fontWeight: 600 }
+      };
+    });
+
+
+    const uploadFields = [
+      { name: 'nricFront', label: 'NRIC Front Photo', file: s.files.nricFront },
+      { name: 'nricRear', label: 'NRIC Rear Photo', file: s.files.nricRear },
+      { name: 'selfie', label: 'Selfie with IC Photo', file: s.files.selfie }
+    ].map(u => ({
+      name: u.name,
+      label: u.label,
+      icon: u.file ? '✓' : '+',
+      iconStyle: {
+        width: '38px', height: '38px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: u.file ? '#178D93' : '#E9F5F5', color: u.file ? '#fff' : '#178D93', fontSize: '18px', fontWeight: 700
+      },
+      filename: u.file ? u.file.name : 'Click to upload — PDF, PNG, or HEIC'
+    }));
+
+    const baseBtn = { padding: '11px 22px', borderRadius: '9px', fontSize: '14px', fontWeight: 700, border: 'none', cursor: 'pointer' };
+
+    return {
+      stepList,
+      stepNumber: step + 1,
+      currentStepLabel: STEP_LABELS[step],
+      progressPct: `${Math.round(((step + 1) / 7) * 100)}%`,
+      step0: step === 0, step1: step === 1, step2: step === 2, step3: step === 3,
+      step4: step === 4, step5: step === 5, step6: step === 6,
+      data: s.data,
+      onChange: this.onChange,
+      onFileChange: this.onFileChange,
+      inputStyle, textareaStyle,
+      errorMsg: s.errorMsg,
+      uploadFields,
+      isFirstStep: step === 0,
+      isLastStep: step === 6,
+      notLastStep: step !== 6,
+      goPrev: this.goPrev,
+      goNext: this.goNext,
+      submitForm: this.submitForm,
+      submitting: s.submitting,
+      submitLabel: s.submitting ? 'Submitting…' : 'Submit Application',
+      prevButtonStyle: { ...baseBtn, width: isMobile ? '100%' : 'auto', textAlign: 'center', background: '#F3F0ED', color: step === 0 ? '#c7c2bc' : '#6B6560', cursor: step === 0 ? 'not-allowed' : 'pointer' },
+      nextButtonStyle: { ...baseBtn, width: isMobile ? '100%' : 'auto', textAlign: 'center', background: '#178D93', color: '#fff' },
+      submitButtonStyle: { ...baseBtn, width: isMobile ? '100%' : 'auto', textAlign: 'center', background: '#C9A227', color: '#fff', opacity: s.submitting ? 0.7 : 1 },
+      selectEssential: this.selectEssential,
+      selectPlatinum: this.selectPlatinum,
+      isEssential: s.data.plan === 'PruBSN AnugerahMax',
+      isPlatinum: s.data.plan === 'PruBSN Asas360',
+      essentialCardStyle, platinumCardStyle,
+      selectedPlanLabel: s.data.plan || '—',
+      selectedPlanPriceLabel: s.data.plan === 'PruBSN Asas360' ? 'RM 337/month' : (s.data.plan === 'PruBSN AnugerahMax' ? 'RM 290/month' : '—'),
+      success: s.success,
+      notSuccess: !s.success,
+      submittedName: s.submittedName,
+      submittedPlan: s.submittedPlan,
+      outerWrapStyle, headerStyle, formCardStyle, sidebarStyle, contentPaneStyle, footerNavStyle,
+      gridStyle, planGridStyle
+    };
+  }
+}
+</script>
+
+
+</body></html>
