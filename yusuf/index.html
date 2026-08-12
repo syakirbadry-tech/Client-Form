@@ -1,438 +1,20 @@
 <!DOCTYPE html>
-<html><head><script>window.__resources={"https://unpkg.com/react@18.3.1/umd/react.production.min.js":"assets/quotation/bea624eb-31de-4f45-8506-7539ce330d58.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"assets/quotation/0374e262-0b1e-4f6b-bc79-666383eb248e.js"};</script>
+<html><head><style>
+#compare-grid{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr)!important;width:100%;max-width:100%;}
+#compare-grid>div{min-width:0;overflow-wrap:anywhere;word-break:break-word;hyphens:auto;}
+@media(max-width:380px){#compare-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) minmax(0,1fr)!important;}}
+</style><script>window.__resources={"https://unpkg.com/react@18.3.1/umd/react.production.min.js":"assets/quotation/09c9e363-b053-49a0-80ec-a310db10680e.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"assets/quotation/45fb6cb1-fcba-4b37-89bc-f08c1dbcd364.js"};</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<script src="assets/quotation/9433a0b5-e744-4b2d-8a27-a9999f058887.js"></script>
+<script src="assets/quotation/e95d3e24-fafd-4526-ba17-d6fc39ec8863.js"></script>
 </head>
 <body>
 <x-dc>
+
+
+
 <helmet>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <style>/* cyrillic-ext */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("assets/quotation/3fa37810-6a63-4c27-a969-48f8484cb010.woff2") format('woff2');
-  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
-}
-/* cyrillic */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("assets/quotation/eacbd0ee-9546-44a5-b3a4-3c6e56517052.woff2") format('woff2');
-  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-}
-/* greek-ext */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("assets/quotation/580fa0f6-5be9-42d7-8e45-e979347b7859.woff2") format('woff2');
-  unicode-range: U+1F00-1FFF;
-}
-/* greek */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("assets/quotation/a3160786-65d7-4bb2-91a5-ff0f8416dbdf.woff2") format('woff2');
-  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
-}
-/* vietnamese */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("assets/quotation/1c4157a2-527b-46af-b8cc-ad7de6bcb437.woff2") format('woff2');
-  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
-}
-/* latin-ext */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("assets/quotation/9c02add3-fb62-411d-adeb-b2c441817dde.woff2") format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("assets/quotation/8358a2e3-809e-4ce5-aab7-e7f359d13eb3.woff2") format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* cyrillic-ext */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("assets/quotation/3fa37810-6a63-4c27-a969-48f8484cb010.woff2") format('woff2');
-  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
-}
-/* cyrillic */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("assets/quotation/eacbd0ee-9546-44a5-b3a4-3c6e56517052.woff2") format('woff2');
-  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-}
-/* greek-ext */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("assets/quotation/580fa0f6-5be9-42d7-8e45-e979347b7859.woff2") format('woff2');
-  unicode-range: U+1F00-1FFF;
-}
-/* greek */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("assets/quotation/a3160786-65d7-4bb2-91a5-ff0f8416dbdf.woff2") format('woff2');
-  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
-}
-/* vietnamese */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("assets/quotation/1c4157a2-527b-46af-b8cc-ad7de6bcb437.woff2") format('woff2');
-  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
-}
-/* latin-ext */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("assets/quotation/9c02add3-fb62-411d-adeb-b2c441817dde.woff2") format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("assets/quotation/8358a2e3-809e-4ce5-aab7-e7f359d13eb3.woff2") format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* cyrillic-ext */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("assets/quotation/3fa37810-6a63-4c27-a969-48f8484cb010.woff2") format('woff2');
-  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
-}
-/* cyrillic */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("assets/quotation/eacbd0ee-9546-44a5-b3a4-3c6e56517052.woff2") format('woff2');
-  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-}
-/* greek-ext */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("assets/quotation/580fa0f6-5be9-42d7-8e45-e979347b7859.woff2") format('woff2');
-  unicode-range: U+1F00-1FFF;
-}
-/* greek */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("assets/quotation/a3160786-65d7-4bb2-91a5-ff0f8416dbdf.woff2") format('woff2');
-  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
-}
-/* vietnamese */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("assets/quotation/1c4157a2-527b-46af-b8cc-ad7de6bcb437.woff2") format('woff2');
-  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
-}
-/* latin-ext */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("assets/quotation/9c02add3-fb62-411d-adeb-b2c441817dde.woff2") format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("assets/quotation/8358a2e3-809e-4ce5-aab7-e7f359d13eb3.woff2") format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* cyrillic-ext */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("assets/quotation/3fa37810-6a63-4c27-a969-48f8484cb010.woff2") format('woff2');
-  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
-}
-/* cyrillic */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("assets/quotation/eacbd0ee-9546-44a5-b3a4-3c6e56517052.woff2") format('woff2');
-  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-}
-/* greek-ext */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("assets/quotation/580fa0f6-5be9-42d7-8e45-e979347b7859.woff2") format('woff2');
-  unicode-range: U+1F00-1FFF;
-}
-/* greek */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("assets/quotation/a3160786-65d7-4bb2-91a5-ff0f8416dbdf.woff2") format('woff2');
-  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
-}
-/* vietnamese */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("assets/quotation/1c4157a2-527b-46af-b8cc-ad7de6bcb437.woff2") format('woff2');
-  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
-}
-/* latin-ext */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("assets/quotation/9c02add3-fb62-411d-adeb-b2c441817dde.woff2") format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("assets/quotation/8358a2e3-809e-4ce5-aab7-e7f359d13eb3.woff2") format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* cyrillic-ext */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url("assets/quotation/3fa37810-6a63-4c27-a969-48f8484cb010.woff2") format('woff2');
-  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
-}
-/* cyrillic */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url("assets/quotation/eacbd0ee-9546-44a5-b3a4-3c6e56517052.woff2") format('woff2');
-  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-}
-/* greek-ext */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url("assets/quotation/580fa0f6-5be9-42d7-8e45-e979347b7859.woff2") format('woff2');
-  unicode-range: U+1F00-1FFF;
-}
-/* greek */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url("assets/quotation/a3160786-65d7-4bb2-91a5-ff0f8416dbdf.woff2") format('woff2');
-  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
-}
-/* vietnamese */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url("assets/quotation/1c4157a2-527b-46af-b8cc-ad7de6bcb437.woff2") format('woff2');
-  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
-}
-/* latin-ext */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url("assets/quotation/9c02add3-fb62-411d-adeb-b2c441817dde.woff2") format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url("assets/quotation/8358a2e3-809e-4ce5-aab7-e7f359d13eb3.woff2") format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* vietnamese */
-@font-face {
-  font-family: 'Newsreader';
-  font-style: italic;
-  font-weight: 500;
-  font-display: swap;
-  src: url("assets/quotation/c300163f-4c80-4185-b273-18ea93658cb5.woff2") format('woff2');
-  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
-}
-/* latin-ext */
-@font-face {
-  font-family: 'Newsreader';
-  font-style: italic;
-  font-weight: 500;
-  font-display: swap;
-  src: url("assets/quotation/4d3e409b-6c87-4f9a-a5a2-8c7498e4f99f.woff2") format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Newsreader';
-  font-style: italic;
-  font-weight: 500;
-  font-display: swap;
-  src: url("assets/quotation/fa7ee25a-1613-4c64-971e-115933ed87f6.woff2") format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* vietnamese */
-@font-face {
-  font-family: 'Newsreader';
-  font-style: italic;
-  font-weight: 600;
-  font-display: swap;
-  src: url("assets/quotation/c300163f-4c80-4185-b273-18ea93658cb5.woff2") format('woff2');
-  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
-}
-/* latin-ext */
-@font-face {
-  font-family: 'Newsreader';
-  font-style: italic;
-  font-weight: 600;
-  font-display: swap;
-  src: url("assets/quotation/4d3e409b-6c87-4f9a-a5a2-8c7498e4f99f.woff2") format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Newsreader';
-  font-style: italic;
-  font-weight: 600;
-  font-display: swap;
-  src: url("assets/quotation/fa7ee25a-1613-4c64-971e-115933ed87f6.woff2") format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* vietnamese */
-@font-face {
-  font-family: 'Newsreader';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("assets/quotation/f499aee6-9c60-4001-b606-0eed71729b02.woff2") format('woff2');
-  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
-}
-/* latin-ext */
-@font-face {
-  font-family: 'Newsreader';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("assets/quotation/50e57825-f3b1-432b-b48c-74441a04004a.woff2") format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Newsreader';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("assets/quotation/6f9137a6-095a-470a-8fe2-f9dd2f37480d.woff2") format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* vietnamese */
-@font-face {
-  font-family: 'Newsreader';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("assets/quotation/f499aee6-9c60-4001-b606-0eed71729b02.woff2") format('woff2');
-  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
-}
-/* latin-ext */
-@font-face {
-  font-family: 'Newsreader';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("assets/quotation/50e57825-f3b1-432b-b48c-74441a04004a.woff2") format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Newsreader';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("assets/quotation/6f9137a6-095a-470a-8fe2-f9dd2f37480d.woff2") format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-</style>
   <style>
     * { box-sizing: border-box; }
     html, body { margin:0; }
@@ -468,19 +50,31 @@
     @keyframes figureStartle { 0%,100% { transform:scale(1); } 50% { transform:scale(1.08); } }
     .plan-card { transition: transform .25s ease, box-shadow .25s ease; cursor:pointer; }
     .plan-card:hover { transform:translateY(-4px); box-shadow:0 14px 32px rgba(11,37,69,0.16); }
+
+    html, body { background:#DCE3EA; }
+    @media (min-width:640px) {
+      body { padding:32px 0; min-height:100vh; }
+      #quote-app { max-width:480px; margin:0 auto; box-shadow:0 20px 60px rgba(11,37,69,0.22); border-radius:18px; overflow:hidden; }
+    }
+    @media (min-width:1024px) {
+      #quote-app { max-width:520px; }
+    }
+    @media (max-width:380px) {
+      #compare-grid { grid-template-columns:1.15fr 1fr 1fr !important; gap:1px !important; }
+      #compare-grid > div { padding:10px 6px !important; font-size:11.5px !important; }
+    }
   </style>
 </helmet>
 
-<div style="font-family:'Inter',sans-serif; color:#0B2545; width:100%; overflow-x:hidden;">
+<div id="quote-app" style="font-family:'Inter',sans-serif; color:#0B2545; width:100%; overflow-x:hidden; position:relative;">
 
   <!-- INTRO SPLASH -->
   <div sc-camel-on-click="{{ skipIntro }}" style="{{ introOverlayStyle }}">
-    <img src="assets/quotation/0c263f0a-c429-4b25-9ad2-67b2d43cce9f.png" alt="Prudential BSN Takaful" style="height:56px; width:auto; opacity:0; animation:introLogo 1.6s cubic-bezier(.22,1,.36,1) .1s forwards;">
+    <img src="assets/quotation/45db8ffc-4445-4439-b162-4542e87df878.png" alt="Prudential BSN Takaful" style="height:56px; width:auto; opacity:0; animation:introLogo 1.6s cubic-bezier(.22,1,.36,1) .1s forwards;">
     <div style="font-family:'Newsreader',serif; font-style:italic; font-size:26px; color:#178D93; margin-top:18px; opacity:0; animation:introLogo 1.6s cubic-bezier(.22,1,.36,1) .5s forwards;">Anda Inspirasi Kami</div>
     <div style="font-size:12px; color:#7C88A0; letter-spacing:0.1em; text-transform:uppercase; margin-top:28px; opacity:0; animation:introLogo 1.6s cubic-bezier(.22,1,.36,1) 1s forwards;">{{ t.tapToContinue }}</div>
   </div>
 
-  <!-- background music: drop a royalty-free mp3 named background-music.mp3 in the project to enable -->
   <audio id="bg-music" preload="none" loop="" style="display:none;"></audio>
 
   <button sc-camel-on-click="{{ toggleAudio }}" style="position:fixed; top:16px; right:16px; z-index:50; background:rgba(11,37,69,0.85); color:#FFFFFF; border:none; border-radius:100px; padding:10px 16px; font-family:'Inter',sans-serif; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; cursor:pointer; box-shadow:0 6px 16px rgba(11,37,69,0.3);">
@@ -491,9 +85,9 @@
   <button sc-camel-on-click="{{ toggleLang }}" style="position:fixed; top:16px; right:150px; z-index:50; background:rgba(11,37,69,0.85); color:#FFFFFF; border:none; border-radius:100px; padding:10px 16px; font-family:'Inter',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.05em; cursor:pointer; box-shadow:0 6px 16px rgba(11,37,69,0.3);">{{ langLabel }}</button>
 
   <!-- INTRO -->
-  <section style="position:relative; min-height:100vh; display:flex; flex-direction:column; padding:calc(env(safe-area-inset-top) + 40px) 28px 56px; overflow:hidden;">
+  <section style="position:relative; min-height:100dvh; display:flex; flex-direction:column; padding:calc(env(safe-area-inset-top) + 40px) 28px 56px; overflow:hidden;">
     <div class="reveal">
-      <img src="assets/quotation/0c263f0a-c429-4b25-9ad2-67b2d43cce9f.png" alt="Prudential BSN Takaful" style="height:52px; width:auto;">
+      <img src="assets/quotation/45db8ffc-4445-4439-b162-4542e87df878.png" alt="Prudential BSN Takaful" style="height:52px; width:auto;">
     </div>
 
     <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
@@ -514,7 +108,7 @@
   </section>
 
   <!-- HOOK -->
-  <section style="position:relative; min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:48px 28px 64px; overflow:hidden;">
+  <section style="position:relative; min-height:100dvh; display:flex; flex-direction:column; justify-content:center; padding:48px 28px 64px; overflow:hidden;">
     <div class="reveal" style="position: relative; font-size: 14px; color: #178D93; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase">{{ t.hookKicker }}</div>
     <div class="reveal d1" style="position:relative; font-family:'Newsreader',serif; font-size:44px; font-weight:600; line-height:1.18; margin-top:18px;">{{ t.hookHeadline }}</div>
     <div class="reveal d2" style="position:relative; font-size:18px; color:#3B5578; margin-top:22px; line-height:1.55;">{{ t.hookBody }}</div>
@@ -563,7 +157,7 @@
   </section>
 
   <!-- SCENE 2: the accident -->
-  <section style="position:relative; min-height:60vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px 28px; background:linear-gradient(160deg, #0B2545 0%, #16345E 100%); overflow:hidden;">
+  <section style="position:relative; min-height:60dvh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px 28px; background:linear-gradient(160deg, #0B2545 0%, #16345E 100%); overflow:hidden;">
     <svg class="zoom-item" width="70" height="88" sc-camel-view-box="0 0 24 30" fill="none" stroke="#F2A65A" stroke-width="1.5" style="animation:figureStartle 1.4s ease-in-out infinite;"><circle cx="12" cy="6" r="3.6"></circle><path d="M5 29v-6a7 7 0 0 1 14 0v6"></path><path d="M5 15l-4-3M19 15l4-3"></path></svg>
     <div class="zoom-item" style="font-size:14px; color:#CFE0EE; text-transform:uppercase; letter-spacing:0.1em; margin-top:22px;">{{ t.crisisKicker }}</div>
     <div class="zoom-item" style="font-family:'Newsreader',serif; font-size:32px; font-weight:600; color:#FFFFFF; margin-top:12px; max-width:440px; line-height:1.3;">{{ t.crisisPre }}<span style="color:#F2A65A;">RM100,000</span>{{ t.crisisPost }}</div>
@@ -624,8 +218,8 @@
   <!-- COVER -->
   <section style="position:relative; padding:64px 28px; border-top:1px solid rgba(11,37,69,0.1);">
     <div class="reveal" style="display:flex; align-items:center; gap:14px; margin-bottom:28px;">
-      <img src="assets/quotation/644e99c1-b546-473b-bb24-cf9a2de8ad45.jpg" alt="ASG Ansar Group" style="width:52px; height:52px; border-radius:10px; object-fit:cover; flex-shrink:0;">
-      <img src="assets/quotation/0c263f0a-c429-4b25-9ad2-67b2d43cce9f.png" alt="Prudential BSN Takaful" style="height:46px; width:auto;">
+      <img src="assets/quotation/46460d81-45e2-4d3c-9b75-6ade4afe127c.jpg" alt="ASG Ansar Group" style="width:52px; height:52px; border-radius:10px; object-fit:cover; flex-shrink:0;">
+      <img src="assets/quotation/45db8ffc-4445-4439-b162-4542e87df878.png" alt="Prudential BSN Takaful" style="height:46px; width:auto;">
     </div>
     <div class="reveal d1" style="font-size:18px; color:#3B5578; margin-top:8px; font-weight:500;">{{ t.coverPreparedFor }}</div>
     <div class="reveal d1" style="font-family:'Newsreader',serif; font-size:46px; line-height:1.1; font-weight:600; margin-top:10px;">Yusuf</div>
@@ -851,9 +445,9 @@
   </section>
 
   <!-- Beat 1: Admission -->
-  <section data-narrate="{{ planBeat1Narrate }}" style="position:relative; min-height:92vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px 28px; overflow:hidden;">
+  <section data-narrate="{{ planBeat1Narrate }}" style="position:relative; min-height:92dvh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px 28px; overflow:hidden;">
     <div style="position:absolute; inset:0; overflow:hidden;">
-      <img class="reveal kenburns" src="assets/quotation/ccf0b5c2-6060-4e59-94fb-47304b1203ea.webp" alt="Hospital entrance lobby" style="width:100%; height:100%; object-fit:cover; object-position:center 30%;">
+      <img class="reveal kenburns" src="assets/quotation/1fe485de-7a80-4938-9476-6de60e7e41b6.webp" alt="Hospital entrance lobby" style="width:100%; height:100%; object-fit:cover; object-position:center 30%;">
     </div>
     <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,37,69,0.55) 0%, rgba(11,37,69,0.72) 60%, rgba(11,37,69,0.85) 100%);"></div>
     <div style="position:relative; color:#FFFFFF;">
@@ -866,9 +460,9 @@
   </section>
 
   <!-- Beat 2: The ward -->
-  <section data-narrate="Your Hospital Room and Board benefit takes over from here, for up to 150 days a year." style="position:relative; min-height:88vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px 28px; overflow:hidden;">
+  <section data-narrate="Your Hospital Room and Board benefit takes over from here, for up to 150 days a year." style="position:relative; min-height:88dvh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px 28px; overflow:hidden;">
     <div style="position:absolute; inset:0; overflow:hidden;">
-      <img class="reveal kenburns" src="assets/quotation/f14fe951-33f9-4b4f-9624-db4f8084c68e.jpg" alt="Private hospital ward" style="width:100%; height:100%; object-fit:cover; object-position:22% 55%;">
+      <img class="reveal kenburns" src="assets/quotation/b82aa728-c380-4fed-957b-73bccc6bedf8.jpg" alt="Private hospital ward" style="width:100%; height:100%; object-fit:cover; object-position:22% 55%;">
     </div>
     <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,37,69,0.35) 0%, rgba(11,37,69,0.55) 55%, rgba(11,37,69,0.82) 100%);"></div>
     <div class="zoom-item" style="position:absolute; left:8%; bottom:12%; display:flex; align-items:center; gap:10px;">
@@ -882,9 +476,9 @@
   </section>
 
   <!-- Beat 2.5: Surgery -->
-  <section data-narrate="Surgical fees and in-hospital treatment are covered as charged, cashless at panel hospitals." style="position:relative; min-height:88vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px 28px; overflow:hidden;">
+  <section data-narrate="Surgical fees and in-hospital treatment are covered as charged, cashless at panel hospitals." style="position:relative; min-height:88dvh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px 28px; overflow:hidden;">
     <div style="position:absolute; inset:0; overflow:hidden;">
-      <img class="reveal kenburns" src="assets/quotation/33c28ef5-0a10-4f65-a653-a358b7754058.jpg" alt="Operation theatre" style="width:100%; height:100%; object-fit:cover; object-position:center 40%;">
+      <img class="reveal kenburns" src="assets/quotation/3306b158-1371-46d9-8ab4-ab1f37142738.jpg" alt="Operation theatre" style="width:100%; height:100%; object-fit:cover; object-position:center 40%;">
     </div>
     <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,37,69,0.45) 0%, rgba(11,37,69,0.62) 55%, rgba(11,37,69,0.85) 100%);"></div>
     <div style="position:relative; color:#FFFFFF;">
@@ -895,9 +489,9 @@
   </section>
 
   <!-- Beat 3: RM200 room -->
-  <section data-narrate="A twin-sharing room at most Malaysian private hospitals is covered, no need to touch your own savings." style="position:relative; min-height:92vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px 28px; overflow:hidden;">
+  <section data-narrate="A twin-sharing room at most Malaysian private hospitals is covered, no need to touch your own savings." style="position:relative; min-height:92dvh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px 28px; overflow:hidden;">
     <div style="position:absolute; inset:0; overflow:hidden;">
-      <img class="reveal kenburns" src="assets/quotation/273afb62-9f92-4ff7-ae6d-d6de5363f7fe.jpg" alt="Hospital room" style="width:100%; height:100%; object-fit:cover; object-position:center 45%;">
+      <img class="reveal kenburns" src="assets/quotation/03a530a3-44ff-4b2d-ae44-6ede7e2d57f2.jpg" alt="Hospital room" style="width:100%; height:100%; object-fit:cover; object-position:center 45%;">
     </div>
     <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,37,69,0.4) 0%, rgba(11,37,69,0.6) 55%, rgba(11,37,69,0.86) 100%);"></div>
     <div style="position:relative; color:#FFFFFF;">
@@ -909,9 +503,9 @@
   </section>
 
   <!-- Beat 4: big-bill protection (plan-specific mechanic) -->
-  <section data-narrate="{{ planBeat4Narrate }}" style="position:relative; min-height:90vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px 28px; overflow:hidden;">
+  <section data-narrate="{{ planBeat4Narrate }}" style="position:relative; min-height:90dvh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px 28px; overflow:hidden;">
     <div style="position:absolute; inset:0; overflow:hidden;">
-      <img class="reveal kenburns" src="assets/quotation/5fc08374-7390-4ea7-8e5b-4210ab855f24.jpg" alt="Cancer treatment centre" style="width:100%; height:100%; object-fit:cover; object-position:center 35%;">
+      <img class="reveal kenburns" src="assets/quotation/59493355-1be1-4f0f-af71-0d8f0231d64a.jpg" alt="Cancer treatment centre" style="width:100%; height:100%; object-fit:cover; object-position:center 35%;">
     </div>
     <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,37,69,0.5) 0%, rgba(11,37,69,0.68) 55%, rgba(11,37,69,0.86) 100%);"></div>
     <div style="position:relative; color:#FFFFFF;">
@@ -978,7 +572,7 @@
     <div class="reveal" style="font-size:14px; color:#178D93; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;">{{ t.sideBySideKicker }}</div>
     <div class="reveal d1" style="font-family:'Newsreader',serif; font-size:28px; font-weight:600; margin-top:12px; line-height:1.28;">{{ t.sideBySideHeadline }}</div>
 
-    <div style="display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:1px; margin-top:28px; background:rgba(11,37,69,0.1); border-radius:10px; overflow:hidden; box-shadow:0 6px 20px rgba(11,37,69,0.08);">
+    <div id="compare-grid" style="display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:1px; margin-top:28px; background:rgba(11,37,69,0.1); border-radius:10px; overflow:hidden; box-shadow:0 6px 20px rgba(11,37,69,0.08);">
       <div style="background:#F4F1EA; padding:14px 12px; font-size:12px; font-weight:700; color:#7C88A0; text-transform:uppercase; letter-spacing:0.04em;"></div>
       <div style="background:{{ essentialHeaderBg }}; padding:14px 12px; font-size:13px; font-weight:800; color:{{ essentialHeaderColor }}; text-align:center;">AnugerahMax</div>
       <div style="background:{{ platinumHeaderBg }}; padding:14px 12px; font-size:13px; font-weight:800; color:{{ platinumHeaderColor }}; text-align:center;">Asas360</div>
@@ -1194,9 +788,9 @@
     </div>
 
     <div class="reveal d4" style="margin-top:40px; border-top:1px solid rgba(11,37,69,0.12); padding-top:26px;">
-      <img src="assets/quotation/0c263f0a-c429-4b25-9ad2-67b2d43cce9f.png" alt="Prudential BSN Takaful" style="height:38px; width:auto; margin-bottom:18px;">
+      <img src="assets/quotation/45db8ffc-4445-4439-b162-4542e87df878.png" alt="Prudential BSN Takaful" style="height:38px; width:auto; margin-bottom:18px;">
       <div style="display:flex; gap:16px; align-items:flex-start;">
-        <img src="assets/quotation/644e99c1-b546-473b-bb24-cf9a2de8ad45.jpg" alt="ASG Ansar Group" style="width:56px; height:56px; border-radius:10px; object-fit:cover; flex-shrink:0;">
+        <img src="assets/quotation/46460d81-45e2-4d3c-9b75-6ade4afe127c.jpg" alt="ASG Ansar Group" style="width:56px; height:56px; border-radius:10px; object-fit:cover; flex-shrink:0;">
         <div>
           <div style="font-size:19px; font-weight:700;">Muhammad Syakir Badri Bin Md Nizam</div>
           <div style="font-size:15px; color:#5A6B85; margin-top:4px;">{{ t.agentCardLine }}</div>
@@ -1223,7 +817,7 @@
   </section>
 
   <!-- OUTRO -->
-  <section style="min-height:70vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:64px 28px; border-top:1px solid rgba(11,37,69,0.1);">
+  <section style="min-height:70dvh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:64px 28px; border-top:1px solid rgba(11,37,69,0.1);">
     <div class="reveal" style="width:84px; height:84px; border-radius:50%; background:#178D93; display:flex; align-items:center; justify-content:center; animation:outroPulse 2.4s ease-in-out infinite;">
       <svg width="38" height="38" sc-camel-view-box="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2"><path d="M20 6L9 17l-5-5"></path></svg>
     </div>
@@ -1609,7 +1203,7 @@ class Component extends DCLogic {
       planHomeNursingLabel: tr('Home Nursing Care', 'Jagaan Jururawat di Rumah'),
       planHomeNursingBody: isPlatinum ? tr('Not applicable under this rider configuration.', 'Tidak berkenaan di bawah konfigurasi rider ini.') : tr('Up to 180 days per lifetime, as charged.', 'Sehingga 180 hari sepanjang hayat, mengikut caj sebenar.'),
       planHighlightTitle: isPlatinum ? tr('RM1,000,000 Smart Value Point', 'Smart Value Point RM1,000,000') : tr('+RM200,000 for Cancer, Heart Attack or Kidney Failure', '+RM200,000 untuk Kanser, Angin Ahmar atau Kegagalan Buah Pinggang'),
-      planHighlightBody: isPlatinum ? tr('Grows 2% every 2 certificate years as SVP Bonus — on top of the RM1,000,000 starting point.', 'Berkembang 2% setiap 2 tahun sijil sebagai Bonus SVP — tambahan kepada titik permulaan RM1,000,000.') : tr('Your limit doubles to RM400,000 permanently, from day one.', 'Had anda berganda kepada RM400,000 secara kekal, dari hari pertama.'),
+      planHighlightBody: isPlatinum ? 'Grows 2% every 2 certificate years as SVP Bonus — on top of the RM1,000,000 starting point.' : 'Your limit doubles to RM400,000 permanently, from day one.',
       planDialysisBody: isPlatinum ? tr('Combined up to RM1,500,000 per lifetime for haemodialysis, peritoneal dialysis, and cancer outpatient treatment.', 'Gabungan sehingga RM1,500,000 sepanjang hayat untuk hemodialisis, dialisis peritoneal, dan rawatan pesakit luar kanser.') : tr('RM1,000,000 per lifetime for kidney dialysis treatment, plus cancer outpatient care.', 'RM1,000,000 sepanjang hayat untuk rawatan dialisis buah pinggang, serta rawatan pesakit luar kanser.'),
       planExtraLabel: isPlatinum ? tr('Second Medical Opinion', 'Pendapat Perubatan Kedua') : tr('Treatment Allowance', 'Elaun Rawatan'),
       planExtraBody: isPlatinum ? tr('Consultation with a world-leading expert, plus up to RM1,000/year for a local second opinion.', 'Rundingan dengan pakar terkemuka dunia, serta sehingga RM1,000/tahun untuk pendapat kedua tempatan.') : tr('RM100/day (up to RM1,000/year, RM10,000/lifetime) for chemo, radiotherapy &amp; dialysis.', 'RM100/hari (sehingga RM1,000/tahun, RM10,000 sepanjang hayat) untuk kemoterapi, radioterapi &amp; dialisis.'),
@@ -1659,7 +1253,6 @@ class Component extends DCLogic {
     };
   }
 }
-
 
 </script>
 

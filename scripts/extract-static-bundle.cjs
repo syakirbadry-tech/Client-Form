@@ -4,7 +4,7 @@ const zlib = require('zlib');
 
 const projectRoot = path.resolve(__dirname, '..');
 const sourceRoot = '/Users/syakir/Project/Prudential BSN Takaful/pru-bsn-client-form/quotation created/design_handoff_prubsn_quotation';
-const yusufSourceRoot = '/Users/syakir/Project/Prudential BSN Takaful/pru-bsn-client-form/quotation created/Yusuf design_handoff_prubsn_quotation';
+const yusufSourceRoot = '/Users/syakir/Project/Prudential BSN Takaful/Quotation Generator/Quotation Created /design_handoff_prubsn_quotation';
 
 const pages = [
   {
@@ -21,7 +21,8 @@ const pages = [
   {
     source: path.join(yusufSourceRoot, 'yusuf-quotation-prototype.html'),
     output: path.join(projectRoot, 'yusuf', 'index.html'),
-    assetDir: 'assets/quotation'
+    assetDir: 'assets/quotation',
+    responsiveComparison: true
   },
   {
     source: path.join(yusufSourceRoot, 'yusuf-client-detail-form.html'),
@@ -86,6 +87,15 @@ function writePage(page) {
   }
   const resourceScript = `<script>window.__resources=${JSON.stringify(resourceMap).replace(/<\//g, '<\\/')};<\/script>`;
   template = template.replace(/<head([^>]*)>/i, `<head$1>${resourceScript}`);
+
+  if (page.responsiveComparison) {
+    const comparisonFix = `<style>
+#compare-grid{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr)!important;width:100%;max-width:100%;}
+#compare-grid>div{min-width:0;overflow-wrap:anywhere;word-break:break-word;hyphens:auto;}
+@media(max-width:380px){#compare-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) minmax(0,1fr)!important;}}
+</style>`;
+    template = template.replace(/<head([^>]*)>/i, `<head$1>${comparisonFix}`);
+  }
 
   if (page.staticQuotation) {
     template = template
