@@ -524,7 +524,6 @@
                   <span style="font-size:13px; font-weight:600; color:#178D93;">Spouse NRIC</span>
                   <input name="spouseNric" value="{{ data.spouseNric }}" sc-camel-on-change="{{ onChange }}" placeholder="Spouse's NRIC" style="{{ inputStyle }}">
                 </label>
-                </sc-if>
                 <label style="display:flex; flex-direction:column; gap:6px;">
                   <span style="font-size:13px; font-weight:600; color:#178D93;">Number of Children</span>
                   <input type="number" name="numChildren" value="{{ data.numChildren }}" sc-camel-on-change="{{ onChange }}" placeholder="0" style="{{ inputStyle }}">
@@ -533,6 +532,7 @@
                   <span style="font-size:13px; font-weight:600; color:#178D93;">Children Details</span>
                   <textarea name="childrenDetails" value="{{ data.childrenDetails }}" sc-camel-on-change="{{ onChange }}" placeholder="Name, age, and other details of your children" rows="3" style="{{ textareaStyle }}"></textarea>
                 </label>
+                </sc-if>
               </div>
             </sc-if>
 
@@ -609,6 +609,15 @@
                     <input type="file" name="{{ u.name }}" sc-camel-on-change="{{ onFileChange }}" accept=".pdf,.png,.jpg,.jpeg,.heic" style="display:none;">
                   </label>
                 </sc-for>
+                <div style="border:2px dashed #B9DEE0; border-radius:12px; padding:18px; display:flex; flex-direction:column; gap:10px; background:#FAFEFE;">
+                  <div style="font-size:13.5px; font-weight:700; color:#178D93; text-align:center;">Signature *</div>
+                  <div style="font-size:12.5px; color:#8a857f; text-align:center;">Sign inside the box using your finger or mouse</div>
+                  <canvas id="sigPad" width="600" height="200" style="width:100%; height:160px; background:#fff; border:1px solid #E5E0DA; border-radius:9px; touch-action:none; cursor:crosshair;"></canvas>
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="font-size:12.5px; color:#8a857f;">{{ signatureStatus }}</div>
+                    <button type="button" sc-camel-on-click="{{ clearSignature }}" style="padding:7px 14px; border-radius:8px; border:none; background:#F3F0ED; color:#6B6560; font-size:13px; font-weight:600; cursor:pointer;">Clear</button>
+                  </div>
+                </div>
               </div>
             </sc-if>
 
@@ -713,6 +722,7 @@ class Component extends DCLogic {
       bankName: '', accountNumber: '', accountHolderName: ''
     },
     files: { nricFront: null, nricRear: null, selfie: null },
+    signature: '',
     errorMsg: '',
     submitting: false,
     success: false,
@@ -724,11 +734,66 @@ class Component extends DCLogic {
   componentDidMount() {
     this._onResize = () => this.setState({ isMobile: window.innerWidth <= 700 });
     window.addEventListener('resize', this._onResize);
+
+    // Signature pad: the canvas mounts/unmounts with the step, so listen on the document.
+    const point = (canvas, e) => {
+      const r = canvas.getBoundingClientRect();
+      return { x: (e.clientX - r.left) * (canvas.width / r.width), y: (e.clientY - r.top) * (canvas.height / r.height) };
+    };
+    this._sigDown = (e) => {
+      const canvas = e.target;
+      if (!canvas || canvas.id !== 'sigPad') return;
+      e.preventDefault();
+      if (canvas.setPointerCapture) canvas.setPointerCapture(e.pointerId);
+      const ctx = canvas.getContext('2d');
+      ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1a1a1a';
+      const p = point(canvas, e);
+      ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + 0.1, p.y + 0.1); ctx.stroke();
+      this._sigCanvas = canvas;
+    };
+    this._sigMove = (e) => {
+      const canvas = this._sigCanvas;
+      if (!canvas) return;
+      e.preventDefault();
+      const p = point(canvas, e);
+      const ctx = canvas.getContext('2d');
+      ctx.lineTo(p.x, p.y); ctx.stroke();
+    };
+    this._sigUp = () => {
+      const canvas = this._sigCanvas;
+      if (!canvas) return;
+      this._sigCanvas = null;
+      this.setState({ signature: canvas.toDataURL('image/png'), errorMsg: '' });
+    };
+    document.addEventListener('pointerdown', this._sigDown);
+    document.addEventListener('pointermove', this._sigMove, { passive: false });
+    document.addEventListener('pointerup', this._sigUp);
+    document.addEventListener('pointercancel', this._sigUp);
+  }
+
+  componentDidUpdate() {
+    // Redraw a saved signature when the user comes back to the documents step.
+    const canvas = document.getElementById('sigPad');
+    if (!canvas || canvas.dataset.restored || !this.state.signature) return;
+    canvas.dataset.restored = '1';
+    const img = new Image();
+    img.onload = () => canvas.getContext('2d').drawImage(img, 0, 0);
+    img.src = this.state.signature;
   }
 
   componentWillUnmount() {
     if (this._onResize) window.removeEventListener('resize', this._onResize);
+    document.removeEventListener('pointerdown', this._sigDown);
+    document.removeEventListener('pointermove', this._sigMove);
+    document.removeEventListener('pointerup', this._sigUp);
+    document.removeEventListener('pointercancel', this._sigUp);
   }
+
+  clearSignature = () => {
+    const canvas = document.getElementById('sigPad');
+    if (canvas) canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+    this.setState({ signature: '' });
+  };
 
   onChange = (e) => {
     const { name, value } = e.target;
@@ -761,7 +826,10 @@ class Component extends DCLogic {
     if (step === 2) return req(['maritalStatus']) || 'Please fill all required fields.';
     if (step === 3) return req(['height','weight','smokingStatus']) || 'Please fill all required fields.';
     if (step === 4) return (data.plan && req(['beneficiaryName','beneficiaryNric','beneficiaryRelationship','benefitWeightage'])) || 'Please complete beneficiary information.';
-    if (step === 5) return !!(files.nricFront && files.nricRear && files.selfie) || 'Please upload all required documents.';
+    if (step === 5) {
+      if (!(files.nricFront && files.nricRear && files.selfie)) return 'Please upload all required documents.';
+      return !!this.state.signature || 'Please provide your signature.';
+    }
     if (step === 6) return req(['bankName','accountNumber','accountHolderName']) || 'Please fill all required fields.';
     return true;
   }
@@ -799,6 +867,13 @@ class Component extends DCLogic {
           filename: file.name || key
         };
       }
+      if (this.state.signature) {
+        documents.signature = {
+          base64: this.state.signature.split(',')[1],
+          mimeType: 'image/png',
+          filename: 'signature.png'
+        };
+      }
 
       const payload = {
         version: '1.2',
@@ -830,8 +905,8 @@ class Component extends DCLogic {
           maritalStatus: d.maritalStatus,
           spouseName: single ? '' : d.spouseName,
           spouseNric: single ? '' : d.spouseNric,
-          numChildren: Number(d.numChildren) || 0,
-          childrenDetails: d.childrenDetails
+          numChildren: single ? 0 : (Number(d.numChildren) || 0),
+          childrenDetails: single ? '' : d.childrenDetails
         },
         medicalHistory: {
           preExistingConditions: d.preExisting,
@@ -961,6 +1036,8 @@ class Component extends DCLogic {
       showSpouse: s.data.maritalStatus !== 'Single',
       onChange: this.onChange,
       onFileChange: this.onFileChange,
+      clearSignature: this.clearSignature,
+      signatureStatus: s.signature ? '✓ Signature captured' : 'Not signed yet',
       inputStyle, textareaStyle,
       errorMsg: s.errorMsg,
       uploadFields,
