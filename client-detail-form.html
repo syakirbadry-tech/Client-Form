@@ -553,18 +553,6 @@
             </sc-if>
 
             <sc-if value="{{ step4 }}" hint-placeholder-val="{{ false }}">
-              <div style="background:#F2FAFA; border:2px solid #178D93; border-radius:12px; padding:20px 22px; margin-bottom:20px; position:relative;">
-                <div style="font-family:'Playfair Display', serif; font-weight:700; font-size:19px; color:#178D93;">PruBSN AnugerahMax — Medic TotalCare Plan 150</div>
-                <div style="font-size:25px; font-weight:700; color:#C9A227; margin-top:8px;">RM 158<span style="font-size:13px; color:#6B6560; font-weight:500;">/month</span></div>
-                <div style="font-size:13px; color:#6B6560; margin-top:6px;">As quoted — 45-year coverage term</div>
-                <div style="font-size:12.5px; color:#3d3a37; margin-top:14px; line-height:1.9;">
-                  ✓ RM 150/day hospital room &amp; board<br>
-                  ✓ RM 150,000 annual limit — doubles to RM 300,000 on critical illness<br>
-                  ✓ No lifetime limit<br>
-                  ✓ RM 10,000 death/TPD benefit
-                </div>
-              </div>
-
               <div style="font-family:'Playfair Display', serif; font-weight:700; font-size:17px; color:#178D93; margin-bottom:16px;">Beneficiary Information</div>
               <div style="{{ gridStyle }}">
                 <label style="display:flex; flex-direction:column; gap:6px;">
@@ -662,7 +650,7 @@ const STEP_LABELS = [
   'Employment Details',
   'Family Information',
   'Medical History',
-  'Plan Selection',
+  'Beneficiary Information',
   'Documents Upload',
   'Bank Details'
 ];
@@ -748,7 +736,7 @@ class Component extends DCLogic {
     if (step === 1) return req(['employmentType','occupation','monthlyIncome']) || 'Please fill all required fields.';
     if (step === 2) return req(['maritalStatus']) || 'Please fill all required fields.';
     if (step === 3) return req(['height','weight','smokingStatus']) || 'Please fill all required fields.';
-    if (step === 4) return (data.plan && req(['beneficiaryName','beneficiaryNric','beneficiaryRelationship','benefitWeightage'])) || 'Please select a plan and complete beneficiary information.';
+    if (step === 4) return (data.plan && req(['beneficiaryName','beneficiaryNric','beneficiaryRelationship','benefitWeightage'])) || 'Please complete beneficiary information.';
     if (step === 5) return !!(files.nricFront && files.nricRear && files.selfie) || 'Please upload all required documents.';
     if (step === 6) return req(['bankName','accountNumber','accountHolderName']) || 'Please fill all required fields.';
     return true;
