@@ -458,8 +458,27 @@
                     <option value="Employee">Employee</option>
                     <option value="Self-employed">Self-employed</option>
                     <option value="Business Owner">Business Owner</option>
+                    <option value="Not Employed">Not Employed</option>
                   </sc-raw-select>
                 </label>
+                <sc-if value="{{ isNotEmployed }}" hint-placeholder-val="{{ false }}">
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Status *</span>
+                  <sc-raw-select name="notEmployedCategory" value="{{ data.notEmployedCategory }}" sc-camel-on-change="{{ onChange }}" style="{{ inputStyle }}">
+                    <option value="">Select an option</option>
+                    <option value="Housewife / Homemaker">Housewife / Homemaker</option>
+                    <option value="Student">Student</option>
+                    <option value="Retiree">Retiree</option>
+                    <option value="Unemployed">Unemployed</option>
+                    <option value="Other">Other</option>
+                  </sc-raw-select>
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Monthly Income (RM)</span>
+                  <input type="number" name="monthlyIncome" value="{{ data.monthlyIncome }}" sc-camel-on-change="{{ onChange }}" placeholder="0" style="{{ inputStyle }}">
+                </label>
+                </sc-if>
+                <sc-if value="{{ isEmployed }}" hint-placeholder-val="{{ true }}">
                 <label style="display:flex; flex-direction:column; gap:6px;">
                   <span style="font-size:13px; font-weight:600; color:#178D93;">Occupation *</span>
                   <input name="occupation" value="{{ data.occupation }}" sc-camel-on-change="{{ onChange }}" placeholder="Your job title" style="{{ inputStyle }}">
@@ -480,6 +499,7 @@
                   <span style="font-size:13px; font-weight:600; color:#178D93;">Work Place Address</span>
                   <textarea name="workAddress" value="{{ data.workAddress }}" sc-camel-on-change="{{ onChange }}" placeholder="Enter your workplace address" rows="3" style="{{ textareaStyle }}"></textarea>
                 </label>
+                </sc-if>
               </div>
             </sc-if>
 
@@ -684,7 +704,7 @@ class Component extends DCLogic {
     step: 0,
     data: {
       fullName: '', nric: '', dob: '', gender: '', race: '', religion: '', email: '', phone: '', address: '',
-      employmentType: '', occupation: '', fieldOfWork: '', employerName: '', monthlyIncome: '', workAddress: '',
+      employmentType: '', notEmployedCategory: '', occupation: '', fieldOfWork: '', employerName: '', monthlyIncome: '', workAddress: '',
       maritalStatus: '', spouseName: '', spouseNric: '', numChildren: '', childrenDetails: '',
       height: '', weight: '', smokingStatus: '', preExisting: '', medications: '', allergies: '', surgery: '',
       plan: 'PruBSN AnugerahMax — Medic TotalCare Plan 150',
@@ -733,7 +753,10 @@ class Component extends DCLogic {
   validateStep(step, data, files) {
     const req = (fields) => fields.every(f => String(data[f] || '').trim() !== '');
     if (step === 0) return req(['fullName','nric','dob','gender','race','religion','email','phone','address']) || 'Please fill all required fields.';
-    if (step === 1) return req(['employmentType','occupation','monthlyIncome']) || 'Please fill all required fields.';
+    if (step === 1) {
+      const fields = data.employmentType === 'Not Employed' ? ['employmentType','notEmployedCategory'] : ['employmentType','occupation','monthlyIncome'];
+      return req(fields) || 'Please fill all required fields.';
+    }
     if (step === 2) return req(['maritalStatus']) || 'Please fill all required fields.';
     if (step === 3) return req(['height','weight','smokingStatus']) || 'Please fill all required fields.';
     if (step === 4) return (data.plan && req(['beneficiaryName','beneficiaryNric','beneficiaryRelationship','benefitWeightage'])) || 'Please complete beneficiary information.';
@@ -761,6 +784,7 @@ class Component extends DCLogic {
     if (check !== true) { this.setState({ errorMsg: check }); return; }
     this.setState({ submitting: true, errorMsg: '' });
     const d = this.state.data;
+    const notEmployed = d.employmentType === 'Not Employed';
     const planPrice = 158;
 
     try {
@@ -791,13 +815,14 @@ class Component extends DCLogic {
           email: d.email,
           mobileNumber: d.phone,
           address: d.address,
-          occupation: d.occupation
+          occupation: notEmployed ? d.notEmployedCategory : d.occupation
         },
         employment: {
           employmentType: d.employmentType,
-          fieldOfWork: d.fieldOfWork,
-          employerName: d.employerName,
-          workAddress: d.workAddress,
+          notEmployedCategory: notEmployed ? d.notEmployedCategory : '',
+          fieldOfWork: notEmployed ? '' : d.fieldOfWork,
+          employerName: notEmployed ? '' : d.employerName,
+          workAddress: notEmployed ? '' : d.workAddress,
           monthlyIncome: Number(d.monthlyIncome) || 0
         },
         family: {
@@ -930,6 +955,8 @@ class Component extends DCLogic {
       step0: step === 0, step1: step === 1, step2: step === 2, step3: step === 3,
       step4: step === 4, step5: step === 5, step6: step === 6,
       data: s.data,
+      isNotEmployed: s.data.employmentType === 'Not Employed',
+      isEmployed: s.data.employmentType !== 'Not Employed',
       onChange: this.onChange,
       onFileChange: this.onFileChange,
       inputStyle, textareaStyle,
