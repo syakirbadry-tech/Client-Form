@@ -515,6 +515,7 @@
                     <option value="Widowed">Widowed</option>
                   </sc-raw-select>
                 </label>
+                <sc-if value="{{ showSpouse }}" hint-placeholder-val="{{ true }}">
                 <label style="display:flex; flex-direction:column; gap:6px;">
                   <span style="font-size:13px; font-weight:600; color:#178D93;">Spouse Name</span>
                   <input name="spouseName" value="{{ data.spouseName }}" sc-camel-on-change="{{ onChange }}" placeholder="Spouse's full name" style="{{ inputStyle }}">
@@ -523,6 +524,7 @@
                   <span style="font-size:13px; font-weight:600; color:#178D93;">Spouse NRIC</span>
                   <input name="spouseNric" value="{{ data.spouseNric }}" sc-camel-on-change="{{ onChange }}" placeholder="Spouse's NRIC" style="{{ inputStyle }}">
                 </label>
+                </sc-if>
                 <label style="display:flex; flex-direction:column; gap:6px;">
                   <span style="font-size:13px; font-weight:600; color:#178D93;">Number of Children</span>
                   <input type="number" name="numChildren" value="{{ data.numChildren }}" sc-camel-on-change="{{ onChange }}" placeholder="0" style="{{ inputStyle }}">
@@ -707,7 +709,7 @@ class Component extends DCLogic {
       employmentType: '', notEmployedCategory: '', occupation: '', fieldOfWork: '', employerName: '', monthlyIncome: '', workAddress: '',
       maritalStatus: '', spouseName: '', spouseNric: '', numChildren: '', childrenDetails: '',
       height: '', weight: '', smokingStatus: '', preExisting: '', medications: '', allergies: '', surgery: '',
-      plan: 'PruBSN AnugerahMax — Medic TotalCare Plan 150',
+      plan: 'PruBSN AnugerahMax — Medic TotalCare Plan 200',
       beneficiaryName: '', beneficiaryNric: '', beneficiaryRelationship: '', benefitWeightage: '',
       bankName: '', accountNumber: '', accountHolderName: ''
     },
@@ -785,6 +787,7 @@ class Component extends DCLogic {
     this.setState({ submitting: true, errorMsg: '' });
     const d = this.state.data;
     const notEmployed = d.employmentType === 'Not Employed';
+    const single = d.maritalStatus === 'Single';
     const planPrice = 158;
 
     try {
@@ -827,8 +830,8 @@ class Component extends DCLogic {
         },
         family: {
           maritalStatus: d.maritalStatus,
-          spouseName: d.spouseName,
-          spouseNric: d.spouseNric,
+          spouseName: single ? '' : d.spouseName,
+          spouseNric: single ? '' : d.spouseNric,
           numChildren: Number(d.numChildren) || 0,
           childrenDetails: d.childrenDetails
         },
@@ -957,6 +960,7 @@ class Component extends DCLogic {
       data: s.data,
       isNotEmployed: s.data.employmentType === 'Not Employed',
       isEmployed: s.data.employmentType !== 'Not Employed',
+      showSpouse: s.data.maritalStatus !== 'Single',
       onChange: this.onChange,
       onFileChange: this.onFileChange,
       inputStyle, textareaStyle,
