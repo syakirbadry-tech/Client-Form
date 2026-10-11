@@ -635,8 +635,7 @@
                 <div style="font-size:13px; font-weight:700; color:#178D93; margin-bottom:8px;">Summary</div>
                 <div style="font-size:13px; color:#3d3a37; line-height:1.8;">
                   Applicant: {{ data.fullName }}<br>
-                  Plan: {{ selectedPlanLabel }}<br>
-                  Monthly Premium: {{ selectedPlanPriceLabel }}
+                  Plan: {{ selectedPlanLabel }}
                 </div>
               </div>
             </sc-if>
@@ -788,7 +787,6 @@ class Component extends DCLogic {
     const d = this.state.data;
     const notEmployed = d.employmentType === 'Not Employed';
     const single = d.maritalStatus === 'Single';
-    const planPrice = 158;
 
     try {
       const documents = {};
@@ -852,7 +850,7 @@ class Component extends DCLogic {
         }],
         selectedPlan: d.plan,
         selectedPlanDetails: {
-          monthlyContribution: `RM ${planPrice.toFixed(2)}`
+          monthlyContribution: ''
         },
         bank: {
           bankName: d.bankName,
@@ -978,7 +976,6 @@ class Component extends DCLogic {
       nextButtonStyle: { ...baseBtn, width: isMobile ? '100%' : 'auto', textAlign: 'center', background: '#178D93', color: '#fff' },
       submitButtonStyle: { ...baseBtn, width: isMobile ? '100%' : 'auto', textAlign: 'center', background: '#C9A227', color: '#fff', opacity: s.submitting ? 0.7 : 1 },
       selectedPlanLabel: s.data.plan || '—',
-      selectedPlanPriceLabel: 'RM 158/month',
       success: s.success,
       notSuccess: !s.success,
       submittedName: s.submittedName,
