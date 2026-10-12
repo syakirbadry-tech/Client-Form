@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'none'; img-src 'self'; form-action 'none'; base-uri 'none'">
+  <title>Dashboard Setup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="login-wrap">
+    <form class="login-card" id="setupForm" novalidate>
+      <div>
+        <h1>Dashboard Setup</h1>
+        <p>Creates the two secret values for the Cloudflare Worker. Everything is worked out on this device; nothing you type here is sent anywhere.</p>
+      </div>
+      <div class="alert" id="setupError" role="alert" hidden></div>
+      <div class="field">
+        <label for="password">New dashboard password (12+ characters)</label>
+        <input class="input" id="password" name="password" type="password" autocomplete="new-password" required>
+      </div>
+      <div class="field">
+        <label for="confirm">Type it again</label>
+        <input class="input" id="confirm" name="confirm" type="password" autocomplete="new-password" required>
+      </div>
+      <button class="btn btn-primary" id="setupBtn" type="submit">Generate values</button>
+
+      <div id="results" hidden>
+        <div class="field">
+          <label for="hashOut">ADMIN_PASSWORD_HASH</label>
+          <textarea class="input" id="hashOut" rows="3" readonly></textarea>
+          <button class="btn" type="button" data-copy="hashOut">Copy</button>
+        </div>
+        <div class="field">
+          <label for="secretOut">ADMIN_SESSION_SECRET</label>
+          <textarea class="input" id="secretOut" rows="2" readonly></textarea>
+          <button class="btn" type="button" data-copy="secretOut">Copy</button>
+        </div>
+      </div>
+      <div class="login-foot">Paste each value into Cloudflare as a <strong>Secret</strong>, then close this tab.</div>
+    </form>
+  </div>
+  <script src="admin.js"></script>
+  <script src="setup.js"></script>
+</body>
+</html>
