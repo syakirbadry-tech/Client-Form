@@ -37,7 +37,7 @@
     ]]
   ];
 
-  const DOCUMENTS = [['NRIC Front Photo', 'NRIC front'], ['NRIC Rear Photo', 'NRIC back'], ['Selfie with IC Photo', 'Selfie with IC']];
+  const DOCUMENTS = [['NRIC Front Photo', 'NRIC front'], ['NRIC Rear Photo', 'NRIC back'], ['Selfie with IC Photo', 'Selfie with IC'], ['Signature', 'Signature']];
 
   const $ = (id) => document.getElementById(id);
   const state = { submissions: [], filter: 'All', query: '', openId: null };
