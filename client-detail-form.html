@@ -700,6 +700,38 @@ function deriveDobFromNric(digits) {
   return `${year}-${pad(mm)}-${pad(dd)}`;
 }
 
+// Airtable's direct upload takes files up to 5 MB, so large phone photos are
+// shrunk to a JPEG before they are kept for submission.
+const MAX_UPLOAD_BYTES = 4.5 * 1024 * 1024;
+
+function shrinkImage(file) {
+  return new Promise((resolve) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const scale = Math.min(1, 2000 / Math.max(img.naturalWidth, img.naturalHeight));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.naturalWidth * scale);
+      canvas.height = Math.round(img.naturalHeight * scale);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob((blob) => {
+        if (!blob) return resolve(null);
+        const name = (file.name || 'photo').replace(/\.[^.]+$/, '') + '.jpg';
+        resolve(new File([blob], name, { type: 'image/jpeg' }));
+      }, 'image/jpeg', 0.85);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+    img.src = url;
+  });
+}
+
+async function prepareUpload(file) {
+  if (file.size <= MAX_UPLOAD_BYTES) return file;
+  const shrunk = await shrinkImage(file);
+  return shrunk && shrunk.size <= MAX_UPLOAD_BYTES ? shrunk : null;
+}
+
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -809,11 +841,15 @@ class Component extends DCLogic {
     this.setState(s => ({ data: { ...s.data, [name]: value }, errorMsg: '' }));
   };
 
-  onFileChange = (e) => {
+  onFileChange = async (e) => {
     const { name, files } = e.target;
-    if (files && files[0]) {
-      this.setState(s => ({ files: { ...s.files, [name]: files[0] }, errorMsg: '' }));
+    if (!files || !files[0]) return;
+    const file = await prepareUpload(files[0]);
+    if (!file) {
+      this.setState({ errorMsg: 'This file is too large (over 5 MB). Please upload a smaller photo, or a JPG/PNG instead.' });
+      return;
     }
+    this.setState(s => ({ files: { ...s.files, [name]: file }, errorMsg: '' }));
   };
 
   validateStep(step, data, files) {
