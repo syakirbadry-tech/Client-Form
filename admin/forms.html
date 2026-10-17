@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://prubsn-submission-service.syakirbadry.workers.dev; img-src 'self'; form-action 'none'; base-uri 'none'">
+  <title>Forms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Forms</h1>
+      <div class="topbar-sub" id="lastUpdated">Loading…</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="alert" id="pageError" role="alert" hidden></div>
+
+    <section class="panel insight-panel">
+      <h2>Client registration form</h2>
+      <p class="sub team-help">Send this link to a client. When they submit it, they appear in your Customers list.</p>
+      <div id="formLink"></div>
+      <div class="forms-actions" id="formActions"></div>
+    </section>
+
+    <section class="panel insight-panel">
+      <h2>Recently submitted</h2>
+      <ul class="forms-list" id="recent"></ul>
+      <div class="forms-actions"><a class="btn" href="dashboard.html">Open Customers</a></div>
+    </section>
+  </main>
+
+  <script src="admin.js"></script>
+  <script src="forms.js"></script>
+</body>
+</html>

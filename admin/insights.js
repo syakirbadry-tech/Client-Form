@@ -9,6 +9,7 @@
   const BUDGET_SHARE = 0.10;
 
   const $ = (id) => document.getElementById(id);
+  mountPortalNav('insights', session);
   const state = { all: [], clients: [], agent: 'All', sortBy: 'birthday' };
 
   function signOut(message) {

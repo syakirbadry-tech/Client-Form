@@ -10,6 +10,7 @@
   }
 
   const $ = (id) => document.getElementById(id);
+  mountPortalNav('team', session);
   const FORM_URL = new URL('../client-detail-form.html', location.href).href;
   const LOGIN_URL = new URL('./', location.href).href;
   const state = { users: [], codes: {} };

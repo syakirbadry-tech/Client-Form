@@ -199,3 +199,55 @@ function showBirthdayReminder(clients) {
   document.body.append(overlay);
   okBtn.focus();
 }
+
+// ---------- Portal menu (left sidebar; a slide-in drawer on phones) ----------
+
+// Sections still being built are listed so agents can see what is coming, but are not links yet.
+const NAV_GROUPS = [
+  ['Client journey', [
+    { id: 'customers', label: 'Customers', href: 'dashboard.html', icon: '👥' },
+    { id: 'vb', label: 'VB', icon: '🎯', soon: true },
+    { id: 'appointments', label: 'Appointments', icon: '📅', soon: true },
+    { id: 'presentation', label: 'Presentation', icon: '🖥️', soon: true },
+    { id: 'forms', label: 'Forms', href: 'forms.html', icon: '📝' }
+  ]],
+  ['Motivation', [
+    { id: 'contests', label: 'Contests', icon: '🏆', soon: true }
+  ]],
+  ['Reports', [
+    { id: 'insights', label: 'Insights', href: 'insights.html', icon: '📊' },
+    { id: 'team', label: 'Team', href: 'team.html', icon: '🧑‍🤝‍🧑', ownerOnly: true }
+  ]]
+];
+
+// Adds the menu to a signed-in page. `active` is the NAV_GROUPS id of the current page.
+function mountPortalNav(active, session) {
+  const me = Session.user(session);
+  const close = () => document.body.classList.remove('nav-open');
+  const item = (n) => {
+    const content = [el('span', { class: 'nav-icon', 'aria-hidden': 'true', text: n.icon }), el('span', { class: 'nav-label', text: n.label })];
+    if (n.soon) return el('li', {}, el('span', { class: 'nav-item soon', 'aria-disabled': 'true' }, content, el('span', { class: 'nav-soon', text: 'Soon' })));
+    return el('li', {}, el('a', { class: 'nav-item', href: n.href, 'aria-current': n.id === active ? 'page' : null }, content));
+  };
+  const nav = el('nav', { class: 'portal-nav', id: 'portalNav', 'aria-label': 'Portal menu' },
+    el('div', { class: 'nav-brand' },
+      el('img', { src: 'img/asg-ansar-logo.jpg', alt: '', class: 'nav-logo' }),
+      el('div', {}, el('div', { class: 'nav-brand-name', text: 'ASG Portal' }), el('div', { class: 'nav-brand-sub', text: 'Ansar Group' }))
+    ),
+    NAV_GROUPS.map(([title, items]) => {
+      const shown = items.filter((n) => !n.ownerOnly || me.role === 'owner');
+      return el('div', { class: 'nav-group' }, el('div', { class: 'nav-group-title', text: title }), el('ul', {}, shown.map(item)));
+    }),
+    el('div', { class: 'nav-foot' },
+      el('div', { class: 'nav-who' }, el('div', { class: 'name', text: me.name || session.username }), el('div', { class: 'sub', text: ROLE_LABELS[me.role] || '' })),
+      el('button', { class: 'btn nav-signout', type: 'button', onclick: () => { Session.clear(); location.replace('./'); } }, 'Sign out')
+    )
+  );
+  const menuBtn = el('button', { class: 'btn nav-toggle', type: 'button', 'aria-controls': 'portalNav', 'aria-label': 'Open menu', onclick: () => document.body.classList.add('nav-open') }, '☰');
+  const scrim = el('div', { class: 'nav-scrim', onclick: close });
+  document.body.classList.add('has-nav');
+  document.body.prepend(nav, scrim);
+  const bar = document.querySelector('.topbar');
+  if (bar) bar.prepend(menuBtn);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+}
