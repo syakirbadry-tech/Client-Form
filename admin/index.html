@@ -13,45 +13,42 @@
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-  <div class="login-wrap">
-    <form class="login-card" id="loginForm" novalidate>
-      <div>
-        <h1>Staff Sign In</h1>
-        <p>PruBSN client submissions dashboard</p>
+  <main class="login-scene">
+    <section class="login-story" aria-label="Client submissions portal">
+      <div class="login-brand" aria-label="PruBSN staff portal"><span class="brand-mark" aria-hidden="true">P</span><span class="brand-name">PRUBSN <small>STAFF PORTAL</small></span></div>
+      <div class="story-copy">
+        <p class="story-kicker">CLIENT SUBMISSIONS PORTAL</p>
+        <h2>Good advice starts with a thoughtful conversation.</h2>
+        <p>Review client submissions in one secure workspace, with the details you need to follow up clearly and confidently.</p>
       </div>
-      <div class="alert" id="loginError" role="alert" hidden></div>
-      <div class="field">
-        <label for="username">Email</label>
-        <input class="input" id="username" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+      <div class="story-security"><span class="security-mark" aria-hidden="true">✓</span><span><strong>Private staff access</strong><small>Sign in to continue to your dashboard</small></span></div>
+      <span class="story-orbit orbit-one" aria-hidden="true"></span><span class="story-orbit orbit-two" aria-hidden="true"></span><span class="story-glow" aria-hidden="true"></span>
+    </section>
+    <section class="login-side" aria-label="Sign in">
+      <div class="login-mobile-brand"><span class="brand-mark" aria-hidden="true">P</span><span class="brand-name">PRUBSN <small>STAFF PORTAL</small></span></div>
+      <div class="login-wrap">
+        <form class="login-card" id="loginForm" novalidate>
+          <div class="login-heading"><p class="form-kicker">SECURE STAFF ACCESS</p><h1>Welcome back</h1><p>Sign in to your client submissions dashboard.</p></div>
+          <div class="alert" id="loginError" role="alert" hidden></div>
+          <div class="field"><label for="username">Email address</label><input class="input" id="username" name="username" type="email" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="you@example.com" required></div>
+          <div class="field"><label for="password">Password</label><input class="input" id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required></div>
+          <button class="btn btn-primary" id="loginBtn" type="submit">Sign in <span aria-hidden="true">→</span></button>
+          <div class="login-foot"><span class="lock-mark" aria-hidden="true">●</span> Authorised staff only. Your session ends after 8 hours or when you close this tab.</div>
+        </form>
+        <form class="login-card" id="setupForm" novalidate hidden>
+          <div class="login-heading"><p class="form-kicker">ACCOUNT SETUP</p><h1>Choose your password</h1><p>You signed in with a temporary password. Choose your own password to continue. Nobody else will see it.</p></div>
+          <div class="alert" id="setupError" role="alert" hidden></div>
+          <input type="email" name="email" autocomplete="username" hidden>
+          <div class="field"><label for="newPassword">New password <span>(at least 8 characters)</span></label><input class="input" id="newPassword" name="password" type="password" autocomplete="new-password" minlength="8" required></div>
+          <div class="field"><label for="newPassword2">Confirm new password</label><input class="input" id="newPassword2" name="password2" type="password" autocomplete="new-password" minlength="8" required></div>
+          <button class="btn btn-primary" id="setupBtn" type="submit">Save password and sign in <span aria-hidden="true">→</span></button>
+          <button class="link-btn" id="showLogin" type="button">Back to sign in</button>
+          <div class="login-foot"><span class="lock-mark" aria-hidden="true">●</span> Authorised staff only. Your session ends after 8 hours or when you close this tab.</div>
+        </form>
       </div>
-      <div class="field">
-        <label for="password">Password</label>
-        <input class="input" id="password" name="password" type="password" autocomplete="current-password" required>
-      </div>
-      <button class="btn btn-primary" id="loginBtn" type="submit">Sign in</button>
-      <div class="login-foot">Authorised staff only. Sessions end after 8 hours or when you close this tab.</div>
-    </form>
-
-    <form class="login-card" id="setupForm" novalidate hidden>
-      <div>
-        <h1>Choose your password</h1>
-        <p>You signed in with a temporary password. Choose your own password to continue – nobody else will see it.</p>
-      </div>
-      <div class="alert" id="setupError" role="alert" hidden></div>
-      <input type="email" name="email" autocomplete="username" hidden>
-      <div class="field">
-        <label for="newPassword">New password (at least 8 characters)</label>
-        <input class="input" id="newPassword" name="password" type="password" autocomplete="new-password" minlength="8" required>
-      </div>
-      <div class="field">
-        <label for="newPassword2">Type it again</label>
-        <input class="input" id="newPassword2" name="password2" type="password" autocomplete="new-password" minlength="8" required>
-      </div>
-      <button class="btn btn-primary" id="setupBtn" type="submit">Save password and sign in</button>
-      <button class="link-btn" id="showLogin" type="button">Back to sign in</button>
-    </form>
-  </div>
-  <script src="admin.js"></script>
-  <script src="login.js"></script>
+      <p class="login-copyright">© PruBSN client submissions · Secure staff workspace</p>
+    </section>
+  </main>
+  <script src="admin.js"></script><script src="login.js"></script>
 </body>
 </html>
