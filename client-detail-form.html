@@ -389,7 +389,28 @@
 
           <div style="flex:1;" class="om-step-panel" key="{{ stepNumber }}">
 
-            <sc-if value="{{ step0 }}" hint-placeholder-val="{{ false }}">
+            <sc-if value="{{ stepScan }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#F2FAFA; border:1px solid #CDE7E8; border-radius:10px; padding:14px 16px; font-size:13px; color:#2c4a4b; margin-bottom:20px; line-height:1.6;">
+                Take a clear photo of the <b>front</b> and <b>back</b> of your MyKad. We read your name, IC number, address and gender from the front to fill in the form for you, and you can check and change everything on the next step. The photos are saved with your application.
+              </div>
+              <div style="display:flex; flex-direction:column; gap:18px;">
+                <sc-for list="{{ icUploadFields }}" as="u" hint-placeholder-count="2">
+                  <label style="border:2px dashed #B9DEE0; border-radius:12px; padding:22px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; cursor:pointer; background:#FAFEFE; text-align:center;">
+                    <div style="font-size:13.5px; font-weight:700; color:#178D93;">{{ u.label }} *</div>
+                    <div style="{{ u.iconStyle }}">{{ u.icon }}</div>
+                    <div style="font-size:12.5px; color:#8a857f;">{{ u.filename }}</div>
+                    <input type="file" name="{{ u.name }}" sc-camel-on-change="{{ onFileChange }}" accept="image/*" style="display:none;">
+                  </label>
+                </sc-for>
+              </div>
+              <div role="status" style="{{ scanStatusStyle }}">
+                <div style="font-weight:700; margin-bottom:4px;">{{ scanTitle }}</div>
+                <div style="white-space:pre-line;">{{ scanDetail }}</div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ stepPersonal }}" hint-placeholder-val="{{ false }}">
+              <div style="{{ prefillNoteStyle }}">Filled in from your IC. Please check every detail and correct anything that is wrong. Race is not printed on the MyKad, so please choose it yourself.</div>
               <div style="{{ gridStyle }}">
                 <label style="display:flex; flex-direction:column; gap:6px;">
                   <span style="font-size:13px; font-weight:600; color:#178D93;">Full Name *</span>
@@ -447,7 +468,7 @@
               </div>
             </sc-if>
 
-            <sc-if value="{{ step1 }}" hint-placeholder-val="{{ false }}">
+            <sc-if value="{{ stepEmployment }}" hint-placeholder-val="{{ false }}">
               <div style="{{ gridStyle }}">
                 <label style="display:flex; flex-direction:column; gap:6px;">
                   <span style="font-size:13px; font-weight:600; color:#178D93;">Employment Type *</span>
@@ -501,7 +522,7 @@
               </div>
             </sc-if>
 
-            <sc-if value="{{ step2 }}" hint-placeholder-val="{{ false }}">
+            <sc-if value="{{ stepFamily }}" hint-placeholder-val="{{ false }}">
               <div style="{{ gridStyle }}">
                 <label style="display:flex; flex-direction:column; gap:6px;">
                   <span style="font-size:13px; font-weight:600; color:#178D93;">Marital Status *</span>
@@ -534,7 +555,7 @@
               </div>
             </sc-if>
 
-            <sc-if value="{{ step3 }}" hint-placeholder-val="{{ false }}">
+            <sc-if value="{{ stepMedical }}" hint-placeholder-val="{{ false }}">
               <div style="{{ gridStyle }}">
                 <label style="display:flex; flex-direction:column; gap:6px;">
                   <span style="font-size:13px; font-weight:600; color:#178D93;">Height (cm) *</span>
@@ -707,10 +728,10 @@
 
             <sc-if value="{{ stepDocs }}" hint-placeholder-val="{{ false }}">
               <div style="background:#FBF2E9; border:1px solid #F0DCC4; border-radius:10px; padding:14px 16px; font-size:13px; color:#7a5a1f; margin-bottom:22px;">
-                <b>Note:</b> All document uploads are required. Please ensure your files are clear and legible. Accepted formats: PDF, PNG, HEIC, JPG.
+                <b>Note:</b> Your IC photos were taken in the first step. Please add a selfie holding your IC, and sign below. Accepted formats: PNG, HEIC, JPG.
               </div>
               <div style="display:flex; flex-direction:column; gap:18px;">
-                <sc-for list="{{ uploadFields }}" as="u" hint-placeholder-count="3">
+                <sc-for list="{{ uploadFields }}" as="u" hint-placeholder-count="1">
                   <label style="border:2px dashed #B9DEE0; border-radius:12px; padding:22px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; cursor:pointer; background:#FAFEFE; text-align:center;">
                     <div style="font-size:13.5px; font-weight:700; color:#178D93;">{{ u.label }} *</div>
                     <div style="{{ u.iconStyle }}">{{ u.icon }}</div>
@@ -786,6 +807,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script="">
 const STEP_LABELS = [
+  'Scan IC',
   'Personal Information',
   'Employment Details',
   'Family Information',
@@ -800,11 +822,59 @@ const STEP_LABELS = [
 // FORM_CHANGELOG.md. It is shown in the footer and saved with every
 // submission (Airtable "Form Version"), so any record can be traced back
 // to the exact form the client saw.
-const FORM_VERSION = '2.0';
+const FORM_VERSION = '3.0';
 
 const LAST_STEP = STEP_LABELS.length - 1;
 // Step indexes, so inserting a step only means updating this list.
-const STEP = { personal: 0, employment: 1, family: 2, medical: 3, coverage: 4, plan: 5, docs: 6, bank: 7 };
+const STEP = { scan: 0, personal: 1, employment: 2, family: 3, medical: 4, coverage: 5, plan: 6, docs: 7, bank: 8 };
+
+// Reads the IC front and returns { fields, missing, note } (see the Worker's src/icScan.js).
+const SCAN_URL = 'https://prubsn-submission-service.syakirbadry.workers.dev/scan-ic';
+const SCAN_TIMEOUT_MS = 60000;
+
+// A JPEG of the photo, at most 1600px on the long side, for reading. Returns
+// null if the browser can't decode it (e.g. HEIC outside Safari).
+function imageForScan(file) {
+  return new Promise((resolve) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const scale = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.naturalWidth * scale);
+      canvas.height = Math.round(img.naturalHeight * scale);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+      resolve(dataUrl.startsWith('data:image/jpeg') ? dataUrl.split(',')[1] : null);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+    img.src = url;
+  });
+}
+
+async function scanIc(file) {
+  const base64 = await imageForScan(file);
+  if (!base64) throw new Error('We could not open this photo to read it. Please type your details on the next step, or try a JPG photo.');
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), SCAN_TIMEOUT_MS);
+  try {
+    const res = await fetch(SCAN_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: { base64, mimeType: 'image/jpeg' } }),
+      signal: controller.signal
+    });
+    const result = await res.json().catch(() => ({}));
+    if (!res.ok || !result.success) throw new Error(result.error || 'We could not read your IC. Please type your details on the next step.');
+    return result;
+  } catch (err) {
+    if (err.name === 'AbortError') throw new Error('Reading your IC took too long. Please type your details on the next step, or try again.');
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 const COVERAGE_COMPANIES = [
   'Prudential BSN Takaful', 'Prudential Assurance Malaysia', 'AIA', 'Great Eastern', 'Allianz', 'Etiqa',
@@ -928,6 +998,8 @@ class Component extends DCLogic {
     files: { nricFront: null, nricRear: null, selfie: null },
     signature: '',
     errorMsg: '',
+    scan: { state: 'idle', title: '', detail: '' },
+    prefilled: false,
     submitting: false,
     success: false,
     submittedName: '',
@@ -1037,6 +1109,7 @@ class Component extends DCLogic {
   onFileChange = async (e) => {
     const { name, files } = e.target;
     if (!files || !files[0]) return;
+    if (name === 'nricFront') this.readIcFront(files[0]);
     const file = await prepareUpload(files[0]);
     if (!file) {
       this.setState({ errorMsg: 'This file is too large (over 5 MB). Please upload a smaller photo, or a JPG/PNG instead.' });
@@ -1045,7 +1118,49 @@ class Component extends DCLogic {
     this.setState(s => ({ files: { ...s.files, [name]: file }, errorMsg: '' }));
   };
 
+  // Fills the personal details from the IC front. Only values that were
+  // actually read replace what is in the form; the client checks them next.
+  readIcFront = async (file) => {
+    const seq = (this._scanSeq || 0) + 1;
+    this._scanSeq = seq;
+    this.setState({ scan: { state: 'reading', title: 'Reading your IC…', detail: 'This takes a few seconds.' } });
+    try {
+      const { fields, missing, note } = await scanIc(file);
+      if (this._scanSeq !== seq) return;
+      const read = {};
+      for (const key of ['fullName', 'nric', 'address', 'gender', 'religion']) {
+        if (fields[key]) read[key] = fields[key];
+      }
+      const dob = read.nric ? deriveDobFromNric(read.nric.replace(/\D/g, '').slice(0, 6)) : null;
+      if (dob) read.dob = dob;
+      const lines = [
+        read.fullName && `Name: ${read.fullName}`,
+        read.nric && `IC number: ${read.nric}`,
+        read.gender && `Gender: ${read.gender}`,
+        read.address && `Address: ${read.address}`
+      ].filter(Boolean);
+      const gaps = missing && missing.length ? `\nCould not read: ${missing.join(', ')} - please type ${missing.length > 1 ? 'them' : 'it'} on the next step.` : '';
+      this.setState(s => ({
+        data: { ...s.data, ...read },
+        prefilled: true,
+        scan: {
+          state: missing && missing.length ? 'partial' : 'done',
+          title: missing && missing.length ? 'Some details were read from your IC' : 'Your details were read from your IC',
+          detail: lines.join('\n') + gaps + (note ? `\n${note}` : '')
+        }
+      }));
+    } catch (err) {
+      if (this._scanSeq !== seq) return;
+      this.setState({ scan: { state: 'failed', title: 'We could not read your IC', detail: err.message || 'Please type your details on the next step.' } });
+    }
+  };
+
   validateStep(step, data, files) {
+    if (step === STEP.scan) {
+      if (!(files.nricFront && files.nricRear)) return 'Please upload photos of the front and back of your IC.';
+      if (this.state.scan.state === 'reading') return 'Please wait a moment while we read your IC.';
+      return true;
+    }
     const req = (fields) => fields.every(f => String(data[f] || '').trim() !== '');
     if (step === STEP.personal) return req(['fullName','nric','dob','gender','race','religion','email','phone','address']) || 'Please fill all required fields.';
     if (step === STEP.employment) {
@@ -1073,7 +1188,7 @@ class Component extends DCLogic {
       return req(['beneficiaryName','beneficiaryNric','beneficiaryRelationship','benefitWeightage']) || 'Please complete beneficiary information.';
     }
     if (step === STEP.docs) {
-      if (!(files.nricFront && files.nricRear && files.selfie)) return 'Please upload all required documents.';
+      if (!files.selfie) return 'Please upload a selfie holding your IC.';
       return !!this.state.signature || 'Please provide your signature.';
     }
     if (step === STEP.bank) return req(['bankName','accountNumber','accountHolderName']) || 'Please fill all required fields.';
@@ -1260,11 +1375,7 @@ class Component extends DCLogic {
     });
 
 
-    const uploadFields = [
-      { name: 'nricFront', label: 'NRIC Front Photo', file: s.files.nricFront },
-      { name: 'nricRear', label: 'NRIC Rear Photo', file: s.files.nricRear },
-      { name: 'selfie', label: 'Selfie with IC Photo', file: s.files.selfie }
-    ].map(u => ({
+    const uploadBox = (u) => ({
       name: u.name,
       label: u.label,
       icon: u.file ? '✓' : '+',
@@ -1272,8 +1383,15 @@ class Component extends DCLogic {
         width: '38px', height: '38px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
         background: u.file ? '#178D93' : '#E9F5F5', color: u.file ? '#fff' : '#178D93', fontSize: '18px', fontWeight: 700
       },
-      filename: u.file ? u.file.name : 'Click to upload — PDF, PNG, or HEIC'
-    }));
+      filename: u.file ? u.file.name : u.hint
+    });
+    const icUploadFields = [
+      { name: 'nricFront', label: 'IC Front Photo', file: s.files.nricFront, hint: 'Tap to take or choose a photo of the front' },
+      { name: 'nricRear', label: 'IC Back Photo', file: s.files.nricRear, hint: 'Tap to take or choose a photo of the back' }
+    ].map(uploadBox);
+    const uploadFields = [
+      { name: 'selfie', label: 'Selfie with IC Photo', file: s.files.selfie, hint: 'Click to upload — PNG, JPG or HEIC' }
+    ].map(uploadBox);
 
     const baseBtn = { padding: '11px 22px', borderRadius: '9px', fontSize: '14px', fontWeight: 700, border: 'none', cursor: 'pointer' };
 
@@ -1283,7 +1401,19 @@ class Component extends DCLogic {
       currentStepLabel: STEP_LABELS[step],
       totalSteps: STEP_LABELS.length,
       progressPct: `${Math.round(((step + 1) / STEP_LABELS.length) * 100)}%`,
-      step0: step === STEP.personal, step1: step === STEP.employment, step2: step === STEP.family, step3: step === STEP.medical,
+      stepScan: step === STEP.scan,
+      stepPersonal: step === STEP.personal, stepEmployment: step === STEP.employment, stepFamily: step === STEP.family, stepMedical: step === STEP.medical,
+      icUploadFields,
+      scanTitle: s.scan.title,
+      scanDetail: s.scan.detail,
+      scanStatusStyle: {
+        display: s.scan.state === 'idle' ? 'none' : 'block', marginTop: '18px', padding: '14px 16px', borderRadius: '10px', fontSize: '13.5px', lineHeight: 1.6,
+        background: s.scan.state === 'failed' ? '#FDEAEA' : (s.scan.state === 'reading' ? '#F3F0ED' : '#EAF6EF'),
+        color: s.scan.state === 'failed' ? '#B3261E' : (s.scan.state === 'reading' ? '#4a4540' : '#1E5E3A')
+      },
+      prefillNoteStyle: {
+        display: s.prefilled ? 'block' : 'none', background: '#EAF6EF', color: '#1E5E3A', borderRadius: '10px', padding: '12px 14px', fontSize: '13px', marginBottom: '18px', lineHeight: 1.5
+      },
       stepCoverage: step === STEP.coverage, stepPlan: step === STEP.plan, stepDocs: step === STEP.docs, stepBank: step === STEP.bank,
       formVersion: FORM_VERSION,
       showPolicies: s.data.hasCoverage === 'Yes',
