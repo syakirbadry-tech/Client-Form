@@ -424,13 +424,11 @@
 
   // ---------- Wire up ----------
 
-  $('who').textContent = `Signed in as ${me.name || session.username} · ${ROLE_LABELS[me.role] || ''}`;
-  $('teamLink').hidden = me.role !== 'owner';
+  mountPortalNav('customers', session);
   $('passwordBtn').hidden = me.role === 'owner';
   $('passwordBtn').addEventListener('click', openChangePassword);
   document.querySelector('th.col-agent').hidden = !seesAll;
   $('agentFilter').addEventListener('change', (e) => { state.agent = e.target.value; render(); });
-  $('logoutBtn').addEventListener('click', () => signOut());
   $('refreshBtn').addEventListener('click', load);
   $('exportBtn').addEventListener('click', exportCsv);
   $('search').addEventListener('input', (e) => { state.query = e.target.value.trim(); renderRows(); });
