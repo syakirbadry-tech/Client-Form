@@ -378,7 +378,7 @@ body:has(.login-scene) { min-height: 100vh; background: #08231f; color: #17302d;
  .login-mobile-brand { width:100%; display:flex; gap:10px; padding:18px 4px 4px; }
  .login-mobile-brand .brand-mark { width:30px; height:30px; border-radius:10px 10px 10px 3px; font-size:19px; }
  .login-mobile-brand .brand-name { color:#143c38; font-size:11px; } .login-mobile-brand .brand-name small { color:#74837d; font-size:8px; }
- .login-wrap { margin-top:-31px; position:relative; z-index:3; }
+ .login-wrap { margin-top:8px; position:relative; z-index:3; }
  .login-card { max-width:520px; padding:25px 21px; gap:17px; border-radius:17px; box-shadow:0 16px 40px rgba(16,47,42,.12); }
  .login-card h1 { font-size:29px; } .login-card .input { min-height:48px; } .login-card .btn { min-height:49px; } .login-copyright { margin-top:16px; }
 }
