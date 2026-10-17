@@ -25,6 +25,9 @@
       ['Pre-existing Medical Conditions', 'wide'], ['Current Medications', 'wide'],
       ['Allergies', 'wide'], ['Previous Surgery/Hospitalization', 'wide']
     ]],
+    ['Existing Coverage', [
+      ['Existing Coverage'], ['Existing Premium per Year', 'money'], ['Existing Policies', 'wide']
+    ]],
     ['Plan & Beneficiary', [
       ['Selected Plan', 'wide'], ['Beneficiary Name'], ['Beneficiary NRIC'],
       ['Beneficiary Relationship'], ['Benefit Weightage (%)']
@@ -33,9 +36,12 @@
       ['Bank Name'], ['Account Number'], ['Account Holder Name']
     ]],
     ['Submission', [
-      ['Submission ID', 'wide'], ['Submitted At', 'datetime'], ['Agent Name'], ['Payload Version']
+      ['Submission ID', 'wide'], ['Submitted At', 'datetime'], ['Agent Name'], ['Form Version'], ['Payload Version']
     ]]
   ];
+
+  // Sections shown before the Documents block; the rest (bank, submission) come after it.
+  const CLIENT_SECTIONS = SECTIONS.findIndex(([title]) => title === 'Bank Details');
 
   const DOCUMENTS = [['NRIC Front Photo', 'NRIC front'], ['NRIC Rear Photo', 'NRIC back'], ['Selfie with IC Photo', 'Selfie with IC'], ['Signature', 'Signature']];
 
@@ -279,9 +285,9 @@
       $('printBtn').hidden = false;
       renderStatusControl(id, f['Submission Status'] || 'Received');
       $('drawerBody').replaceChildren(
-        ...SECTIONS.slice(0, 5).map(([title, fields]) => renderSection(title, fields, f)),
+        ...SECTIONS.slice(0, CLIENT_SECTIONS).map(([title, fields]) => renderSection(title, fields, f)),
         renderDocuments(f),
-        ...SECTIONS.slice(5).map(([title, fields]) => renderSection(title, fields, f))
+        ...SECTIONS.slice(CLIENT_SECTIONS).map(([title, fields]) => renderSection(title, fields, f))
       );
     } catch (err) {
       if (state.openId === id) $('drawerBody').replaceChildren(el('div', { class: 'alert', text: err.message }));
@@ -319,16 +325,17 @@
         el('div', { class: 'letterhead-right' },
           el('img', { class: 'letterhead-partner', src: 'img/prubsn-takaful-logo.png', alt: 'Prudential BSN Takaful' }),
           el('div', { class: 'letterhead-title', text: 'Client Details' }),
-          el('div', { text: formatDate(new Date().toISOString()) })
+          el('div', { text: formatDate(new Date().toISOString()) }),
+          f['Form Version'] ? el('div', { text: `Form v${f['Form Version']}` }) : null
         )
       ),
       el('div', { class: 'print-client' },
         el('h1', { text: f['Full Name'] || summary.fullName || 'Client' }),
         el('div', { class: 'sub', text: f['Selected Plan'] || '' })
       ),
-      ...SECTIONS.slice(0, 5).map(([title, fields]) => renderSection(title, fields, f)),
+      ...SECTIONS.slice(0, CLIENT_SECTIONS).map(([title, fields]) => renderSection(title, fields, f)),
       renderDocuments(f),
-      renderSection(...SECTIONS[5], f)
+      renderSection(...SECTIONS[CLIENT_SECTIONS], f)
     );
     document.getElementById('printSheet')?.remove();
     document.body.append(sheet);
