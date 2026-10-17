@@ -40,7 +40,9 @@
   const DOCUMENTS = [['NRIC Front Photo', 'NRIC front'], ['NRIC Rear Photo', 'NRIC back'], ['Selfie with IC Photo', 'Selfie with IC'], ['Signature', 'Signature']];
 
   const $ = (id) => document.getElementById(id);
-  const state = { submissions: [], filter: 'All', query: '', openId: null };
+  const me = Session.user(session);
+  const seesAll = me.role !== 'agent';
+  const state = { submissions: [], filter: 'All', agent: 'All', query: '', openId: null, current: null };
 
   function signOut(message) {
     Session.clear();
@@ -77,6 +79,7 @@
       state.submissions = data.submissions;
       $('lastUpdated').textContent = `Updated ${formatDateTime(new Date().toISOString())}`;
       render();
+      showBirthdayReminder(state.submissions.map((s) => ({ name: s.fullName || '(no name)', phone: s.phone, bd: birthDate(s.dateOfBirth, s.nric) })));
     } catch (err) {
       showPageError(err.message);
       $('lastUpdated').textContent = 'Could not load submissions';
@@ -90,18 +93,24 @@
   }
 
   function matches(s) {
+    if (state.agent !== 'All' && agentLabel(s) !== state.agent) return false;
     if (state.filter !== 'All' && statusOf(s) !== state.filter) return false;
     if (!state.query) return true;
     const q = state.query.toLowerCase();
     const digits = q.replace(/\D/g, '');
-    return [s.fullName, s.email, s.plan].some((v) => v && String(v).toLowerCase().includes(q)) ||
+    return [s.fullName, s.email, s.plan, s.agentName].some((v) => v && String(v).toLowerCase().includes(q)) ||
       (digits.length >= 3 && [s.nric, s.phone].some((v) => v && String(v).replace(/\D/g, '').includes(digits)));
   }
 
+  // Submissions for the chosen agent (all of them for "All agents"); status chips and tiles count within it.
+  function pool() {
+    return state.agent === 'All' ? state.submissions : state.submissions.filter((s) => agentLabel(s) === state.agent);
+  }
+
   function renderStats() {
-    const count = (st) => state.submissions.filter((s) => statusOf(s) === st).length;
+    const count = (st) => pool().filter((s) => statusOf(s) === st).length;
     const tiles = [
-      ['total', 'Total submissions', state.submissions.length],
+      ['total', 'Total submissions', pool().length],
       ['received', 'New (Received)', count('Received')],
       ['review', 'In review', count('In Review') + count('Documents Verified')],
       ['approved', 'Approved', count('Approved')],
@@ -112,9 +121,21 @@
     ));
   }
 
+  function renderAgentFilter() {
+    if (!seesAll) return;
+    const names = [...new Set(state.submissions.map(agentLabel))].sort();
+    if (state.agent !== 'All' && !names.includes(state.agent)) state.agent = 'All';
+    const select = $('agentFilter');
+    select.replaceChildren(
+      el('option', { value: 'All', selected: state.agent === 'All' }, 'All agents'),
+      ...names.map((n) => el('option', { value: n, selected: state.agent === n }, `${n} (${state.submissions.filter((s) => agentLabel(s) === n).length})`))
+    );
+    select.hidden = false;
+  }
+
   function renderChips() {
     $('chips').replaceChildren(...['All', ...STATUSES].map((st) => {
-      const n = st === 'All' ? state.submissions.length : state.submissions.filter((s) => statusOf(s) === st).length;
+      const n = st === 'All' ? pool().length : pool().filter((s) => statusOf(s) === st).length;
       return el('button', {
         class: 'chip',
         type: 'button',
@@ -136,6 +157,7 @@
         el('td', {}, el('div', { class: 'name', text: s.fullName || '(no name)' }), el('div', { class: 'sub num', text: s.nric || '' })),
         el('td', { class: 'col-hide-sm' }, el('div', { class: 'num', text: s.phone || '' }), el('div', { class: 'sub', text: s.email || '' })),
         el('td', { class: 'col-hide-md', text: s.plan || '' }),
+        seesAll ? el('td', { class: 'col-hide-md sub', text: agentLabel(s) }) : null,
         el('td', {}, el('span', { class: 'pill', 'data-status': statusOf(s), text: statusOf(s) })),
         el('td', { class: 'col-hide-sm sub', text: formatDateTime(s.submittedAt || s.createdTime) })
       )
@@ -146,6 +168,7 @@
   }
 
   function render() {
+    renderAgentFilter();
     renderStats();
     renderChips();
     renderRows();
@@ -240,6 +263,8 @@
     $('drawerTitle').textContent = summary.fullName || 'Submission';
     $('drawerSub').textContent = `Submitted ${formatDateTime(summary.submittedAt || summary.createdTime)}`;
     $('statusRow').replaceChildren();
+    state.current = null;
+    $('printBtn').hidden = true;
     $('drawerBody').replaceChildren(el('div', { class: 'loading', text: 'Loading full details…' }));
     $('scrim').hidden = false;
     $('drawer').hidden = false;
@@ -250,6 +275,8 @@
       const { submission } = await call(`/admin/submissions/${id}`);
       if (state.openId !== id) return;
       const f = submission.fields;
+      state.current = submission;
+      $('printBtn').hidden = false;
       renderStatusControl(id, f['Submission Status'] || 'Received');
       $('drawerBody').replaceChildren(
         ...SECTIONS.slice(0, 5).map(([title, fields]) => renderSection(title, fields, f)),
@@ -263,10 +290,106 @@
 
   function closeDetail() {
     state.openId = null;
+    state.current = null;
     $('scrim').hidden = true;
     $('drawer').hidden = true;
     document.body.style.overflow = '';
     $('drawerBody').replaceChildren();
+  }
+
+  // ---------- Print / save as PDF ----------
+
+  // Builds a clean A4 sheet of the open client and hands it to the browser's
+  // print dialog, where "Save as PDF" gives a PDF copy.
+  async function printDetail() {
+    const sub = state.current;
+    if (!sub) return;
+    const f = sub.fields;
+    const summary = state.submissions.find((s) => s.id === sub.id) || {};
+    // Letterhead, then the client's details only (no internal submission/status info).
+    const sheet = el('div', { class: 'print-sheet', id: 'printSheet' },
+      el('div', { class: 'print-watermark', 'aria-hidden': 'true' }, 'ASG ANSAR', el('br'), 'USE ONLY'),
+      el('header', { class: 'letterhead' },
+        el('img', { class: 'letterhead-logo', src: 'img/asg-ansar-logo.jpg', alt: 'ASG Ansar Group' }),
+        el('div', { class: 'grow' },
+          el('div', { class: 'letterhead-name', text: 'ASG ANSAR GROUP' }),
+          el('div', { class: 'letterhead-sub', text: 'Ejen Takaful · Prudential BSN Takaful Berhad' }),
+          el('div', { class: 'letterhead-sub', text: 'Sungai Petani, Kedah' })
+        ),
+        el('div', { class: 'letterhead-right' },
+          el('img', { class: 'letterhead-partner', src: 'img/prubsn-takaful-logo.png', alt: 'Prudential BSN Takaful' }),
+          el('div', { class: 'letterhead-title', text: 'Client Details' }),
+          el('div', { text: formatDate(new Date().toISOString()) })
+        )
+      ),
+      el('div', { class: 'print-client' },
+        el('h1', { text: f['Full Name'] || summary.fullName || 'Client' }),
+        el('div', { class: 'sub', text: f['Selected Plan'] || '' })
+      ),
+      ...SECTIONS.slice(0, 5).map(([title, fields]) => renderSection(title, fields, f)),
+      renderDocuments(f),
+      renderSection(...SECTIONS[5], f)
+    );
+    document.getElementById('printSheet')?.remove();
+    document.body.append(sheet);
+
+    // Give the photos a moment to load so they appear on the page.
+    const imgs = [...sheet.querySelectorAll('img')];
+    imgs.forEach((img) => img.removeAttribute('loading'));
+    await Promise.race([
+      Promise.all(imgs.map((img) => img.complete ? null : new Promise((r) => { img.onload = img.onerror = r; }))),
+      new Promise((r) => setTimeout(r, 4000))
+    ]);
+
+    const prevTitle = document.title;
+    document.title = `Client - ${f['Full Name'] || sub.id}`;
+    document.body.classList.add('printing-sheet');
+    window.addEventListener('afterprint', () => {
+      sheet.remove();
+      document.body.classList.remove('printing-sheet');
+      document.title = prevTitle;
+    }, { once: true });
+    window.print();
+  }
+
+  // ---------- Change password (leaders and agents) ----------
+
+  function openChangePassword() {
+    const err = el('div', { class: 'alert', role: 'alert', hidden: true });
+    const field = (label, name, autocomplete) => el('div', { class: 'field' },
+      el('label', { for: `cp-${name}`, text: label }),
+      el('input', { class: 'input', id: `cp-${name}`, name, type: 'password', autocomplete, required: true }));
+    const saveBtn = el('button', { class: 'btn btn-primary', type: 'submit' }, 'Save');
+    const cancelBtn = el('button', { class: 'btn', type: 'button' }, 'Cancel');
+    const form = el('form', { class: 'reminder', novalidate: true },
+      el('h2', { text: 'Change password' }),
+      err,
+      field('Current password', 'current', 'current-password'),
+      field('New password (at least 8 characters)', 'next', 'new-password'),
+      field('Type the new password again', 'again', 'new-password'),
+      el('div', { class: 'reminder-actions' }, cancelBtn, saveBtn));
+    const overlay = el('div', { class: 'reminder-overlay' }, form);
+    const close = () => overlay.remove();
+    cancelBtn.addEventListener('click', close);
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const show = (m) => { err.textContent = m; err.hidden = false; };
+      if (form.next.value.length < 8) return show('Your new password needs at least 8 characters.');
+      if (form.next.value !== form.again.value) return show('The two new passwords do not match.');
+      saveBtn.disabled = true;
+      try {
+        const data = await call('/admin/change-password', { method: 'POST', body: { currentPassword: form.current.value, newPassword: form.next.value } });
+        Session.set({ ...session, token: data.token, expiresAt: data.expiresAt, user: data.user });
+        session.token = data.token;
+        close();
+        alert('Your password has been changed.');
+      } catch (ex) {
+        show(ex.message);
+        saveBtn.disabled = false;
+      }
+    });
+    document.body.append(overlay);
+    form.current.focus();
   }
 
   // ---------- CSV export (summary columns) ----------
@@ -280,9 +403,9 @@
 
   function exportCsv() {
     const list = state.submissions.filter(matches);
-    const header = ['Full Name', 'NRIC', 'Phone', 'Email', 'Plan', 'Status', 'Employment Type', 'Marital Status', 'Submitted At'];
+    const header = ['Full Name', 'NRIC', 'Phone', 'Email', 'Plan', 'Status', 'Agent', 'Employment Type', 'Marital Status', 'Submitted At'];
     const lines = [header, ...list.map((s) => [
-      s.fullName, s.nric, s.phone, s.email, s.plan, statusOf(s), s.employmentType, s.maritalStatus, formatDateTime(s.submittedAt || s.createdTime)
+      s.fullName, s.nric, s.phone, s.email, s.plan, statusOf(s), agentLabel(s), s.employmentType, s.maritalStatus, formatDateTime(s.submittedAt || s.createdTime)
     ])].map((r) => r.map(csvCell).join(','));
     const blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
     const a = el('a', { href: URL.createObjectURL(blob), download: `client-submissions-${new Date().toISOString().slice(0, 10)}.csv` });
@@ -294,12 +417,18 @@
 
   // ---------- Wire up ----------
 
-  $('who').textContent = `Signed in as ${session.username}`;
+  $('who').textContent = `Signed in as ${me.name || session.username} · ${ROLE_LABELS[me.role] || ''}`;
+  $('teamLink').hidden = me.role !== 'owner';
+  $('passwordBtn').hidden = me.role === 'owner';
+  $('passwordBtn').addEventListener('click', openChangePassword);
+  document.querySelector('th.col-agent').hidden = !seesAll;
+  $('agentFilter').addEventListener('change', (e) => { state.agent = e.target.value; render(); });
   $('logoutBtn').addEventListener('click', () => signOut());
   $('refreshBtn').addEventListener('click', load);
   $('exportBtn').addEventListener('click', exportCsv);
   $('search').addEventListener('input', (e) => { state.query = e.target.value.trim(); renderRows(); });
   $('closeDrawer').addEventListener('click', closeDetail);
+  $('printBtn').addEventListener('click', printDetail);
   $('scrim').addEventListener('click', closeDetail);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && state.openId) closeDetail(); });
 

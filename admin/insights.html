@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://prubsn-submission-service.syakirbadry.workers.dev; img-src 'self'; form-action 'none'; base-uri 'none'">
+  <title>Client Insights</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Client Insights</h1>
+      <div class="topbar-sub" id="lastUpdated">Loading…</div>
+    </div>
+    <div class="topbar-right no-print">
+      <a class="btn" href="dashboard.html">Submissions</a>
+      <button class="btn btn-gold" id="printBtn" type="button">Print / PDF</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="alert" id="pageError" role="alert" hidden></div>
+
+    <label class="sub no-print" id="agentFilterWrap" hidden>Showing
+      <select class="input agent-filter" id="agentFilter" aria-label="Filter by agent"></select>
+    </label>
+
+    <section class="stats" id="stats" aria-label="Summary"></section>
+
+    <div class="insight-grid">
+      <section class="panel insight-panel"><h2>Monthly income</h2><div id="incomeChart"></div></section>
+      <section class="panel insight-panel"><h2>Age group</h2><div id="ageChart"></div></section>
+      <section class="panel insight-panel"><h2>Occupation</h2><div id="occupationChart"></div></section>
+      <section class="panel insight-panel"><h2>Employment type</h2><div id="employmentChart"></div></section>
+      <section class="panel insight-panel"><h2>Marital status</h2><div id="maritalChart"></div></section>
+    </div>
+
+    <section class="panel">
+      <div class="insight-table-head">
+        <h2>All clients</h2>
+        <label class="sub no-print">Sort by
+          <select id="sortBy">
+            <option value="birthday">Next birthday</option>
+            <option value="income">Income (high to low)</option>
+            <option value="age">Age (oldest first)</option>
+            <option value="name">Name</option>
+          </select>
+        </label>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Age</th>
+              <th>Birthday</th>
+              <th>Occupation</th>
+              <th class="right">Income / month</th>
+              <th class="right">Est. budget / month</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <p class="sub insight-note">Est. budget is a guide only: 10% of the client's stated monthly income, a common rule of thumb for protection plans. The form does not ask clients for a budget directly.</p>
+    </section>
+  </main>
+
+  <script src="admin.js"></script>
+  <script src="insights.js"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://prubsn-submission-service.syakirbadry.workers.dev; img-src 'self'; form-action 'none'; base-uri 'none'">
+  <title>Team</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Team</h1>
+      <div class="topbar-sub" id="lastUpdated">Loading…</div>
+    </div>
+    <div class="topbar-right">
+      <a class="btn" href="dashboard.html">Submissions</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="alert" id="pageError" role="alert" hidden></div>
+
+    <section class="panel insight-panel">
+      <h2>Your form link</h2>
+      <p class="sub team-help">Clients who fill in this link are yours. Leaders can see them; agents cannot.</p>
+      <div id="ownerLink"></div>
+    </section>
+
+    <section class="panel">
+      <div class="insight-table-head"><h2>Leaders &amp; agents</h2></div>
+      <p class="sub team-help team-pad">Leaders see every client. Agents only see clients who used their own form link. To let someone sign in (or reset a forgotten password), tap <b>Temporary password</b> and send them the message. They sign in with it once and must then choose their own password.</p>
+      <div id="members" class="members"></div>
+    </section>
+
+    <section class="panel insight-panel">
+      <h2>Add a person</h2>
+      <form id="addForm" class="add-form" novalidate>
+        <div class="field"><label for="addName">Full name</label><input class="input" id="addName" name="name" required></div>
+        <div class="field"><label for="addEmail">Email (their login)</label><input class="input" id="addEmail" name="email" type="email" autocapitalize="none" spellcheck="false" required></div>
+        <div class="field"><label for="addRole">Role</label>
+          <select class="input" id="addRole" name="role">
+            <option value="agent">Agent – sees own clients</option>
+            <option value="leader">Leader – sees all clients</option>
+          </select>
+        </div>
+        <div class="alert" id="addError" role="alert" hidden></div>
+        <button class="btn btn-primary" id="addBtn" type="submit">Add person</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="admin.js"></script>
+  <script src="team.js"></script>
+</body>
+</html>

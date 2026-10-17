@@ -21,7 +21,7 @@
       </div>
       <div class="alert" id="loginError" role="alert" hidden></div>
       <div class="field">
-        <label for="username">Username</label>
+        <label for="username">Email</label>
         <input class="input" id="username" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
       </div>
       <div class="field">
@@ -30,6 +30,25 @@
       </div>
       <button class="btn btn-primary" id="loginBtn" type="submit">Sign in</button>
       <div class="login-foot">Authorised staff only. Sessions end after 8 hours or when you close this tab.</div>
+    </form>
+
+    <form class="login-card" id="setupForm" novalidate hidden>
+      <div>
+        <h1>Choose your password</h1>
+        <p>You signed in with a temporary password. Choose your own password to continue – nobody else will see it.</p>
+      </div>
+      <div class="alert" id="setupError" role="alert" hidden></div>
+      <input type="email" name="email" autocomplete="username" hidden>
+      <div class="field">
+        <label for="newPassword">New password (at least 8 characters)</label>
+        <input class="input" id="newPassword" name="password" type="password" autocomplete="new-password" minlength="8" required>
+      </div>
+      <div class="field">
+        <label for="newPassword2">Type it again</label>
+        <input class="input" id="newPassword2" name="password2" type="password" autocomplete="new-password" minlength="8" required>
+      </div>
+      <button class="btn btn-primary" id="setupBtn" type="submit">Save password and sign in</button>
+      <button class="link-btn" id="showLogin" type="button">Back to sign in</button>
     </form>
   </div>
   <script src="admin.js"></script>

@@ -352,7 +352,7 @@
     <div style="{{ headerStyle }}">
       <div style="position:absolute; top:-40px; right:-40px; width:160px; height:160px; border-radius:50%; background:rgba(255,255,255,0.25);"></div>
       <div style="position:relative; font-family:'Playfair Display', serif; font-weight:700; font-size:29px; color:#C9A227; letter-spacing:0.5px;">ASG ANSAR GROUP</div>
-      <div style="position:relative; font-size:15px; font-weight:700; color:#178D93; margin-top:6px;">PruBSN AnugerahMax</div>
+      <div style="position:relative; font-size:15px; font-weight:700; color:#178D93; margin-top:6px;">Prudential BSN Takaful</div>
       <div style="position:relative; font-size:13.5px; color:#79736c; margin-top:10px;">Client Registration Form</div>
 
       <div style="position:relative; max-width:480px; margin:22px auto 0; height:6px; background:rgba(255,255,255,0.6); border-radius:99px; overflow:hidden;">
@@ -575,7 +575,47 @@
             </sc-if>
 
             <sc-if value="{{ step4 }}" hint-placeholder-val="{{ false }}">
-              <div style="font-family:'Playfair Display', serif; font-weight:700; font-size:17px; color:#178D93; margin-bottom:16px;">Beneficiary Information</div>
+              <div style="font-family:'Playfair Display', serif; font-weight:700; font-size:17px; color:#178D93; margin-bottom:16px;">Product</div>
+              <div style="{{ gridStyle }}">
+                <label style="display:flex; flex-direction:column; gap:6px; grid-column:1 / -1;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Product you are signing up for *</span>
+                  <sc-raw-select name="product" value="{{ data.product }}" sc-camel-on-change="{{ onChange }}" style="{{ inputStyle }}">
+                    <option value="">Select a product</option>
+                    <option value="AnugerahMax">PruBSN AnugerahMax</option>
+                    <option value="Warisan Gold">PruBSN Warisan Gold</option>
+                    <option value="Anggun">PruBSN Anggun</option>
+                    <option value="Critical Care 360">PruBSN Critical Care 360</option>
+                    <option value="Asas 360">PruBSN Asas 360</option>
+                  </sc-raw-select>
+                </label>
+                <sc-if value="{{ isAnugerahMax }}" hint-placeholder-val="{{ false }}">
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Plan *</span>
+                  <sc-raw-select name="planTier" value="{{ data.planTier }}" sc-camel-on-change="{{ onChange }}" style="{{ inputStyle }}">
+                    <option value="">Select a plan</option>
+                    <option value="Plan 150">Plan 150</option>
+                    <option value="Plan 200">Plan 200</option>
+                    <option value="Plan 250">Plan 250</option>
+                  </sc-raw-select>
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Medic Booster *</span>
+                  <sc-raw-select name="medicBooster" value="{{ data.medicBooster }}" sc-camel-on-change="{{ onChange }}" style="{{ inputStyle }}">
+                    <option value="">Select an option</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </sc-raw-select>
+                </label>
+                </sc-if>
+                <sc-if value="{{ needsSumCovered }}" hint-placeholder-val="{{ false }}">
+                <label style="display:flex; flex-direction:column; gap:6px;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Sum covered (RM) *</span>
+                  <input type="number" name="sumCovered" value="{{ data.sumCovered }}" sc-camel-on-change="{{ onChange }}" placeholder="e.g. 100000" min="1" inputmode="numeric" style="{{ inputStyle }}">
+                </label>
+                </sc-if>
+              </div>
+
+              <div style="font-family:'Playfair Display', serif; font-weight:700; font-size:17px; color:#178D93; margin:8px 0 16px;">Beneficiary Information</div>
               <div style="{{ gridStyle }}">
                 <label style="display:flex; flex-direction:column; gap:6px;">
                   <span style="font-size:13px; font-weight:600; color:#178D93;">Beneficiary Name *</span>
@@ -666,7 +706,7 @@
     </div>
 
     <div style="text-align:center; font-size:12px; color:#a19c96; margin-top:22px; line-height:1.8;">
-      © 2024 ASG ANSAR GROUP | Alor Setar, Kedah<br>
+      © 2024 ASG ANSAR GROUP | Sungai Petani, Kedah<br>
       PruBSN AnugerahMax – Professional Insurance Solutions
     </div>
 
@@ -680,12 +720,39 @@ const STEP_LABELS = [
   'Employment Details',
   'Family Information',
   'Medical History',
-  'Beneficiary Information',
+  'Plan & Beneficiary',
   'Documents Upload',
   'Bank Details'
 ];
 
 const SUBMIT_URL = 'https://prubsn-submission-service.syakirbadry.workers.dev/submit';
+
+const PRODUCTS_WITH_SUM_COVERED = ['Warisan Gold', 'Critical Care 360'];
+
+// The plan as one line for the "Selected Plan" field, e.g.
+// "PruBSN AnugerahMax — Medic TotalCare Plan 200 (Medic Booster: Yes)".
+function planLabel(d) {
+  if (!d.product) return '';
+  const name = `PruBSN ${d.product}`;
+  if (d.product === 'AnugerahMax') {
+    return `${name} — Medic TotalCare ${d.planTier || '(plan not chosen)'} (Medic Booster: ${d.medicBooster || '—'})`;
+  }
+  if (PRODUCTS_WITH_SUM_COVERED.includes(d.product)) {
+    const sum = Number(d.sumCovered);
+    return `${name} — Sum covered RM ${sum > 0 ? sum.toLocaleString('en-MY') : '—'}`;
+  }
+  return name;
+}
+
+// An agent's personal link (client-detail-form.html?agent=<code>) tags the submission to them.
+function agentCodeFromUrl() {
+  try {
+    const code = (new URLSearchParams(window.location.search).get('agent') || '').trim().toLowerCase();
+    return /^[a-z0-9-]{1,32}$/.test(code) ? code : '';
+  } catch (e) {
+    return '';
+  }
+}
 
 function deriveDobFromNric(digits) {
   if (digits.length !== 6) return null;
@@ -749,7 +816,7 @@ class Component extends DCLogic {
       employmentType: '', notEmployedCategory: '', occupation: '', fieldOfWork: '', employerName: '', monthlyIncome: '', workAddress: '',
       maritalStatus: '', spouseName: '', spouseNric: '', numChildren: '', childrenDetails: '',
       height: '', weight: '', smokingStatus: '', preExisting: '', medications: '', allergies: '', surgery: '',
-      plan: 'PruBSN AnugerahMax — Medic TotalCare Plan 200',
+      product: '', planTier: '', medicBooster: '', sumCovered: '',
       beneficiaryName: '', beneficiaryNric: '', beneficiaryRelationship: '', benefitWeightage: '',
       bankName: '', accountNumber: '', accountHolderName: ''
     },
@@ -861,7 +928,12 @@ class Component extends DCLogic {
     }
     if (step === 2) return req(['maritalStatus']) || 'Please fill all required fields.';
     if (step === 3) return req(['height','weight','smokingStatus']) || 'Please fill all required fields.';
-    if (step === 4) return (data.plan && req(['beneficiaryName','beneficiaryNric','beneficiaryRelationship','benefitWeightage'])) || 'Please complete beneficiary information.';
+    if (step === 4) {
+      if (!data.product) return 'Please choose the product you are signing up for.';
+      if (data.product === 'AnugerahMax' && !req(['planTier', 'medicBooster'])) return 'Please choose your AnugerahMax plan and Medic Booster option.';
+      if (PRODUCTS_WITH_SUM_COVERED.includes(data.product) && !(Number(data.sumCovered) > 0)) return 'Please key in the sum covered.';
+      return req(['beneficiaryName','beneficiaryNric','beneficiaryRelationship','benefitWeightage']) || 'Please complete beneficiary information.';
+    }
     if (step === 5) {
       if (!(files.nricFront && files.nricRear && files.selfie)) return 'Please upload all required documents.';
       return !!this.state.signature || 'Please provide your signature.';
@@ -889,6 +961,7 @@ class Component extends DCLogic {
     if (check !== true) { this.setState({ errorMsg: check }); return; }
     this.setState({ submitting: true, errorMsg: '' });
     const d = this.state.data;
+    const plan = planLabel(d);
     const notEmployed = d.employmentType === 'Not Employed';
     const single = d.maritalStatus === 'Single';
 
@@ -959,7 +1032,7 @@ class Component extends DCLogic {
           relationship: d.beneficiaryRelationship,
           percentage: Number(d.benefitWeightage) || 0
         }],
-        selectedPlan: d.plan,
+        selectedPlan: plan,
         selectedPlanDetails: {
           monthlyContribution: ''
         },
@@ -970,6 +1043,8 @@ class Component extends DCLogic {
         },
         documents
       };
+      const agentCode = agentCodeFromUrl();
+      if (agentCode) payload.agentCode = agentCode;
 
       const res = await fetch(SUBMIT_URL, {
         method: 'POST',
@@ -981,7 +1056,7 @@ class Component extends DCLogic {
         throw new Error(result.error || 'Failed to submit your application.');
       }
 
-      this.setState({ submitting: false, success: true, submittedName: d.fullName, submittedPlan: d.plan });
+      this.setState({ submitting: false, success: true, submittedName: d.fullName, submittedPlan: plan });
     } catch (err) {
       this.setState({ submitting: false, errorMsg: err.message || 'Something went wrong submitting your application.' });
     }
@@ -1088,7 +1163,9 @@ class Component extends DCLogic {
       prevButtonStyle: { ...baseBtn, width: isMobile ? '100%' : 'auto', textAlign: 'center', background: '#F3F0ED', color: step === 0 ? '#c7c2bc' : '#6B6560', cursor: step === 0 ? 'not-allowed' : 'pointer' },
       nextButtonStyle: { ...baseBtn, width: isMobile ? '100%' : 'auto', textAlign: 'center', background: '#178D93', color: '#fff' },
       submitButtonStyle: { ...baseBtn, width: isMobile ? '100%' : 'auto', textAlign: 'center', background: '#C9A227', color: '#fff', opacity: s.submitting ? 0.7 : 1 },
-      selectedPlanLabel: s.data.plan || '—',
+      selectedPlanLabel: planLabel(s.data) || '—',
+      isAnugerahMax: s.data.product === 'AnugerahMax',
+      needsSumCovered: PRODUCTS_WITH_SUM_COVERED.includes(s.data.product),
       success: s.success,
       notSuccess: !s.success,
       submittedName: s.submittedName,
