@@ -40,7 +40,7 @@
   const DOCUMENTS = [['NRIC Front Photo', 'NRIC front'], ['NRIC Rear Photo', 'NRIC back'], ['Selfie with IC Photo', 'Selfie with IC'], ['Signature', 'Signature']];
 
   const $ = (id) => document.getElementById(id);
-  const state = { submissions: [], filter: 'All', query: '', openId: null };
+  const state = { submissions: [], filter: 'All', query: '', openId: null, current: null };
 
   function signOut(message) {
     Session.clear();
@@ -240,6 +240,8 @@
     $('drawerTitle').textContent = summary.fullName || 'Submission';
     $('drawerSub').textContent = `Submitted ${formatDateTime(summary.submittedAt || summary.createdTime)}`;
     $('statusRow').replaceChildren();
+    state.current = null;
+    $('printBtn').hidden = true;
     $('drawerBody').replaceChildren(el('div', { class: 'loading', text: 'Loading full details…' }));
     $('scrim').hidden = false;
     $('drawer').hidden = false;
@@ -250,6 +252,8 @@
       const { submission } = await call(`/admin/submissions/${id}`);
       if (state.openId !== id) return;
       const f = submission.fields;
+      state.current = submission;
+      $('printBtn').hidden = false;
       renderStatusControl(id, f['Submission Status'] || 'Received');
       $('drawerBody').replaceChildren(
         ...SECTIONS.slice(0, 5).map(([title, fields]) => renderSection(title, fields, f)),
@@ -263,10 +267,58 @@
 
   function closeDetail() {
     state.openId = null;
+    state.current = null;
     $('scrim').hidden = true;
     $('drawer').hidden = true;
     document.body.style.overflow = '';
     $('drawerBody').replaceChildren();
+  }
+
+  // ---------- Print / save as PDF ----------
+
+  // Builds a clean A4 sheet of the open client and hands it to the browser's
+  // print dialog, where "Save as PDF" gives a PDF copy.
+  async function printDetail() {
+    const sub = state.current;
+    if (!sub) return;
+    const f = sub.fields;
+    const summary = state.submissions.find((s) => s.id === sub.id) || {};
+    const sheet = el('div', { class: 'print-sheet', id: 'printSheet' },
+      el('header', { class: 'print-head' },
+        el('div', {},
+          el('h1', { text: f['Full Name'] || summary.fullName || 'Client' }),
+          el('div', { class: 'sub', text: [f['NRIC'], f['Phone Number'], f['Email']].filter(Boolean).join('  ·  ') })
+        ),
+        el('div', { class: 'print-meta' },
+          el('div', {}, 'Status: ', el('b', { text: f['Submission Status'] || 'Received' })),
+          el('div', { text: `Submitted ${formatDateTime(f['Submitted At'] || sub.createdTime)}` }),
+          el('div', { text: `Printed ${formatDateTime(new Date().toISOString())}` })
+        )
+      ),
+      ...SECTIONS.slice(0, 5).map(([title, fields]) => renderSection(title, fields, f)),
+      renderDocuments(f),
+      ...SECTIONS.slice(5).map(([title, fields]) => renderSection(title, fields, f))
+    );
+    document.getElementById('printSheet')?.remove();
+    document.body.append(sheet);
+
+    // Give the photos a moment to load so they appear on the page.
+    const imgs = [...sheet.querySelectorAll('img')];
+    imgs.forEach((img) => img.removeAttribute('loading'));
+    await Promise.race([
+      Promise.all(imgs.map((img) => img.complete ? null : new Promise((r) => { img.onload = img.onerror = r; }))),
+      new Promise((r) => setTimeout(r, 4000))
+    ]);
+
+    const prevTitle = document.title;
+    document.title = `Client - ${f['Full Name'] || sub.id}`;
+    document.body.classList.add('printing-sheet');
+    window.addEventListener('afterprint', () => {
+      sheet.remove();
+      document.body.classList.remove('printing-sheet');
+      document.title = prevTitle;
+    }, { once: true });
+    window.print();
   }
 
   // ---------- CSV export (summary columns) ----------
@@ -300,6 +352,7 @@
   $('exportBtn').addEventListener('click', exportCsv);
   $('search').addEventListener('input', (e) => { state.query = e.target.value.trim(); renderRows(); });
   $('closeDrawer').addEventListener('click', closeDetail);
+  $('printBtn').addEventListener('click', printDetail);
   $('scrim').addEventListener('click', closeDetail);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && state.openId) closeDetail(); });
 
