@@ -382,12 +382,10 @@
         </sc-if>
 
         <sc-if value="{{ notSuccess }}" hint-placeholder-val="{{ true }}">
-          <div style="font-size:12.5px; font-weight:600; color:#C9A227; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:4px;">Step {{ stepNumber }} of 7</div>
+          <div style="font-size:12.5px; font-weight:600; color:#C9A227; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:4px;">Step {{ stepNumber }} of {{ totalSteps }}</div>
           <div style="font-family:'Playfair Display', serif; font-weight:700; font-size:27px; color:#178D93; margin-bottom:22px;">{{ currentStepLabel }}</div>
 
-          <sc-if value="{{ errorMsg }}" hint-placeholder-val="{{ false }}">
-            <div style="background:#FDEAEA; color:#B3261E; padding:11px 15px; border-radius:9px; font-size:13.5px; margin-bottom:18px;">{{ errorMsg }}</div>
-          </sc-if>
+          <div role="alert" style="{{ errorStyle }}">{{ errorMsg }}</div>
 
           <div style="flex:1;" class="om-step-panel" key="{{ stepNumber }}">
 
@@ -574,7 +572,78 @@
               </div>
             </sc-if>
 
-            <sc-if value="{{ step4 }}" hint-placeholder-val="{{ false }}">
+            <sc-if value="{{ stepCoverage }}" hint-placeholder-val="{{ false }}">
+              <div style="{{ gridStyle }}">
+                <label style="display:flex; flex-direction:column; gap:6px; grid-column:1 / -1;">
+                  <span style="font-size:13px; font-weight:600; color:#178D93;">Do you have any existing insurance or takaful protection? *</span>
+                  <sc-raw-select name="hasCoverage" value="{{ data.hasCoverage }}" sc-camel-on-change="{{ onChange }}" style="{{ inputStyle }}">
+                    <option value="">Select an option</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </sc-raw-select>
+                </label>
+              </div>
+              <sc-if value="{{ showPolicies }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:13px; color:#6B6560; margin:18px 0 14px;">Tell us about each policy you have. Add one entry per policy.</div>
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                  <sc-for list="{{ policyRows }}" as="p" hint-placeholder-count="1">
+                    <div style="border:1.5px solid #E4DED8; border-radius:12px; padding:16px; background:#FDFCFB;">
+                      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                        <div style="font-family:'Playfair Display', serif; font-weight:700; font-size:16px; color:#178D93;">Policy {{ p.number }}</div>
+                        <sc-if value="{{ p.canRemove }}" hint-placeholder-val="{{ false }}">
+                          <button type="button" sc-camel-on-click="{{ p.remove }}" style="padding:8px 14px; border-radius:8px; border:none; background:#F3F0ED; color:#B3261E; font-size:13px; font-weight:600; cursor:pointer;">Remove</button>
+                        </sc-if>
+                      </div>
+                      <div style="{{ gridStyle }}">
+                        <label style="display:flex; flex-direction:column; gap:6px;">
+                          <span style="font-size:13px; font-weight:600; color:#178D93;">Insurance / takaful company *</span>
+                          <sc-raw-select name="{{ p.companyName }}" value="{{ p.company }}" sc-camel-on-change="{{ onPolicyChange }}" style="{{ inputStyle }}">
+                            <option value="">Select a company</option>
+                            <sc-for list="{{ companyOptions }}" as="c" hint-placeholder-count="3">
+                              <option value="{{ c }}">{{ c }}</option>
+                            </sc-for>
+                          </sc-raw-select>
+                        </label>
+                        <sc-if value="{{ p.isOtherCompany }}" hint-placeholder-val="{{ false }}">
+                        <label style="display:flex; flex-direction:column; gap:6px;">
+                          <span style="font-size:13px; font-weight:600; color:#178D93;">Company name *</span>
+                          <input name="{{ p.otherCompanyName }}" value="{{ p.otherCompany }}" sc-camel-on-change="{{ onPolicyChange }}" placeholder="Type the company name" style="{{ inputStyle }}">
+                        </label>
+                        </sc-if>
+                        <label style="display:flex; flex-direction:column; gap:6px;">
+                          <span style="font-size:13px; font-weight:600; color:#178D93;">Type of policy *</span>
+                          <sc-raw-select name="{{ p.typeName }}" value="{{ p.type }}" sc-camel-on-change="{{ onPolicyChange }}" style="{{ inputStyle }}">
+                            <option value="">Select a type</option>
+                            <sc-for list="{{ policyTypeOptions }}" as="t" hint-placeholder-count="3">
+                              <option value="{{ t }}">{{ t }}</option>
+                            </sc-for>
+                          </sc-raw-select>
+                        </label>
+                        <label style="display:flex; flex-direction:column; gap:6px;">
+                          <span style="font-size:13px; font-weight:600; color:#178D93;">Premium / contribution (RM) *</span>
+                          <input type="number" name="{{ p.premiumName }}" value="{{ p.premium }}" sc-camel-on-change="{{ onPolicyChange }}" placeholder="e.g. 150" min="1" step="0.01" inputmode="decimal" style="{{ inputStyle }}">
+                        </label>
+                        <label style="display:flex; flex-direction:column; gap:6px;">
+                          <span style="font-size:13px; font-weight:600; color:#178D93;">Paid every *</span>
+                          <sc-raw-select name="{{ p.frequencyName }}" value="{{ p.frequency }}" sc-camel-on-change="{{ onPolicyChange }}" style="{{ inputStyle }}">
+                            <option value="">Select an option</option>
+                            <option value="Monthly">Month (monthly)</option>
+                            <option value="Quarterly">3 months (quarterly)</option>
+                            <option value="Half-yearly">6 months (half-yearly)</option>
+                            <option value="Yearly">Year (yearly)</option>
+                          </sc-raw-select>
+                        </label>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ canAddPolicy }}" hint-placeholder-val="{{ true }}">
+                  <button type="button" sc-camel-on-click="{{ addPolicy }}" style="margin-top:14px; width:100%; padding:13px; border-radius:10px; border:1.5px dashed #178D93; background:#F2FAFA; color:#11706F; font-size:14px; font-weight:700; cursor:pointer;">+ Add another policy</button>
+                </sc-if>
+              </sc-if>
+            </sc-if>
+
+            <sc-if value="{{ stepPlan }}" hint-placeholder-val="{{ false }}">
               <div style="font-family:'Playfair Display', serif; font-weight:700; font-size:17px; color:#178D93; margin-bottom:16px;">Product</div>
               <div style="{{ gridStyle }}">
                 <label style="display:flex; flex-direction:column; gap:6px; grid-column:1 / -1;">
@@ -636,7 +705,7 @@
               </div>
             </sc-if>
 
-            <sc-if value="{{ step5 }}" hint-placeholder-val="{{ false }}">
+            <sc-if value="{{ stepDocs }}" hint-placeholder-val="{{ false }}">
               <div style="background:#FBF2E9; border:1px solid #F0DCC4; border-radius:10px; padding:14px 16px; font-size:13px; color:#7a5a1f; margin-bottom:22px;">
                 <b>Note:</b> All document uploads are required. Please ensure your files are clear and legible. Accepted formats: PDF, PNG, HEIC, JPG.
               </div>
@@ -661,7 +730,7 @@
               </div>
             </sc-if>
 
-            <sc-if value="{{ step6 }}" hint-placeholder-val="{{ false }}">
+            <sc-if value="{{ stepBank }}" hint-placeholder-val="{{ false }}">
               <div style="background:#FBF2E9; border:1px solid #F0DCC4; border-radius:10px; padding:14px 16px; font-size:13px; color:#7a5a1f; margin-bottom:22px;">
                 <b>Note:</b> Your bank details will be used for premium deductions and claim payments. Please ensure the information is accurate.
               </div>
@@ -707,7 +776,8 @@
 
     <div style="text-align:center; font-size:12px; color:#a19c96; margin-top:22px; line-height:1.8;">
       © 2024 ASG ANSAR GROUP | Sungai Petani, Kedah<br>
-      PruBSN AnugerahMax – Professional Insurance Solutions
+      PruBSN AnugerahMax – Professional Insurance Solutions<br>
+      Form version {{ formVersion }}
     </div>
 
   </div>
@@ -720,10 +790,43 @@ const STEP_LABELS = [
   'Employment Details',
   'Family Information',
   'Medical History',
+  'Existing Coverage',
   'Plan & Beneficiary',
   'Documents Upload',
   'Bank Details'
 ];
+
+// Bump this whenever the form's questions change, and note what changed in
+// FORM_CHANGELOG.md. It is shown in the footer and saved with every
+// submission (Airtable "Form Version"), so any record can be traced back
+// to the exact form the client saw.
+const FORM_VERSION = '2.0';
+
+const LAST_STEP = STEP_LABELS.length - 1;
+// Step indexes, so inserting a step only means updating this list.
+const STEP = { personal: 0, employment: 1, family: 2, medical: 3, coverage: 4, plan: 5, docs: 6, bank: 7 };
+
+const COVERAGE_COMPANIES = [
+  'Prudential BSN Takaful', 'Prudential Assurance Malaysia', 'AIA', 'Great Eastern', 'Allianz', 'Etiqa',
+  'Takaful Malaysia', 'Zurich', 'Tokio Marine', 'Manulife', 'Sun Life', 'AmMetLife',
+  'Hong Leong Assurance', 'FWD', 'Generali', 'Other'
+];
+const POLICY_TYPES = [
+  'Life insurance / Family takaful', 'Medical card', 'Critical illness', 'Personal accident',
+  'Investment-linked', 'Savings / Education', 'Other'
+];
+const MAX_POLICIES = 5;
+const emptyPolicy = () => ({ company: '', otherCompany: '', type: '', premium: '', frequency: '' });
+
+// Policies the client actually filled in, as sent to the Worker.
+function policiesForPayload(policies) {
+  return policies.map(p => ({
+    company: p.company === 'Other' ? p.otherCompany.trim() : p.company,
+    type: p.type,
+    premium: Number(p.premium) || 0,
+    frequency: p.frequency
+  }));
+}
 
 const SUBMIT_URL = 'https://prubsn-submission-service.syakirbadry.workers.dev/submit';
 
@@ -816,10 +919,12 @@ class Component extends DCLogic {
       employmentType: '', notEmployedCategory: '', occupation: '', fieldOfWork: '', employerName: '', monthlyIncome: '', workAddress: '',
       maritalStatus: '', spouseName: '', spouseNric: '', numChildren: '', childrenDetails: '',
       height: '', weight: '', smokingStatus: '', preExisting: '', medications: '', allergies: '', surgery: '',
+      hasCoverage: '',
       product: '', planTier: '', medicBooster: '', sumCovered: '',
       beneficiaryName: '', beneficiaryNric: '', beneficiaryRelationship: '', benefitWeightage: '',
       bankName: '', accountNumber: '', accountHolderName: ''
     },
+    policies: [emptyPolicy()],
     files: { nricFront: null, nricRear: null, selfie: null },
     signature: '',
     errorMsg: '',
@@ -908,6 +1013,27 @@ class Component extends DCLogic {
     this.setState(s => ({ data: { ...s.data, [name]: value }, errorMsg: '' }));
   };
 
+  // Policy fields are named "policy-<index>-<field>".
+  onPolicyChange = (e) => {
+    const m = /^policy-(\d+)-(\w+)$/.exec(e.target.name || '');
+    if (!m) return;
+    const i = Number(m[1]);
+    const key = m[2];
+    const value = e.target.value;
+    this.setState(s => ({
+      policies: s.policies.map((p, idx) => (idx === i ? { ...p, [key]: value } : p)),
+      errorMsg: ''
+    }));
+  };
+
+  addPolicy = () => {
+    this.setState(s => (s.policies.length >= MAX_POLICIES ? null : { policies: [...s.policies, emptyPolicy()], errorMsg: '' }));
+  };
+
+  removePolicy = (i) => {
+    this.setState(s => ({ policies: s.policies.length > 1 ? s.policies.filter((_, idx) => idx !== i) : s.policies }));
+  };
+
   onFileChange = async (e) => {
     const { name, files } = e.target;
     if (!files || !files[0]) return;
@@ -921,31 +1047,43 @@ class Component extends DCLogic {
 
   validateStep(step, data, files) {
     const req = (fields) => fields.every(f => String(data[f] || '').trim() !== '');
-    if (step === 0) return req(['fullName','nric','dob','gender','race','religion','email','phone','address']) || 'Please fill all required fields.';
-    if (step === 1) {
+    if (step === STEP.personal) return req(['fullName','nric','dob','gender','race','religion','email','phone','address']) || 'Please fill all required fields.';
+    if (step === STEP.employment) {
       const fields = data.employmentType === 'Not Employed' ? ['employmentType','notEmployedCategory'] : ['employmentType','occupation','monthlyIncome'];
       return req(fields) || 'Please fill all required fields.';
     }
-    if (step === 2) return req(['maritalStatus']) || 'Please fill all required fields.';
-    if (step === 3) return req(['height','weight','smokingStatus']) || 'Please fill all required fields.';
-    if (step === 4) {
+    if (step === STEP.family) return req(['maritalStatus']) || 'Please fill all required fields.';
+    if (step === STEP.medical) return req(['height','weight','smokingStatus']) || 'Please fill all required fields.';
+    if (step === STEP.coverage) {
+      if (!data.hasCoverage) return 'Please tell us whether you have any existing protection.';
+      if (data.hasCoverage === 'No') return true;
+      for (let i = 0; i < this.state.policies.length; i++) {
+        const p = this.state.policies[i];
+        const company = p.company === 'Other' ? p.otherCompany.trim() : p.company;
+        if (!company || !p.type || !(Number(p.premium) > 0) || !p.frequency) {
+          return `Please complete Policy ${i + 1}: company, type, premium and how often you pay.`;
+        }
+      }
+      return true;
+    }
+    if (step === STEP.plan) {
       if (!data.product) return 'Please choose the product you are signing up for.';
       if (data.product === 'AnugerahMax' && !req(['planTier', 'medicBooster'])) return 'Please choose your AnugerahMax plan and Medic Booster option.';
       if (PRODUCTS_WITH_SUM_COVERED.includes(data.product) && !(Number(data.sumCovered) > 0)) return 'Please key in the sum covered.';
       return req(['beneficiaryName','beneficiaryNric','beneficiaryRelationship','benefitWeightage']) || 'Please complete beneficiary information.';
     }
-    if (step === 5) {
+    if (step === STEP.docs) {
       if (!(files.nricFront && files.nricRear && files.selfie)) return 'Please upload all required documents.';
       return !!this.state.signature || 'Please provide your signature.';
     }
-    if (step === 6) return req(['bankName','accountNumber','accountHolderName']) || 'Please fill all required fields.';
+    if (step === STEP.bank) return req(['bankName','accountNumber','accountHolderName']) || 'Please fill all required fields.';
     return true;
   }
 
   goNext = () => {
     const check = this.validateStep(this.state.step, this.state.data, this.state.files);
     if (check !== true) { this.setState({ errorMsg: check }); return; }
-    this.setState(s => ({ step: Math.min(6, s.step + 1), errorMsg: '' }));
+    this.setState(s => ({ step: Math.min(LAST_STEP, s.step + 1), errorMsg: '' }));
   };
 
   goPrev = () => {
@@ -957,7 +1095,7 @@ class Component extends DCLogic {
   };
 
   submitForm = async () => {
-    const check = this.validateStep(6, this.state.data, this.state.files);
+    const check = this.validateStep(LAST_STEP, this.state.data, this.state.files);
     if (check !== true) { this.setState({ errorMsg: check }); return; }
     this.setState({ submitting: true, errorMsg: '' });
     const d = this.state.data;
@@ -1032,6 +1170,10 @@ class Component extends DCLogic {
           relationship: d.beneficiaryRelationship,
           percentage: Number(d.benefitWeightage) || 0
         }],
+        existingCoverage: {
+          hasCoverage: d.hasCoverage === 'Yes',
+          policies: d.hasCoverage === 'Yes' ? policiesForPayload(this.state.policies) : []
+        },
         selectedPlan: plan,
         selectedPlanDetails: {
           monthlyContribution: ''
@@ -1043,6 +1185,7 @@ class Component extends DCLogic {
         },
         documents
       };
+      payload.formVersion = FORM_VERSION;
       const agentCode = agentCodeFromUrl();
       if (agentCode) payload.agentCode = agentCode;
 
@@ -1138,9 +1281,26 @@ class Component extends DCLogic {
       stepList,
       stepNumber: step + 1,
       currentStepLabel: STEP_LABELS[step],
-      progressPct: `${Math.round(((step + 1) / 7) * 100)}%`,
-      step0: step === 0, step1: step === 1, step2: step === 2, step3: step === 3,
-      step4: step === 4, step5: step === 5, step6: step === 6,
+      totalSteps: STEP_LABELS.length,
+      progressPct: `${Math.round(((step + 1) / STEP_LABELS.length) * 100)}%`,
+      step0: step === STEP.personal, step1: step === STEP.employment, step2: step === STEP.family, step3: step === STEP.medical,
+      stepCoverage: step === STEP.coverage, stepPlan: step === STEP.plan, stepDocs: step === STEP.docs, stepBank: step === STEP.bank,
+      formVersion: FORM_VERSION,
+      showPolicies: s.data.hasCoverage === 'Yes',
+      policyRows: s.policies.map((p, i) => ({
+        number: i + 1,
+        company: p.company, otherCompany: p.otherCompany, type: p.type, premium: p.premium, frequency: p.frequency,
+        companyName: `policy-${i}-company`, otherCompanyName: `policy-${i}-otherCompany`, typeName: `policy-${i}-type`,
+        premiumName: `policy-${i}-premium`, frequencyName: `policy-${i}-frequency`,
+        isOtherCompany: p.company === 'Other',
+        canRemove: s.policies.length > 1,
+        remove: () => this.removePolicy(i)
+      })),
+      canAddPolicy: s.policies.length < MAX_POLICIES,
+      addPolicy: this.addPolicy,
+      onPolicyChange: this.onPolicyChange,
+      companyOptions: COVERAGE_COMPANIES,
+      policyTypeOptions: POLICY_TYPES,
       data: s.data,
       isNotEmployed: s.data.employmentType === 'Not Employed',
       isEmployed: s.data.employmentType !== 'Not Employed',
@@ -1151,10 +1311,12 @@ class Component extends DCLogic {
       signatureStatus: s.signature ? '✓ Signature captured' : 'Not signed yet',
       inputStyle, textareaStyle,
       errorMsg: s.errorMsg,
+      // Always rendered (hidden when empty): toggling it with sc-if left stale messages on screen.
+      errorStyle: { display: s.errorMsg ? 'block' : 'none', background: '#FDEAEA', color: '#B3261E', padding: '11px 15px', borderRadius: '9px', fontSize: '13.5px', marginBottom: '18px' },
       uploadFields,
       isFirstStep: step === 0,
-      isLastStep: step === 6,
-      notLastStep: step !== 6,
+      isLastStep: step === LAST_STEP,
+      notLastStep: step !== LAST_STEP,
       goPrev: this.goPrev,
       goNext: this.goNext,
       submitForm: this.submitForm,

@@ -48,6 +48,7 @@
       field: String(sub.fieldOfWork || '').trim(),
       employmentType: sub.employmentType || '',
       maritalStatus: sub.maritalStatus || '',
+      existingCoverage: sub.existingCoverage || '',
       income: sub.monthlyIncome != null && sub.monthlyIncome !== '' && Number.isFinite(income) ? income : null
     };
   }
@@ -171,6 +172,7 @@
     bars('occupationChart', tally(cs.map((c) => c.occupation || c.field), 'Not stated'));
     bars('employmentChart', tally(cs.map((c) => c.employmentType), 'Not stated'));
     bars('maritalChart', tally(cs.map((c) => c.maritalStatus), 'Not stated'));
+    bars('coverageChart', tally(cs.map((c) => c.existingCoverage), 'Not asked (older form)'));
   }
 
   function sorted() {
