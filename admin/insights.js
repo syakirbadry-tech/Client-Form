@@ -7,8 +7,6 @@
 
   // Share of monthly income used as a rough "can afford" guide for premiums.
   const BUDGET_SHARE = 0.10;
-  const BIRTHDAY_WINDOW_DAYS = 60;
-  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   const $ = (id) => document.getElementById(id);
   const state = { clients: [], sortBy: 'birthday' };
@@ -34,39 +32,10 @@
 
   // ---------- Data ----------
 
-  // Date of birth as {y, m (0-11), d}; falls back to the NRIC's YYMMDD prefix.
-  function birthDate(f) {
-    const dob = /^(\d{4})-(\d{2})-(\d{2})/.exec(f['Date of Birth'] || '');
-    if (dob) return { y: +dob[1], m: +dob[2] - 1, d: +dob[3] };
-    const ic = /^(\d{2})(\d{2})(\d{2})/.exec(String(f['NRIC'] || '').replace(/\D/g, ''));
-    if (!ic) return null;
-    const yy = +ic[1];
-    const m = +ic[2] - 1;
-    const d = +ic[3];
-    if (m < 0 || m > 11 || d < 1 || d > 31) return null;
-    const nowYY = new Date().getFullYear() % 100;
-    return { y: yy > nowYY ? 1900 + yy : 2000 + yy, m, d };
-  }
-
-  function today() {
-    // Calendar date in Malaysia, regardless of the device's time zone.
-    const [y, m, d] = new Date().toLocaleDateString('en-CA', { timeZone: TZ }).split('-').map(Number);
-    return new Date(Date.UTC(y, m - 1, d));
-  }
-
   function toClient(sub, now) {
     const f = sub.fields || {};
-    const bd = birthDate(f);
-    let age = null;
-    let nextBirthday = null;
-    let daysToBirthday = null;
-    if (bd) {
-      const thisYear = now.getUTCFullYear();
-      age = thisYear - bd.y - ((now.getUTCMonth() < bd.m || (now.getUTCMonth() === bd.m && now.getUTCDate() < bd.d)) ? 1 : 0);
-      nextBirthday = new Date(Date.UTC(thisYear, bd.m, bd.d));
-      if (nextBirthday < now) nextBirthday = new Date(Date.UTC(thisYear + 1, bd.m, bd.d));
-      daysToBirthday = Math.round((nextBirthday - now) / 86400000);
-    }
+    const bd = birthDate(f['Date of Birth'], f['NRIC']);
+    const { age, daysToBirthday } = birthdayInfo(bd, now);
     const income = Number(f['Monthly Income']);
     return {
       id: sub.id,
@@ -74,7 +43,6 @@
       phone: f['Phone Number'] || '',
       bd,
       age,
-      nextBirthday,
       daysToBirthday,
       occupation: String(f['Occupation'] || '').trim(),
       field: String(f['Field of Work'] || '').trim(),
@@ -110,7 +78,7 @@
     try {
       const { submissions } = await call('/admin/submissions');
       const { records, failed } = await loadDetails(submissions);
-      const now = today();
+      const now = todayMY();
       state.clients = records.map((r) => toClient(r, now));
       $('lastUpdated').textContent = `Updated ${formatDateTime(new Date().toISOString())}`;
       if (failed) {
@@ -118,6 +86,7 @@
         $('pageError').hidden = false;
       }
       render();
+      showBirthdayReminder(state.clients);
     } catch (err) {
       $('pageError').textContent = err.message;
       $('pageError').hidden = false;
@@ -141,23 +110,17 @@
     return `${c.bd.d} ${MONTHS[c.bd.m]}`;
   }
 
-  function untilText(days) {
-    if (days === 0) return 'Today!';
-    if (days === 1) return 'Tomorrow';
-    return `in ${days} days`;
-  }
-
   function renderStats() {
     const incomes = state.clients.map((c) => c.income).filter((v) => v != null);
     const ages = state.clients.map((c) => c.age).filter((v) => v != null);
     const avg = (a) => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : null);
-    const soon = state.clients.filter((c) => c.daysToBirthday != null && c.daysToBirthday <= 30).length;
+    const soon = state.clients.filter((c) => c.daysToBirthday != null && c.daysToBirthday <= BIRTHDAY_REMINDER_DAYS).length;
     const tiles = [
       ['total', 'Clients', state.clients.length],
       ['received', 'Average income', money(avg(incomes))],
       ['review', 'Median income', money(median(incomes))],
       ['approved', 'Average age', ages.length ? Math.round(avg(ages)) : '—'],
-      ['followup', 'Birthdays in 30 days', soon]
+      ['followup', `Birthdays in ${BIRTHDAY_REMINDER_DAYS} days`, soon]
     ];
     $('stats').replaceChildren(...tiles.map(([cls, label, value]) =>
       el('div', { class: `stat ${cls}` }, el('div', { class: 'stat-label', text: label }), el('div', { class: 'stat-value', text: value }))
@@ -223,27 +186,6 @@
     bars('occupationChart', tally(cs.map((c) => c.occupation || c.field), 'Not stated'));
     bars('employmentChart', tally(cs.map((c) => c.employmentType), 'Not stated'));
     bars('maritalChart', tally(cs.map((c) => c.maritalStatus), 'Not stated'));
-    bars('monthChart', MONTHS.map((m, i) => [m, cs.filter((c) => c.bd && c.bd.m === i).length]));
-  }
-
-  function renderBirthdays() {
-    const soon = state.clients
-      .filter((c) => c.daysToBirthday != null && c.daysToBirthday <= BIRTHDAY_WINDOW_DAYS)
-      .sort((a, b) => a.daysToBirthday - b.daysToBirthday);
-    if (!soon.length) {
-      $('birthdays').replaceChildren(el('div', { class: 'sub', text: `No client birthdays in the next ${BIRTHDAY_WINDOW_DAYS} days.` }));
-      return;
-    }
-    $('birthdays').replaceChildren(el('ul', { class: 'bday-list' }, soon.map((c) =>
-      el('li', { class: c.daysToBirthday <= 7 ? 'bday soon' : 'bday' },
-        el('div', { class: 'bday-date' }, el('b', { text: c.bd.d }), el('span', { text: MONTHS[c.bd.m] })),
-        el('div', { class: 'grow' },
-          el('div', { class: 'name', text: c.name }),
-          el('div', { class: 'sub', text: [`Turns ${c.age + 1}`, c.phone].filter(Boolean).join('  ·  ') })
-        ),
-        el('div', { class: 'bday-until', text: untilText(c.daysToBirthday) })
-      )
-    )));
   }
 
   function sorted() {
@@ -272,7 +214,6 @@
 
   function render() {
     renderStats();
-    renderBirthdays();
     renderCharts();
     renderRows();
   }

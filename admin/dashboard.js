@@ -77,6 +77,8 @@
       state.submissions = data.submissions;
       $('lastUpdated').textContent = `Updated ${formatDateTime(new Date().toISOString())}`;
       render();
+      // The list carries the NRIC, whose first six digits are the date of birth.
+      showBirthdayReminder(state.submissions.map((s) => ({ name: s.fullName || '(no name)', phone: s.phone, bd: birthDate(null, s.nric) })));
     } catch (err) {
       showPageError(err.message);
       $('lastUpdated').textContent = 'Could not load submissions';

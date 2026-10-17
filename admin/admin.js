@@ -102,3 +102,88 @@ function formatMoney(n) {
   const v = Number(n);
   return Number.isFinite(v) ? `RM ${v.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : String(n);
 }
+
+// ---------- Birthday reminders ----------
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const BIRTHDAY_REMINDER_DAYS = 5;
+
+// Date of birth as {y, m (0-11), d}; falls back to the NRIC's YYMMDD prefix.
+function birthDate(dob, nric) {
+  const iso = /^(\d{4})-(\d{2})-(\d{2})/.exec(dob || '');
+  if (iso) return { y: +iso[1], m: +iso[2] - 1, d: +iso[3] };
+  const ic = /^(\d{2})(\d{2})(\d{2})/.exec(String(nric || '').replace(/\D/g, ''));
+  if (!ic) return null;
+  const yy = +ic[1];
+  const m = +ic[2] - 1;
+  const d = +ic[3];
+  if (m < 0 || m > 11 || d < 1 || d > 31) return null;
+  const nowYY = new Date().getFullYear() % 100;
+  return { y: yy > nowYY ? 1900 + yy : 2000 + yy, m, d };
+}
+
+// Today's calendar date in Malaysia (as a UTC midnight), whatever the device's time zone.
+function todayMY() {
+  const [y, m, d] = new Date().toLocaleDateString('en-CA', { timeZone: TZ }).split('-').map(Number);
+  return new Date(Date.UTC(y, m - 1, d));
+}
+
+function birthdayInfo(bd, now) {
+  if (!bd) return { age: null, daysToBirthday: null };
+  const year = now.getUTCFullYear();
+  const age = year - bd.y - ((now.getUTCMonth() < bd.m || (now.getUTCMonth() === bd.m && now.getUTCDate() < bd.d)) ? 1 : 0);
+  let next = new Date(Date.UTC(year, bd.m, bd.d));
+  if (next < now) next = new Date(Date.UTC(year + 1, bd.m, bd.d));
+  return { age, daysToBirthday: Math.round((next - now) / 86400000) };
+}
+
+function untilText(days) {
+  if (days === 0) return 'Today!';
+  if (days === 1) return 'Tomorrow';
+  return `in ${days} days`;
+}
+
+// Pops up once per sign-in session with clients whose birthday is today or within the next few days.
+// clients: [{ name, phone, bd }]
+function showBirthdayReminder(clients) {
+  const SHOWN_KEY = 'prubsn-birthday-reminder';
+  const now = todayMY();
+  const stamp = now.toISOString().slice(0, 10);
+  try { if (sessionStorage.getItem(SHOWN_KEY) === stamp) return; } catch (e) { /* ignore */ }
+
+  const due = clients
+    .map((c) => ({ ...c, ...birthdayInfo(c.bd, now) }))
+    .filter((c) => c.daysToBirthday != null && c.daysToBirthday <= BIRTHDAY_REMINDER_DAYS)
+    .sort((a, b) => a.daysToBirthday - b.daysToBirthday || a.name.localeCompare(b.name));
+  if (!due.length) return;
+  try { sessionStorage.setItem(SHOWN_KEY, stamp); } catch (e) { /* ignore */ }
+
+  const person = (c) => {
+    const turns = c.daysToBirthday === 0 ? c.age : c.age + 1;
+    return el('li', { class: 'reminder-item' },
+      el('div', { class: 'reminder-date' }, el('b', { text: c.bd.d }), el('span', { text: MONTHS[c.bd.m] })),
+      el('div', { class: 'grow' },
+        el('div', { class: 'name', text: c.name }),
+        el('div', { class: 'sub', text: [`Turns ${turns}`, c.phone].filter(Boolean).join('  ·  ') })
+      ),
+      el('div', { class: 'reminder-until', text: untilText(c.daysToBirthday) })
+    );
+  };
+  const todays = due.filter((c) => c.daysToBirthday === 0);
+  const coming = due.filter((c) => c.daysToBirthday > 0);
+
+  const close = () => { overlay.remove(); document.removeEventListener('keydown', onKey); };
+  const onKey = (e) => { if (e.key === 'Escape') close(); };
+  const okBtn = el('button', { class: 'btn btn-primary', type: 'button', onclick: close }, 'OK');
+  const overlay = el('div', { class: 'reminder-overlay', onclick: (e) => { if (e.target === overlay) close(); } },
+    el('div', { class: 'reminder', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'reminderTitle' },
+      el('h2', { id: 'reminderTitle', text: '🎂 Birthday reminder' }),
+      todays.length ? el('section', {}, el('h3', { text: 'Today' }), el('ul', {}, todays.map(person))) : null,
+      coming.length ? el('section', {}, el('h3', { text: `Next ${BIRTHDAY_REMINDER_DAYS} days` }), el('ul', {}, coming.map(person))) : null,
+      el('div', { class: 'reminder-actions' }, okBtn)
+    )
+  );
+  document.addEventListener('keydown', onKey);
+  document.body.append(overlay);
+  okBtn.focus();
+}
