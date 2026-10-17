@@ -291,7 +291,7 @@
         el('div', { class: 'grow' },
           el('div', { class: 'letterhead-name', text: 'ASG ANSAR GROUP' }),
           el('div', { class: 'letterhead-sub', text: 'Ejen Takaful · Prudential BSN Takaful Berhad' }),
-          el('div', { class: 'letterhead-sub', text: 'Alor Setar, Kedah' })
+          el('div', { class: 'letterhead-sub', text: 'Sungai Petani, Kedah' })
         ),
         el('div', { class: 'letterhead-right' },
           el('img', { class: 'letterhead-partner', src: 'img/prubsn-takaful-logo.png', alt: 'Prudential BSN Takaful' }),
