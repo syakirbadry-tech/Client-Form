@@ -283,21 +283,27 @@
     if (!sub) return;
     const f = sub.fields;
     const summary = state.submissions.find((s) => s.id === sub.id) || {};
+    // Letterhead, then the client's details only (no internal submission/status info).
     const sheet = el('div', { class: 'print-sheet', id: 'printSheet' },
-      el('header', { class: 'print-head' },
+      el('div', { class: 'print-watermark', 'aria-hidden': 'true' }, 'ASG ANSAR', el('br'), 'USE ONLY'),
+      el('header', { class: 'letterhead' },
         el('div', {},
-          el('h1', { text: f['Full Name'] || summary.fullName || 'Client' }),
-          el('div', { class: 'sub', text: [f['NRIC'], f['Phone Number'], f['Email']].filter(Boolean).join('  ·  ') })
+          el('div', { class: 'letterhead-name', text: 'ASG ANSAR GROUP' }),
+          el('div', { class: 'letterhead-sub', text: 'Ejen Takaful · Prudential BSN Takaful Berhad' }),
+          el('div', { class: 'letterhead-sub', text: 'Alor Setar, Kedah' })
         ),
-        el('div', { class: 'print-meta' },
-          el('div', {}, 'Status: ', el('b', { text: f['Submission Status'] || 'Received' })),
-          el('div', { text: `Submitted ${formatDateTime(f['Submitted At'] || sub.createdTime)}` }),
-          el('div', { text: `Printed ${formatDateTime(new Date().toISOString())}` })
+        el('div', { class: 'letterhead-right' },
+          el('div', { class: 'letterhead-title', text: 'Client Details' }),
+          el('div', { text: formatDate(new Date().toISOString()) })
         )
+      ),
+      el('div', { class: 'print-client' },
+        el('h1', { text: f['Full Name'] || summary.fullName || 'Client' }),
+        el('div', { class: 'sub', text: f['Selected Plan'] || '' })
       ),
       ...SECTIONS.slice(0, 5).map(([title, fields]) => renderSection(title, fields, f)),
       renderDocuments(f),
-      ...SECTIONS.slice(5).map(([title, fields]) => renderSection(title, fields, f))
+      renderSection(...SECTIONS[5], f)
     );
     document.getElementById('printSheet')?.remove();
     document.body.append(sheet);
