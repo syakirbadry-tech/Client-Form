@@ -26,7 +26,7 @@
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const password = form.password.value;
-    if (password.length < 12) return showError('Use at least 12 characters.');
+    if (password.length < 8) return showError('Use at least 8 characters.');
     if (password !== form.confirm.value) return showError('The two passwords do not match.');
     if (!window.crypto || !crypto.subtle) return showError('This browser cannot do this. Try Safari or Chrome.');
 

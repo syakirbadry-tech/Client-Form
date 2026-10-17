@@ -9,6 +9,8 @@ if (window.top !== window.self) {
 }
 
 const API_BASE = 'https://prubsn-submission-service.syakirbadry.workers.dev';
+// Clients with no agent tag came from the owner's own form link (and everything before agent links existed).
+const OWNER_AGENT_LABEL = 'Syakir';
 const SESSION_KEY = 'prubsn-admin-session';
 
 const Session = {
@@ -26,8 +28,18 @@ const Session = {
   },
   clear() {
     try { sessionStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
+  },
+  // Sessions from before team accounts existed were always the owner. The server enforces access; this only shapes the UI.
+  user(s) {
+    return (s && s.user) || { name: s ? s.username : '', role: 'owner' };
   }
 };
+
+const ROLE_LABELS = { owner: 'Owner', leader: 'Leader', agent: 'Agent' };
+
+function agentLabel(s) {
+  return s.agentName || OWNER_AGENT_LABEL;
+}
 
 class ApiError extends Error {
   constructor(message, status, code) {

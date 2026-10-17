@@ -9,7 +9,7 @@
   const BUDGET_SHARE = 0.10;
 
   const $ = (id) => document.getElementById(id);
-  const state = { clients: [], sortBy: 'birthday' };
+  const state = { all: [], clients: [], agent: 'All', sortBy: 'birthday' };
 
   function signOut(message) {
     Session.clear();
@@ -33,65 +33,50 @@
   // ---------- Data ----------
 
   function toClient(sub, now) {
-    const f = sub.fields || {};
-    const bd = birthDate(f['Date of Birth'], f['NRIC']);
+    const bd = birthDate(sub.dateOfBirth, sub.nric);
     const { age, daysToBirthday } = birthdayInfo(bd, now);
-    const income = Number(f['Monthly Income']);
+    const income = Number(sub.monthlyIncome);
     return {
       id: sub.id,
-      name: f['Full Name'] || '(no name)',
-      phone: f['Phone Number'] || '',
+      name: sub.fullName || '(no name)',
+      phone: sub.phone || '',
+      agent: agentLabel(sub),
       bd,
       age,
       daysToBirthday,
-      occupation: String(f['Occupation'] || '').trim(),
-      field: String(f['Field of Work'] || '').trim(),
-      employmentType: f['Employment Type'] || '',
-      maritalStatus: f['Marital Status'] || '',
-      income: f['Monthly Income'] !== undefined && f['Monthly Income'] !== '' && Number.isFinite(income) ? income : null
+      occupation: String(sub.occupation || '').trim(),
+      field: String(sub.fieldOfWork || '').trim(),
+      employmentType: sub.employmentType || '',
+      maritalStatus: sub.maritalStatus || '',
+      income: sub.monthlyIncome != null && sub.monthlyIncome !== '' && Number.isFinite(income) ? income : null
     };
-  }
-
-  // The list endpoint only carries summary columns, so fetch each full record (a few at a time).
-  async function loadDetails(list) {
-    const out = [];
-    let next = 0;
-    let failed = 0;
-    async function worker() {
-      while (next < list.length) {
-        const item = list[next++];
-        try {
-          const { submission } = await call(`/admin/submissions/${item.id}`);
-          out.push(submission);
-        } catch (err) {
-          if (err.status === 401) throw err;
-          failed++;
-        }
-        $('lastUpdated').textContent = `Loading client details ${out.length + failed} of ${list.length}…`;
-      }
-    }
-    await Promise.all(Array.from({ length: Math.min(4, list.length) }, worker));
-    return { records: out, failed };
   }
 
   async function load() {
     try {
+      // The list already carries every column this page needs (and only the signed-in person's clients).
       const { submissions } = await call('/admin/submissions');
-      const { records, failed } = await loadDetails(submissions);
       const now = todayMY();
-      state.clients = records.map((r) => toClient(r, now));
+      state.all = submissions.map((s) => toClient(s, now));
       $('lastUpdated').textContent = `Updated ${formatDateTime(new Date().toISOString())}`;
-      if (failed) {
-        $('pageError').textContent = `${failed} client record(s) could not be loaded and are left out. Reload the page to try again.`;
-        $('pageError').hidden = false;
-      }
+      renderAgentFilter();
       render();
-      showBirthdayReminder(state.clients);
+      showBirthdayReminder(state.all);
     } catch (err) {
       $('pageError').textContent = err.message;
       $('pageError').hidden = false;
       $('lastUpdated').textContent = 'Could not load clients';
     }
+  }
+
+  function renderAgentFilter() {
+    if (Session.user(session).role === 'agent') return;
+    const names = [...new Set(state.all.map((c) => c.agent))].sort();
+    $('agentFilter').replaceChildren(
+      el('option', { value: 'All' }, 'All agents'),
+      ...names.map((n) => el('option', { value: n }, n))
+    );
+    $('agentFilterWrap').hidden = names.length < 2;
   }
 
   // ---------- Rendering ----------
@@ -213,11 +198,13 @@
   }
 
   function render() {
+    state.clients = state.agent === 'All' ? state.all : state.all.filter((c) => c.agent === state.agent);
     renderStats();
     renderCharts();
     renderRows();
   }
 
+  $('agentFilter').addEventListener('change', (e) => { state.agent = e.target.value; render(); });
   $('sortBy').addEventListener('change', (e) => { state.sortBy = e.target.value; renderRows(); });
   $('printBtn').addEventListener('click', () => window.print());
 

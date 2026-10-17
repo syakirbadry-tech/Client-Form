@@ -303,3 +303,29 @@ th.right, td.right { text-align: right; }
   .print-sheet .doc a { aspect-ratio: auto; }
   .print-sheet .doc img { height: auto; max-height: 160px; object-fit: contain; }
 }
+
+.link-btn { background: none; border: 0; padding: 0; color: var(--teal); font-size: 13.5px; font-weight: 600; cursor: pointer; text-align: center; text-decoration: underline; }
+.agent-filter { flex: 0 1 200px; max-width: 220px; font-size: 14px; padding: 8px 10px; }
+
+/* ---------- Team page ---------- */
+.team-help { margin: -4px 0 12px; }
+.team-pad { padding: 0 18px; }
+.members { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; padding: 4px 18px 18px; }
+.member { border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.member.inactive { background: #FAF8F6; opacity: .75; }
+.member-head { display: flex; gap: 10px; align-items: flex-start; }
+.member-head .grow { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.member-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.role-select { width: auto; font-size: 14px; padding: 8px 10px; }
+.link-row { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+.link-row code { flex: 1; min-width: 0; font-size: 12px; background: #F4F1ED; border-radius: 8px; padding: 8px 10px; overflow-wrap: anywhere; }
+.code-box { border: 1.5px solid var(--gold); background: #FDF8E9; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.code-box .code { font-family: ui-monospace, Menlo, monospace; font-size: 24px; font-weight: 700; letter-spacing: .08em; color: var(--ink); }
+.code-message { white-space: pre-wrap; font-family: inherit; font-size: 12.5px; margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 10px; max-height: 220px; overflow: auto; overflow-wrap: anywhere; }
+.code-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.add-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: end; }
+.add-form .alert, .add-form .btn { grid-column: 1 / -1; justify-self: start; }
+@media (max-width: 700px) {
+  .add-form { grid-template-columns: 1fr; }
+  .members { grid-template-columns: 1fr; padding: 4px 12px 14px; }
+}

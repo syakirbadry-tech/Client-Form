@@ -21,7 +21,9 @@
     <div class="topbar-right">
       <span class="who" id="who"></span>
       <a class="btn btn-primary" href="insights.html">Insights</a>
+      <a class="btn" id="teamLink" href="team.html" hidden>Team</a>
       <button class="btn" id="refreshBtn" type="button">Refresh</button>
+      <button class="btn" id="passwordBtn" type="button" hidden>Change password</button>
       <button class="btn" id="logoutBtn" type="button">Sign out</button>
     </div>
   </header>
@@ -33,6 +35,7 @@
 
     <div class="toolbar">
       <input class="input" id="search" type="search" placeholder="Search name, NRIC, phone or email" aria-label="Search submissions">
+      <select class="input agent-filter" id="agentFilter" aria-label="Filter by agent" hidden></select>
       <div class="chips" id="chips" role="group" aria-label="Filter by status"></div>
       <div class="toolbar-actions">
         <button class="btn btn-gold" id="exportBtn" type="button">Export CSV</button>
@@ -46,6 +49,7 @@
             <th>Client</th>
             <th class="col-hide-sm">Contact</th>
             <th class="col-hide-md">Plan</th>
+            <th class="col-hide-md col-agent" hidden>Agent</th>
             <th>Status</th>
             <th class="col-hide-sm">Submitted</th>
           </tr>
