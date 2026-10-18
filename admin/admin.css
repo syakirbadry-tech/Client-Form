@@ -387,3 +387,35 @@ a.nav-item:focus-visible { outline: 2px solid #fff; outline-offset: -2px; }
 .forms-list li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
 .forms-list { list-style: none; margin: 0; padding: 0; }
 .forms-list li:last-child { border-bottom: 0; }
+
+/* ---------- VB page ---------- */
+.stat.vb1 { border-left-color: #8A8580; }
+.stat.vb2 { border-left-color: var(--teal); }
+.stat.vb3 { border-left-color: var(--gold); }
+.stat.vb4 { border-left-color: #2E7D4F; }
+.vb-list { list-style: none; margin: 0; padding: 0; }
+.vb-list li + li { border-top: 1px solid var(--line); }
+.vb-row { width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: none; border: 0; text-align: left; cursor: pointer; min-height: 56px; }
+.vb-row:hover { background: var(--teal-soft); }
+.vb-row:focus-visible { outline: 2px solid var(--teal); outline-offset: -2px; }
+.vb-row .grow { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.vb-next { text-align: right; max-width: 45%; }
+.vb-badge { flex: none; border-radius: 8px; padding: 4px 8px; font-size: 12.5px; font-weight: 700; background: #EEEAE6; color: #4A4643; }
+.vb-badge[data-stage="2"] { background: var(--teal-soft); color: var(--teal-dark); }
+.vb-badge[data-stage="3"] { background: #FBF3DB; color: #7A5F0E; }
+.vb-badge[data-stage="4"] { background: #E3F2E8; color: #1F5F3A; }
+.vb-form { display: flex; flex-direction: column; gap: 12px; }
+.vb-form .btn[type="submit"] { align-self: flex-start; }
+.vb-note { resize: vertical; font-family: inherit; font-size: 16px; }
+.vb-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+.vb-actions .btn { min-height: 44px; display: inline-flex; align-items: center; }
+.vb-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; margin-top: 8px; }
+.vb-tpc { margin-top: 10px; font-weight: 600; color: var(--teal-dark); }
+.vb-delete { color: var(--danger); margin-left: auto; }
+.section .alert { margin-top: 8px; }
+@media (max-width: 600px) {
+  .vb-grid { grid-template-columns: 1fr 1fr; }
+  .vb-grid .field:first-child { grid-column: 1 / -1; }
+  .vb-row { flex-wrap: wrap; }
+  .vb-next { max-width: none; width: 100%; text-align: left; padding-left: 52px; }
+}
