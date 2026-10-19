@@ -290,5 +290,12 @@
   $('scrim').addEventListener('click', closeDrawer);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('drawer').hidden) closeDrawer(); });
 
-  load();
+  // vb.html#open=<id> (from the Appointments calendar) opens that name straight away.
+  load().then(() => {
+    const m = /^#open=([0-9a-f-]{36})$/.exec(location.hash);
+    if (m) {
+      history.replaceState(null, '', location.pathname);
+      openDetail(m[1]);
+    }
+  });
 })();

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://prubsn-submission-service.syakirbadry.workers.dev; img-src 'self'; form-action 'none'; base-uri 'none'">
+  <title>Appointments</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Appointments</h1>
+      <div class="topbar-sub" id="lastUpdated">Loading…</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="alert" id="pageError" role="alert" hidden></div>
+
+    <div class="cal-bar">
+      <div class="cal-nav">
+        <button class="btn" id="prevBtn" type="button" aria-label="Previous">‹</button>
+        <button class="btn" id="todayBtn" type="button">Today</button>
+        <button class="btn" id="nextBtn" type="button" aria-label="Next">›</button>
+        <h2 class="cal-title" id="calTitle" aria-live="polite"></h2>
+      </div>
+      <div class="chips" role="group" aria-label="Calendar view" id="viewChips"></div>
+      <button class="btn btn-primary" id="addBtn" type="button">+ Appointment</button>
+    </div>
+
+    <section class="panel cal-panel" id="calendar"></section>
+
+    <section class="panel insight-panel">
+      <h2>Next 7 days</h2>
+      <ul class="cal-upcoming" id="upcoming"></ul>
+    </section>
+  </main>
+
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
+    <div class="drawer-head">
+      <div class="grow">
+        <h2 id="drawerTitle">New appointment</h2>
+        <div class="sub">Pick a name from your VB list. It moves to VB3.</div>
+      </div>
+      <button class="btn" id="closeDrawer" type="button">Close</button>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+  </aside>
+
+  <script src="admin.js"></script>
+  <script src="appointments.js"></script>
+</body>
+</html>
