@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://prubsn-submission-service.syakirbadry.workers.dev; img-src 'self'; form-action 'none'; base-uri 'none'">
+  <title>Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Presentation</h1>
+      <div class="topbar-sub" id="lastUpdated">Loading…</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="alert" id="pageError" role="alert" hidden></div>
+
+    <section class="panel insight-panel">
+      <h2>1. Client</h2>
+      <div class="pres-grid">
+        <div class="field"><label for="client">Who are you presenting to?</label><select class="input" id="client"></select></div>
+        <div class="field"><label for="walkin">Or type a name</label><input class="input" id="walkin" placeholder="e.g. walk-in at an event" maxlength="100" autocomplete="off"></div>
+      </div>
+    </section>
+
+    <section class="panel insight-panel">
+      <h2>2. Financial check <span class="sub">monthly, RM</span></h2>
+      <p class="sub pres-help">Before the client takes on another commitment, see what they can comfortably set aside. Nothing here is saved to the server.</p>
+      <div class="pres-grid pres-money" id="money"></div>
+      <div class="pres-result" id="moneyResult" role="status"></div>
+    </section>
+
+    <section class="panel insight-panel">
+      <h2>3. Recommended plan</h2>
+      <div class="pres-grid">
+        <div class="field"><label for="planName">Plan</label><input class="input" id="planName" placeholder="e.g. PRUBSN Protect" maxlength="100"></div>
+        <div class="field"><label for="planAmount">Contribution (RM / month)</label><input class="input" id="planAmount" type="number" inputmode="decimal" min="0" step="0.01"></div>
+      </div>
+      <div class="field pres-gap"><label for="planPoints">Key benefits <span class="sub">one per line</span></label><textarea class="input vb-note" id="planPoints" rows="4" maxlength="1000" placeholder="Medical card up to RM 1.5 million a year&#10;RM 200,000 death and disability cover"></textarea></div>
+    </section>
+
+    <section class="panel insight-panel">
+      <h2>4. Ready?</h2>
+      <ul class="pres-checks" id="checks"></ul>
+      <div class="forms-actions">
+        <button class="btn btn-primary pres-start" id="startBtn" type="button">▶ Start presentation</button>
+        <button class="btn" id="boardBtn" type="button">Blank blackboard</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="pres-stage" id="stage" role="dialog" aria-modal="true" aria-label="Presentation" hidden>
+    <div class="pres-slide" id="slide"></div>
+    <canvas class="pres-canvas" id="canvas" aria-label="Blackboard"></canvas>
+    <div class="pres-controls">
+      <button class="pres-btn" id="prevSlide" type="button" aria-label="Previous slide">‹</button>
+      <span class="pres-count" id="slideCount"></span>
+      <button class="pres-btn" id="nextSlide" type="button" aria-label="Next slide">›</button>
+      <span class="pres-sep"></span>
+      <button class="pres-btn" id="penBtn" type="button" aria-pressed="false">✏️ Draw</button>
+      <span class="pres-tools" id="tools" hidden></span>
+      <span class="pres-sep"></span>
+      <button class="pres-btn" id="endBtn" type="button">End</button>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+  <script src="presentation.js"></script>
+</body>
+</html>
