@@ -206,7 +206,7 @@ function showBirthdayReminder(clients) {
 const NAV_GROUPS = [
   ['Client journey', [
     { id: 'customers', label: 'Customers', href: 'dashboard.html', icon: '👥' },
-    { id: 'vb', label: 'VB', icon: '🎯', soon: true },
+    { id: 'vb', label: 'VB', href: 'vb.html', icon: '🎯' },
     { id: 'appointments', label: 'Appointments', icon: '📅', soon: true },
     { id: 'presentation', label: 'Presentation', icon: '🖥️', soon: true },
     { id: 'forms', label: 'Forms', href: 'forms.html', icon: '📝' }
