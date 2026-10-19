@@ -406,7 +406,7 @@ a.nav-item:focus-visible { outline: 2px solid #fff; outline-offset: -2px; }
 .vb-badge[data-stage="4"] { background: #E3F2E8; color: #1F5F3A; }
 .vb-form { display: flex; flex-direction: column; gap: 12px; }
 .vb-form .btn[type="submit"] { align-self: flex-start; }
-.vb-note { resize: vertical; font-family: inherit; font-size: 16px; }
+textarea.input.vb-note { resize: vertical; font-family: inherit; font-size: 16px; word-break: normal; }
 .vb-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
 .vb-actions .btn { min-height: 44px; display: inline-flex; align-items: center; }
 .vb-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; margin-top: 8px; }
@@ -472,4 +472,73 @@ a.nav-item:focus-visible { outline: 2px solid #fff; outline-offset: -2px; }
   .cal-dot { display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
   .cal-weekday { padding: 8px 2px; text-align: center; }
   .cal-year { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ---------- Presentation ---------- */
+.pres-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.pres-money { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pres-help { margin: -6px 0 12px; }
+.pres-gap { margin-top: 12px; }
+.pres-result { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px; background: #FBF9F7; border-radius: 10px; padding: 12px; }
+.pres-result > div { display: flex; flex-direction: column; }
+.pres-result b { font-size: 18px; font-variant-numeric: tabular-nums; }
+.pres-good { color: #1F5F3A; }
+.pres-neg { color: var(--danger); }
+.pres-warn { grid-column: 1 / -1; margin: 0; color: #8A3D0B; font-size: 13.5px; }
+.pres-checks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.pres-checks label { display: flex; align-items: center; gap: 10px; min-height: 40px; cursor: pointer; }
+.pres-checks input { width: 20px; height: 20px; accent-color: var(--teal); }
+.pres-start { font-size: 16px; padding: 12px 22px; }
+.pres-summary pre { margin: 0 0 10px; }
+
+body.presenting { overflow: hidden; }
+.pres-stage { position: fixed; inset: 0; z-index: 50; background: #10302F; color: #F2F7F6; display: flex; flex-direction: column; }
+.pres-slide { flex: 1; overflow-y: auto; padding: clamp(20px, 5vw, 64px); display: flex; align-items: center; justify-content: center; }
+.pres-slide > div { width: min(960px, 100%); }
+.pres-slide h1 { color: #fff; font-size: clamp(28px, 4.6vw, 52px); line-height: 1.15; margin: 4px 0 20px; }
+.pres-slide h2, .pres-slide h3 { color: #fff; }
+.pres-slide p { font-size: clamp(16px, 2vw, 21px); color: #CFE0DE; }
+.pres-kicker { color: #F5C542; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: 14px; }
+.pres-cover { text-align: center; }
+.pres-logo { width: 96px; height: 96px; border-radius: 18px; margin-bottom: 18px; }
+.pres-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.pres-card { background: rgba(255, 255, 255, .07); border-radius: 16px; padding: 18px; }
+.pres-card h3 { font-size: 20px; margin: 6px 0; }
+.pres-card p { margin: 0; font-size: 16px; }
+.pres-icon { font-size: 30px; }
+.pres-answers { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.pres-answer { background: rgba(255, 255, 255, .08); color: #fff; border: 2px solid rgba(255, 255, 255, .25); border-radius: 999px; padding: 12px 22px; font-size: 18px; font-weight: 600; cursor: pointer; min-height: 48px; }
+.pres-answer[aria-pressed="true"] { background: #F5C542; border-color: #F5C542; color: #10302F; }
+.pres-note { width: 100%; background: rgba(255, 255, 255, .06); color: #fff; border: 1px solid rgba(255, 255, 255, .2); border-radius: 12px; padding: 12px; font: inherit; font-size: 16px; resize: vertical; }
+.pres-q2 { font-size: clamp(20px, 2.6vw, 28px); margin: 26px 0 12px; }
+.pres-bars { display: flex; flex-direction: column; gap: 16px; }
+.pres-bar-label { display: flex; justify-content: space-between; font-size: clamp(16px, 2vw, 20px); margin-bottom: 6px; }
+.pres-bar-track { background: rgba(255, 255, 255, .1); border-radius: 999px; height: 18px; overflow: hidden; }
+.pres-bar-fill { height: 100%; border-radius: 999px; background: #8FB0AE; }
+.pres-bar-fill.committed { background: #FF8A7A; }
+.pres-bar-fill.left { background: #5FD3C6; }
+.pres-bar-fill.budget { background: #F5C542; }
+.pres-small { font-size: 15px !important; color: #9DBAB8 !important; }
+.pres-price { font-size: clamp(22px, 3vw, 30px); color: #F5C542; margin-bottom: 14px; }
+.pres-price b { font-size: clamp(34px, 5vw, 56px); }
+.pres-points { font-size: clamp(18px, 2.3vw, 24px); line-height: 1.5; padding-left: 1.2em; }
+.pres-points li + li { margin-top: 8px; }
+.pres-canvas { position: absolute; inset: 0 0 64px 0; width: 100%; height: calc(100% - 64px); pointer-events: none; touch-action: none; }
+.pres-canvas.active { pointer-events: auto; cursor: crosshair; }
+.pres-slide.blank { background: #1B3D3B; }
+.pres-controls { height: 64px; flex: none; display: flex; align-items: center; gap: 8px; padding: 0 12px; background: rgba(0, 0, 0, .25); overflow-x: auto; position: relative; z-index: 1; }
+.pres-btn { background: rgba(255, 255, 255, .1); color: #fff; border: 1px solid rgba(255, 255, 255, .2); border-radius: 10px; min-height: 44px; min-width: 44px; padding: 0 12px; font: inherit; font-weight: 600; font-size: 15px; cursor: pointer; white-space: nowrap; }
+.pres-btn:disabled { opacity: .35; cursor: default; }
+.pres-btn[aria-pressed="true"] { background: #F5C542; color: #10302F; border-color: #F5C542; }
+.pres-count { min-width: 64px; text-align: center; font-variant-numeric: tabular-nums; color: #CFE0DE; }
+.pres-sep { flex: 1; }
+.pres-tools { display: flex; gap: 8px; align-items: center; }
+.pres-swatch { width: 32px; height: 32px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .4); cursor: pointer; flex: none; }
+.pres-swatch[aria-pressed="true"] { outline: 3px solid #fff; outline-offset: 2px; }
+@media (max-width: 600px) {
+  .pres-grid { grid-template-columns: 1fr; }
+  .pres-money { grid-template-columns: 1fr 1fr; }
+  .pres-result { grid-template-columns: 1fr; }
+  .pres-cards { grid-template-columns: 1fr; }
+  .pres-sep { flex: 0 0 4px; }
 }
