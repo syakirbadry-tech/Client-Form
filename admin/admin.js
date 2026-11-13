@@ -209,6 +209,7 @@ const NAV_GROUPS = [
     { id: 'vb', label: 'VB', href: 'vb.html', icon: '🎯' },
     { id: 'appointments', label: 'Appointments', href: 'appointments.html', icon: '📅' },
     { id: 'presentation', label: 'Presentation', href: 'presentation.html', icon: '🖥️' },
+    { id: 'answers', label: 'Presentation answers', href: 'answers.html', icon: '💬' },
     { id: 'forms', label: 'Forms', href: 'forms.html', icon: '📝' }
   ]],
   ['Motivation', [
