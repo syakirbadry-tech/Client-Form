@@ -542,3 +542,8 @@ body.presenting { overflow: hidden; }
   .pres-cards { grid-template-columns: 1fr; }
   .pres-sep { flex: 0 0 4px; }
 }
+
+/* Presentation answers */
+.answers-list > li { align-items: flex-start; }
+.answers-list .answer-lines { list-style: disc; margin: 6px 0 0; padding-left: 18px; }
+.answers-list .answer-lines li { display: list-item; border: 0; padding: 2px 0; font-size: 14px; }

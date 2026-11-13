@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://prubsn-submission-service.syakirbadry.workers.dev; img-src 'self'; form-action 'none'; base-uri 'none'">
+  <title>Presentation answers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Presentation answers</h1>
+      <div class="topbar-sub" id="lastUpdated">Loading…</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="alert" id="pageError" role="alert" hidden></div>
+
+    <section class="panel insight-panel">
+      <h2>What clients chose</h2>
+      <p class="sub team-help">Each time a client taps <b>Send my answers</b> at the end of a story presentation, their choices land here.</p>
+      <ul class="forms-list answers-list" id="list"></ul>
+    </section>
+  </main>
+
+  <script src="admin.js"></script>
+  <script src="answers.js"></script>
+</body>
+</html>
