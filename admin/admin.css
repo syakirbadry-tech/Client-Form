@@ -547,3 +547,10 @@ body.presenting { overflow: hidden; }
 .answers-list > li { align-items: flex-start; }
 .answers-list .answer-lines { list-style: disc; margin: 6px 0 0; padding-left: 18px; }
 .answers-list .answer-lines li { display: list-item; border: 0; padding: 2px 0; font-size: 14px; }
+
+/* VB: quotation & presentation */
+.vb-answers { margin-top: 10px; }
+.vb-answer-lines { margin: 4px 0 0; padding-left: 18px; font-size: 14px; }
+.vb-answer-lines li { padding: 2px 0; }
+.pres-quote { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: #EEF6F6; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.pres-quote p { margin: 0; flex: 1 1 240px; font-size: 14px; }

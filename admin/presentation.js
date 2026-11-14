@@ -110,7 +110,7 @@
     $('planAmount').value = prep.planAmount || '';
     $('planPoints').value = prep.planPoints || '';
     for (const id of ['walkin', 'planName', 'planAmount', 'planPoints']) $(id).addEventListener('input', savePrep);
-    $('client').addEventListener('change', savePrep);
+    $('client').addEventListener('change', () => { renderQuoteBox(true); savePrep(); });
     return prep;
   }
 
@@ -126,7 +126,32 @@
       if (err.status === 401) return signOut(err.message);
       select.replaceChildren(el('option', { value: '' }, 'Could not load VB names'));
     }
+    renderQuoteBox(false);
     $('lastUpdated').textContent = 'Prepare, then present full screen';
+  }
+
+  // The chosen VB name's quotation and story presentation from the Quotation Generator.
+  function renderQuoteBox(fill) {
+    const box = $('quoteBox');
+    const p = state.prospects.find((x) => x.id === $('client').value);
+    if (!p) { box.hidden = true; return; }
+    box.hidden = false;
+    if (p.storyUrl || p.quoteUrl) {
+      box.replaceChildren(
+        el('p', { text: `Ready for ${p.name}: ${[p.quotedProduct, p.quotedMonthly ? rm(p.quotedMonthly) + '/month' : ''].filter(Boolean).join(' · ') || 'quotation made'}` }),
+        p.storyUrl ? el('a', { class: 'btn btn-primary', href: p.storyUrl, target: '_blank', rel: 'noopener' }, '▶ Present story') : null,
+        p.quoteUrl ? el('a', { class: 'btn', href: p.quoteUrl, target: '_blank', rel: 'noopener' }, 'Quotation') : null,
+        el('a', { class: 'btn', href: quotationToolUrl(p.id) }, 'New quotation'));
+      // Fill the plan from the quotation, without overwriting anything typed.
+      if (fill) {
+        if (!$('planName').value && p.quotedProduct) $('planName').value = p.quotedProduct;
+        if (!$('planAmount').value && p.quotedMonthly) $('planAmount').value = p.quotedMonthly;
+      }
+    } else {
+      box.replaceChildren(
+        el('p', { text: `No quotation for ${p.name} yet. Upload their PRU Mobility PDF to make the quotation and the story presentation.` }),
+        el('a', { class: 'btn btn-primary', href: quotationToolUrl(p.id) }, 'Make quotation'));
+    }
   }
 
   // ---------- Slides ----------

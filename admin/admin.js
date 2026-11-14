@@ -12,6 +12,10 @@ const API_BASE = 'https://prubsn-submission-service.syakirbadry.workers.dev';
 // Clients with no agent tag came from the owner's own form link (and everything before agent links existed).
 const OWNER_AGENT_LABEL = 'Syakir';
 const SESSION_KEY = 'prubsn-admin-session';
+// The Quotation Generator (quotation-generator repo) lives on this same site, so it shares
+// this sign-in when opened in the same tab. ?vb=<id> links its quotation to that VB name.
+const QUOTATION_TOOL_URL = 'https://syakirbadry-tech.github.io/quotation-generator/browser-tool/';
+const quotationToolUrl = (vbId) => (vbId ? `${QUOTATION_TOOL_URL}?vb=${encodeURIComponent(vbId)}` : QUOTATION_TOOL_URL);
 
 const Session = {
   get() {
@@ -208,6 +212,7 @@ const NAV_GROUPS = [
     { id: 'customers', label: 'Customers', href: 'dashboard.html', icon: '👥' },
     { id: 'vb', label: 'VB', href: 'vb.html', icon: '🎯' },
     { id: 'appointments', label: 'Appointments', href: 'appointments.html', icon: '📅' },
+    { id: 'quotations', label: 'Quotations', href: QUOTATION_TOOL_URL, icon: '🧾' },
     { id: 'presentation', label: 'Presentation', href: 'presentation.html', icon: '🖥️' },
     { id: 'answers', label: 'Presentation answers', href: 'answers.html', icon: '💬' },
     { id: 'forms', label: 'Forms', href: 'forms.html', icon: '📝' }
