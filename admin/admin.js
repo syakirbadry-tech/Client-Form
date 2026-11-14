@@ -14,7 +14,7 @@ const OWNER_AGENT_LABEL = 'Syakir';
 const SESSION_KEY = 'prubsn-admin-session';
 // The Quotation Generator (quotation-generator repo) lives on this same site, so it shares
 // this sign-in when opened in the same tab. ?vb=<id> links its quotation to that VB name.
-const QUOTATION_TOOL_URL = 'https://syakirbadry-tech.github.io/quotation-generator/browser-tool/';
+const QUOTATION_TOOL_URL = 'https://syakirbadry-tech.github.io/quotation-generator/';
 const quotationToolUrl = (vbId) => (vbId ? `${QUOTATION_TOOL_URL}?vb=${encodeURIComponent(vbId)}` : QUOTATION_TOOL_URL);
 
 const Session = {
