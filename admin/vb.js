@@ -211,6 +211,47 @@
     renderDetail(p);
   }
 
+  // Quotation & story presentation, made in the Quotation Generator and saved back here.
+  function quoteSection(p) {
+    const wa = waNumber(p.phone);
+    const first = p.name.split(/\s+/)[0];
+    const share = p.storyUrl || p.quoteUrl;
+    const answers = el('div', { class: 'vb-answers' });
+    const section = el('section', { class: 'section' },
+      el('h3', { text: 'Quotation & presentation' }),
+      p.quotedAt
+        ? el('p', { class: 'sub', text: [p.quotedProduct, p.quotedMonthly ? `RM${number(p.quotedMonthly)}/month` : '', `updated ${dateMY(p.quotedAt)}`].filter(Boolean).join(' · ') })
+        : el('p', { class: 'sub', text: 'Upload their PRU Mobility quotation to make the client quotation and the animated story presentation. The links save here.' }),
+      el('div', { class: 'vb-actions' },
+        el('a', { class: 'btn btn-primary', href: quotationToolUrl(p.id) }, p.quotedAt ? 'New quotation' : 'Make quotation'),
+        p.storyUrl ? el('a', { class: 'btn', href: p.storyUrl, target: '_blank', rel: 'noopener' }, '▶ Story presentation') : null,
+        p.quoteUrl ? el('a', { class: 'btn', href: p.quoteUrl, target: '_blank', rel: 'noopener' }, 'Quotation') : null,
+        share && wa ? el('a', { class: 'btn', target: '_blank', rel: 'noopener',
+          href: `https://wa.me/${wa}?text=${encodeURIComponent(`Hi ${first}, here is your takaful plan${p.storyUrl ? ' presentation' : ' quotation'}: ${share}`)}` }, 'Send on WhatsApp') : null),
+      answers);
+    if (p.storyUrl) loadAnswers(p, answers);
+    return section;
+  }
+
+  // What the client tapped in their story presentation (Send my answers).
+  async function loadAnswers(p, box) {
+    try {
+      const { answers } = await call('/admin/presentation-answers');
+      const mine = answers.filter((a) => a.vbId === p.id);
+      if (!mine.length) {
+        box.replaceChildren(el('p', { class: 'sub', text: 'Their answers appear here when they tap Send at the end of the story presentation.' }));
+        return;
+      }
+      const a = mine[0];
+      box.replaceChildren(
+        el('p', { class: 'sub', text: `What they chose · ${formatDateTime(a.createdAt)}${mine.length > 1 ? ` · ${mine.length} sends` : ''}` }),
+        el('ul', { class: 'vb-answer-lines' }, (a.summary.length ? a.summary : Object.entries(a.answers).map(([k, v]) => `${k}: ${[].concat(v).join(', ')}`)).map((t) => el('li', { text: t }))));
+    } catch (err) {
+      if (err.status === 401) return;
+      box.replaceChildren(el('p', { class: 'sub', text: 'Could not load their answers.' }));
+    }
+  }
+
   function renderDetail(p) {
     const path = `/admin/vb/${p.id}`;
     const sections = [];
@@ -230,6 +271,8 @@
       p.phone ? null : el('p', { class: 'sub', text: 'Add a phone number below to call or WhatsApp from here.' }),
       contactBox));
 
+    sections.push(quoteSection(p));
+
     // Appointment (VB3).
     if (p.stage < 4) {
       const at = el('input', { class: 'input', id: 'fAt', type: 'datetime-local', value: localInputValue(p.appointmentAt) });
@@ -244,8 +287,9 @@
 
     // Policy approved (VB4): keyed in by the agent once Prudential approves it.
     {
-      const product = el('input', { class: 'input', id: 'fProduct', value: p.product || '', placeholder: 'e.g. PRUBSN Protect', maxlength: '100' });
-      const premium = el('input', { class: 'input', id: 'fPremium', type: 'number', inputmode: 'decimal', min: '0', step: '0.01', value: p.premium ?? '' });
+      // Until approved, start from the latest quotation's product and monthly contribution.
+      const product = el('input', { class: 'input', id: 'fProduct', value: p.product || p.quotedProduct || '', placeholder: 'e.g. PRUBSN Protect', maxlength: '100' });
+      const premium = el('input', { class: 'input', id: 'fPremium', type: 'number', inputmode: 'decimal', min: '0', step: '0.01', value: p.premium ?? p.quotedMonthly ?? '' });
       const frequency = el('select', { class: 'input', id: 'fFrequency' }, Object.keys(PAYMENTS_PER_YEAR).map((f) => el('option', { value: f, selected: (p.frequency || 'Monthly') === f }, f)));
       const preview = el('div', { class: 'vb-tpc', role: 'status' });
       const update = () => {
