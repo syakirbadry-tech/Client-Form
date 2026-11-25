@@ -49,7 +49,7 @@
         showError(err);
       }
     });
-    const meta = [a.source, me.role !== 'agent' && a.agentName ? a.agentName : '', formatDateTime(a.createdAt)].filter(Boolean).join('  ·  ');
+    const meta = [a.source, me.role !== 'agent' && a.agentName ? personName(a.agentName) : '', formatDateTime(a.createdAt)].filter(Boolean).join('  ·  ');
     return el('li', { class: 'answer-item' },
       el('div', {},
         el('div', { class: 'name', text: a.client }),

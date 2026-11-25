@@ -17,6 +17,14 @@ const SESSION_KEY = 'prubsn-admin-session';
 const QUOTATION_TOOL_URL = 'https://syakirbadry-tech.github.io/quotation-generator/browser-tool/';
 const quotationToolUrl = (vbId) => (vbId ? `${QUOTATION_TOOL_URL}?vb=${encodeURIComponent(vbId)}` : QUOTATION_TOOL_URL);
 
+// The owner signs in with an email and has no name on the server, so show this instead.
+// Every team member is created with a name; only the owner's "name" can be an email.
+const OWNER_DISPLAY_NAME = 'Syakir';
+const personName = (raw) => {
+  const s = String(raw || '').trim();
+  return s.includes('@') ? OWNER_DISPLAY_NAME : s;
+};
+
 const Session = {
   get() {
     try {
@@ -35,7 +43,8 @@ const Session = {
   },
   // Sessions from before team accounts existed were always the owner. The server enforces access; this only shapes the UI.
   user(s) {
-    return (s && s.user) || { name: s ? s.username : '', role: 'owner' };
+    const u = (s && s.user) || { name: s ? s.username : '', role: 'owner' };
+    return { ...u, name: personName(u.name || (s && s.username)) };
   }
 };
 
@@ -476,7 +485,7 @@ function setNavBadge(id, count) {
 // Adds the app shell to a signed-in page. `active` is the nav id of the current page.
 function mountPortalNav(active, session) {
   const me = Session.user(session);
-  const name = me.name || session.username || '';
+  const name = me.name;
   const role = ROLE_LABELS[me.role] || '';
   const isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
   let collapsed = false;

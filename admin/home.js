@@ -56,7 +56,7 @@
   const now = new Date();
   const hour = Number(now.toLocaleString('en-GB', { timeZone: TZ, hour: '2-digit', hour12: false }));
   const part = hour < 12 ? 'Good morning' : hour < 19 ? 'Good afternoon' : 'Good evening';
-  const full = String(me.name || session.username || '').trim();
+  const full = String(me.name || '').trim();
   const first = (full.split(/\s+/)[0] || '') + (/\(demo\)/.test(full) ? ' (demo)' : '');
   const dateText = now.toLocaleDateString('en-GB', { timeZone: TZ, weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
   $('today').replaceChildren(dateText, first ? el('span', { class: 'home-greet', text: ` · ${part}, ${first}` }) : '');
