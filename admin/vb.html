@@ -26,32 +26,32 @@
 </head>
 <body>
   <header class="topbar">
-    <div>
-      <h1>VB</h1>
-      <div class="topbar-sub" id="lastUpdated">Loading…</div>
+    <div class="topbar__title">
+      <h1>VB pipeline</h1>
+      <div class="sub" id="lastUpdated">Loading…</div>
     </div>
+    <button class="btn btn--primary vb-add" id="addBtn" type="button"></button>
   </header>
 
-  <main>
+  <main class="vbp">
     <div class="alert" id="pageError" role="alert" hidden></div>
 
-    <section class="stats vb-stats" id="stats" aria-label="This week"></section>
+    <section class="stages" id="stats" aria-label="Names at each stage"></section>
+    <p class="note vb-weeknote" id="weekNote" hidden></p>
 
-    <div class="toolbar">
-      <input class="input" id="search" type="search" placeholder="Search name or phone" aria-label="Search names">
-      <div class="chips" id="chips" role="group" aria-label="Filter by stage"></div>
-      <div class="toolbar-actions">
-        <button class="btn btn-primary" id="addBtn" type="button">+ Add name</button>
-      </div>
-    </div>
+    <label class="search">
+      <span class="sr-only">Search names</span>
+      <span id="searchIcon" aria-hidden="true"></span>
+      <input class="input" id="search" type="search" placeholder="Search name or phone" autocomplete="off">
+    </label>
+    <div class="chips" id="chips" role="group" aria-label="Filter by stage" hidden></div>
 
-    <section class="panel">
-      <ul class="vb-list" id="rows"></ul>
-      <div class="empty" id="empty" hidden></div>
-    </section>
+    <div class="vb-listhead"><h2 id="listTitle">All names</h2><span class="sub" id="listSort">Next step first</span></div>
+    <div class="list vb-plist" id="rows" role="list" aria-labelledby="listTitle"></div>
+    <div class="empty" id="empty" hidden></div>
 
-    <section class="panel" id="teamPanel" hidden>
-      <div class="insight-table-head"><h2>Team this week <span class="sub">counts only</span></h2></div>
+    <section class="card vb-team" id="teamPanel" hidden>
+      <div class="card__head"><h2>Team this week</h2><span class="sub">counts only</span></div>
       <div class="table-scroll">
         <table>
           <thead>
@@ -60,20 +60,21 @@
           <tbody id="teamRows"></tbody>
         </table>
       </div>
-      <p class="sub insight-note">Leaders see how many names each agent has at each stage, never the names themselves.</p>
+      <p class="sub vb-team__note">Leaders see how many names each agent has at each stage, never the names themselves.</p>
     </section>
   </main>
 
   <div class="scrim" id="scrim" hidden></div>
-  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
-    <div class="drawer-head">
+  <aside class="sheet cust-sheet" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
+    <div class="sheet__grabber" aria-hidden="true"></div>
+    <div class="sheet__head cust-sheet__head">
       <div class="grow">
-        <h2 id="drawerTitle"></h2>
+        <h2 class="cust-sheet__title" id="drawerTitle"></h2>
         <div class="sub" id="drawerSub"></div>
       </div>
-      <button class="btn" id="closeDrawer" type="button">Close</button>
+      <button class="sheet__close" id="closeDrawer" type="button" aria-label="Close"></button>
     </div>
-    <div class="drawer-body" id="drawerBody"></div>
+    <div class="cust-body" id="drawerBody"></div>
   </aside>
 
   <script src="icons.js"></script>

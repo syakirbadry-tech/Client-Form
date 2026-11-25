@@ -185,3 +185,33 @@ body.is-selecting .tabbar, body.is-selecting .fab { display: none; }
 .confirm-title { font-weight: 600; font-size: var(--fs-17); margin-bottom: 4px; }
 
 .btn svg, .li svg, .chip svg { flex: none; }
+
+/* ---------- VB pipeline (P-05) ---------- */
+.vbp { max-width: 1000px; }
+.vb-add { flex: none; }
+@media (max-width: 767px) { .vb-add { min-height: 40px; padding: 0 12px; font-size: var(--fs-15); } }
+.vbp .stage { color: var(--ink); }
+.vbp .stage[aria-pressed="true"] { color: var(--on-primary); }
+.vb-weeknote { display: flex; align-items: center; gap: 8px; margin: 0; }
+.vb-weeknote svg { color: var(--gold-ink); flex: none; }
+.vb-weeknote > span { flex: 1; }
+.vb-weeknote__link { color: var(--gold-ink); font-weight: 600; min-height: var(--tap); display: inline-flex; align-items: center; }
+.vb-listhead { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: -8px; }
+.vb-listhead h2 { font-size: var(--fs-16); }
+.vb-prow { padding: 0 10px 0 0; gap: 4px; }
+.vb-prow__open { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; padding: 11px 4px 11px 14px; border: 0; background: none; text-align: left; color: var(--ink); cursor: pointer; font-size: inherit; min-height: 64px; }
+.vb-prow__open .pill { flex: none; }
+.vb-next { font-size: var(--fs-13); font-weight: 500; color: var(--muted); }
+.vb-next.is-today { color: var(--primary); }
+.vb-next.is-alert { color: var(--danger); }
+.vb-wa { border-radius: 22px; flex: none; }
+.vb-skel-av { width: 40px; height: 40px; border-radius: 20px; flex: none; }
+.vb-team .table-scroll { border-top: 1px solid var(--line-2); }
+.vb-team__note { padding: 10px 16px 14px; margin: 0; }
+.cust-sheet .vb-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.cust-sheet .vb-form { display: flex; flex-direction: column; gap: 12px; }
+.cust-sheet .vb-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; }
+@media (max-width: 600px) { .cust-sheet .vb-grid { grid-template-columns: 1fr 1fr; } .cust-sheet .vb-grid .field:first-child { grid-column: 1 / -1; } }
+.cust-sheet .vb-tpc { margin-top: 8px; }
+.cust-sheet .saved { display: inline-flex; align-items: center; min-height: var(--tap); }
+.vb-prow .vb-next { text-align: left; max-width: none; width: auto; padding-left: 0; }
