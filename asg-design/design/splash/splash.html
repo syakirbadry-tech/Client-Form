@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7F4F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F0E0C" media="(prefers-color-scheme: dark)">
+<title>ASG Portal · Start → Sign in (reference)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Poppins:wght@600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../asg.css">
+<link rel="stylesheet" href="splash.css">
+</head>
+<body>
+<!-- Sign-in page (index.html). Classes login-in / login-in-2 make it slide in as the mark lands. -->
+<main style="max-width: 420px; margin: 0 auto; padding: calc(env(safe-area-inset-top) + 176px) 24px 40px">
+  <div class="login-in" style="text-align: center">
+    <h1 class="wordmark" style="font-size: 24px">ASG ANSAR GROUP</h1>
+    <p class="sub" style="font-size: 14px; margin: 4px 0 0">Sign in to the Agent Portal</p>
+  </div>
+  <form id="loginForm" class="card login-in-2" style="margin-top: 28px; padding: 22px 20px; display: flex; flex-direction: column; gap: 16px; border-radius: 20px" novalidate>
+    <div class="field"><label for="email">Email</label><input class="input" id="email" type="email" autocomplete="username" required></div>
+    <div class="field"><label for="password">Password</label><input class="input" id="password" type="password" autocomplete="current-password" required>
+      <div class="field__hint" id="capsHint" hidden>Caps Lock is on</div></div>
+    <div class="field__error" id="loginError" role="alert" hidden></div>
+    <button class="btn btn--primary btn--lg" id="loginBtn" type="submit"><span class="btn__label">Sign in</span></button>
+    <div style="display: flex; justify-content: space-between; font-size: 14px">
+      <a href="#" id="showSetup" style="font-weight: 600; text-decoration: none; min-height: 44px; display: flex; align-items: center">First time? Use setup code</a>
+      <a href="#" style="text-decoration: none; color: var(--muted); min-height: 44px; display: flex; align-items: center">Forgot password</a>
+    </div>
+  </form>
+</main>
+
+<!-- Start animation overlay -->
+<div class="splash" aria-label="ASG Portal is starting" role="img">
+  <div class="mark-box an">
+    <svg viewBox="40 40 560 490" width="240" height="210" aria-hidden="true">
+      <defs>
+        <linearGradient id="asgGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F2D27A"/><stop offset=".5" stop-color="#C9A227"/><stop offset="1" stop-color="#9C7A14"/></linearGradient>
+        <clipPath id="asgClip"><polygon points="320,52 432,245 398,302 320,170 275,245 430,518 210,518 180,460 330,460 208,245"/><polygon points="174,302 207,357 117,518 51,518"/><polygon points="466,302 589,518 523,518 431,357"/></clipPath>
+      </defs>
+      <polygon class="pc pc-a an" pathLength="1" points="174,302 207,357 117,518 51,518" style="fill: var(--mark-leg)" stroke="#C9A227" stroke-width="4" stroke-linejoin="round"/>
+      <polygon class="pc pc-s an" pathLength="1" points="320,52 432,245 398,302 320,170 275,245 430,518 210,518 180,460 330,460 208,245" fill="url(#asgGold)" stroke="#B08A1C" stroke-width="5" stroke-linejoin="round"/>
+      <polygon class="pc pc-g an" pathLength="1" points="466,302 589,518 523,518 431,357" style="fill: var(--mark-leg)" stroke="#C9A227" stroke-width="4" stroke-linejoin="round"/>
+      <g clip-path="url(#asgClip)"><rect class="sheen an" x="0" y="0" width="90" height="600" fill="#fff" fill-opacity=".55" transform="skewX(-20)"/></g>
+    </svg>
+    <span class="lt lt-a an" aria-hidden="true">A</span><span class="lt lt-s an" aria-hidden="true">S</span><span class="lt lt-g an" aria-hidden="true">G</span>
+  </div>
+  <div class="cap an" aria-hidden="true">A · S · G</div>
+  <div class="word an"><div class="wordmark">ASG ANSAR GROUP</div><div class="tag">Agent Portal</div></div>
+  <div class="status" role="status" aria-live="polite"></div>
+  <button type="button" class="btn btn--ghost skip an" style="color: var(--muted)">Tap anywhere to skip</button>
+</div>
+
+<script src="splash.js"></script>
+<script>
+  // Demo: pretend the session check takes 1.2 s and the user is signed out.
+  ASGSplash.start({
+    ready: new Promise(function (r) { setTimeout(function () { r({ signedIn: false }); }, 1200); }),
+    onDone: function (s) { /* real app: s.signedIn ? (s.firstSignIn ? go('intro') : go('home')) : focus #email */ }
+  });
+</script>
+</body>
+</html>

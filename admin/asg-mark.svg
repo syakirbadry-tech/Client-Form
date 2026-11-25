@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="40 40 560 490" role="img" aria-label="ASG Ansar Group">
+  <defs><linearGradient id="asgGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F2D27A"/><stop offset=".5" stop-color="#C9A227"/><stop offset="1" stop-color="#9C7A14"/></linearGradient></defs>
+  <!-- A: left leg -->
+  <polygon class="leg" points="174,302 207,357 117,518 51,518" fill="#1F1D1B" stroke="#C9A227" stroke-width="4" stroke-linejoin="round"/>
+  <!-- S: gold centre -->
+  <polygon class="s" points="320,52 432,245 398,302 320,170 275,245 430,518 210,518 180,460 330,460 208,245" fill="url(#asgGold)" stroke="#B08A1C" stroke-width="5" stroke-linejoin="round"/>
+  <!-- G: right leg -->
+  <polygon class="leg" points="466,302 589,518 523,518 431,357" fill="#1F1D1B" stroke="#C9A227" stroke-width="4" stroke-linejoin="round"/>
+</svg>

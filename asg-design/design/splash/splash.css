@@ -1,0 +1,49 @@
+/* ASG start animation → Sign in. Runs ONCE (≈4.5 s), skippable, max 6 s.
+   Timeline: see README.md. All motion is CSS; splash.js only decides
+   where to hand over and handles skip / slow network / offline. */
+.splash{position:fixed;inset:0;z-index:100;background:var(--bg);overflow:hidden;animation:bgout 4.5s linear both}
+.splash.is-landed{pointer-events:none;background:transparent}
+@keyframes bgout{0%,75%{background-color:var(--bg)}80%,100%{background-color:transparent}}
+.splash .an{animation-duration:4.5s;animation-iteration-count:1;animation-fill-mode:both}
+.splash .mark-box{position:absolute;left:50%;top:calc(env(safe-area-inset-top) + 225px);width:240px;height:210px;margin-left:-120px;transform-origin:50% 50%;animation-name:fly;animation-timing-function:cubic-bezier(.65,0,.25,1)}
+.splash .mark-box svg{position:absolute;inset:0;overflow:visible}
+.splash .lt{position:absolute;top:50%;font-family:var(--font-brand);font-weight:700;font-size:76px;line-height:1;opacity:0;transform:translate(-50%,-50%);animation-timing-function:cubic-bezier(.5,0,.2,1)}
+.splash .lt-a{left:16%;color:var(--mark-leg);animation-name:ltA}.splash .lt-s{left:50%;color:#B08A1C;animation-name:ltS}.splash .lt-g{left:84%;color:var(--mark-leg);animation-name:ltG}
+.splash .pc{stroke-dasharray:1;stroke-dashoffset:1;fill-opacity:0;animation-timing-function:cubic-bezier(.6,0,.2,1)}
+.splash .pc-a{animation-name:pcA}.splash .pc-s{animation-name:pcS}.splash .pc-g{animation-name:pcG}
+.splash .sheen{animation-name:sheen;animation-timing-function:ease-in-out}
+.splash .cap,.splash .word{position:absolute;left:0;right:0;top:calc(env(safe-area-inset-top) + 470px);text-align:center;opacity:0}
+.splash .cap{animation-name:cap;font-family:var(--font-brand);font-size:13px;font-weight:600;letter-spacing:.3em;color:var(--muted);padding-top:8px}
+.splash .word{animation-name:word;animation-timing-function:ease-out}
+.splash .word .wordmark{font-size:26px}
+.splash .word .tag{font-size:13px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--primary);margin-top:6px}
+.splash .skip{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 32px);animation-name:skip}
+.splash .status{position:absolute;left:24px;right:24px;bottom:calc(env(safe-area-inset-bottom) + 84px);text-align:center;color:var(--muted);font-size:14px}
+/* Sign-in content that slides in under the mark (lives in index.html) */
+.login-in{animation:login 4.5s cubic-bezier(.2,.8,.2,1) both}
+.login-in-2{animation:login2 4.5s cubic-bezier(.2,.8,.2,1) both}
+/* Slow network: the sheen keeps sweeping as the loader */
+.splash.is-waiting .sheen{animation:sweep 1.2s ease-in-out infinite}
+/* Skipped: jump to the end state */
+.splash.is-skipped,.splash.is-skipped .an,.is-skipped .login-in,.is-skipped .login-in-2{animation-delay:-4.5s !important}
+@media (prefers-reduced-motion: reduce){
+  .splash{animation:none;background:transparent}
+  .splash .an{animation:none}.splash .lt,.splash .cap,.splash .sheen,.splash .word,.splash .skip{display:none}
+  .splash .pc{stroke-dashoffset:0;fill-opacity:1}
+  .splash .mark-box{transform:translateY(-212px) scale(.42)}
+  .login-in,.login-in-2{animation:fade .2s ease-out both}
+}
+@keyframes ltA{0.00%{opacity:0;transform:translate(-50%,-30%)}4.44%,13.33%{opacity:1;transform:translate(-50%,-50%) scale(1)}24.44%,100.00%{opacity:0;transform:translate(-50%,-50%) scale(.55)}}
+@keyframes ltS{0.00%,3.33%{opacity:0;transform:translate(-50%,-30%)}7.78%,20.00%{opacity:1;transform:translate(-50%,-50%) scale(1)}31.11%,100.00%{opacity:0;transform:translate(-50%,-50%) scale(.55)}}
+@keyframes ltG{0.00%,6.67%{opacity:0;transform:translate(-50%,-30%)}11.11%,26.67%{opacity:1;transform:translate(-50%,-50%) scale(1)}37.78%,100.00%{opacity:0;transform:translate(-50%,-50%) scale(.55)}}
+@keyframes pcA{0.00%,13.33%{stroke-dashoffset:1;fill-opacity:0}26.67%{stroke-dashoffset:0;fill-opacity:0}32.22%,100.00%{stroke-dashoffset:0;fill-opacity:1}}
+@keyframes pcS{0.00%,20.00%{stroke-dashoffset:1;fill-opacity:0}35.56%{stroke-dashoffset:0;fill-opacity:0}41.11%,100.00%{stroke-dashoffset:0;fill-opacity:1}}
+@keyframes pcG{0.00%,26.67%{stroke-dashoffset:1;fill-opacity:0}40.00%{stroke-dashoffset:0;fill-opacity:0}45.56%,100.00%{stroke-dashoffset:0;fill-opacity:1}}
+@keyframes sheen{0.00%,44.44%{transform:translateX(-260px)}57.78%,100.00%{transform:translateX(620px)}}
+@keyframes cap{0.00%,4.44%{opacity:0}8.89%,31.11%{opacity:1}40.00%,100.00%{opacity:0}}
+@keyframes word{0.00%,46.67%{opacity:0;transform:translateY(10px)}57.78%,68.89%{opacity:1;transform:none}75.56%,100.00%{opacity:0;transform:translateY(-6px)}}
+@keyframes fly{0.00%,71.11%{transform:translateY(0) scale(1)}88.89%,100.00%{transform:translateY(-212px) scale(.42)}}
+@keyframes login{0.00%,77.78%{opacity:0;transform:translateY(28px)}93.33%,100.00%{opacity:1;transform:none}}
+@keyframes login2{0.00%,82.22%{opacity:0;transform:translateY(40px)}97.78%,100.00%{opacity:1;transform:none}}
+@keyframes skip{0.00%,66.67%{opacity:1}73.33%,100.00%{opacity:0;visibility:hidden}}
+@keyframes sweep{0.00%{transform:translateX(-260px)}100.00%{transform:translateX(620px)}}

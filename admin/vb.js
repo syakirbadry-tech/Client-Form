@@ -224,7 +224,7 @@
         : el('p', { class: 'sub', text: 'Upload their PRU Mobility quotation to make the client quotation and the animated story presentation. The links save here.' }),
       el('div', { class: 'vb-actions' },
         el('a', { class: 'btn btn-primary', href: quotationToolUrl(p.id) }, p.quotedAt ? 'New quotation' : 'Make quotation'),
-        p.storyUrl ? el('a', { class: 'btn', href: p.storyUrl, target: '_blank', rel: 'noopener' }, '▶ Story presentation') : null,
+        p.storyUrl ? el('a', { class: 'btn', href: p.storyUrl, target: '_blank', rel: 'noopener' }, 'Story presentation') : null,
         p.quoteUrl ? el('a', { class: 'btn', href: p.quoteUrl, target: '_blank', rel: 'noopener' }, 'Quotation') : null,
         share && wa ? el('a', { class: 'btn', target: '_blank', rel: 'noopener',
           href: `https://wa.me/${wa}?text=${encodeURIComponent(`Hi ${first}, here is your takaful plan${p.storyUrl ? ' presentation' : ' quotation'}: ${share}`)}` }, 'Send on WhatsApp') : null),
