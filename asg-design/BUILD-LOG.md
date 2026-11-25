@@ -36,3 +36,16 @@
 - A correct sign-in still opens Customers. It switches to Home in phase 3, when Home has real content (`AFTER_SIGN_IN` in login.js).
 - The first sign-in still goes to "Choose your password". Introduction screens come in phase 6.
 - The "First time? Use setup code" and "Forgot password" links in the reference are not added: there is no such flow or endpoint yet.
+
+## Phase 3 · Home (25 Nov 2026)
+
+- `home.html` / `home.js` built from the existing API only (`/admin/vb`, `/admin/submissions`). No server change.
+  - **Next appointment:** the earliest VB3 appointment today or tomorrow, with WhatsApp and "Open presentation" (`presentation.html#vb=<id>` picks that name). If there is none, it says so and offers "Book appointment".
+  - **Contest progress:** your approved TPC this calendar year (VB4 names) against the targets in `admin/config.js` (PWP 125,000, Star Club 280,000). Days left, % per target, and the weekly pace to the next target ("≈ N cases at TPC 2,500").
+  - **This week:** VB1–VB4 counts, cases and TPC. The goal is the weekly pace above.
+  - **Needs you today:** new forms received today (opens `dashboard.html#open=<id>`), VB2 contacted ≥ 3 days ago with no appointment, and VB3 with no time set.
+  - States: skeletons while loading, an empty-state message, and an error with "Try again". If only one source fails, the rest still shows with a note.
+- iPad/desktop: two columns from 1100 px (T-15), and a "+ Create" button in the header (the FAB is phone-only).
+- **Sign-in now lands on Home** (the design's hand-over).
+- `admin/config.js` holds the contest targets, the average case TPC and feature flags (`deleteCustomer: false`). A Settings screen needs a server endpoint, so for now the owner changes this file.
+- Leaders and the owner see their own TPC. The API returns only weekly counts per agent, not yearly totals.

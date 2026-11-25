@@ -85,6 +85,8 @@
       state.submissions = data.submissions;
       $('lastUpdated').textContent = `Updated ${formatDateTime(new Date().toISOString())}`;
       render();
+      const linked = (/^#open=(rec[A-Za-z0-9]{14})$/.exec(location.hash) || [])[1];
+      if (linked) { history.replaceState(null, '', location.pathname); openDetail(linked); }
       showBirthdayReminder(state.submissions.map((s) => ({ name: s.fullName || '(no name)', phone: s.phone, bd: birthDate(s.dateOfBirth, s.nric) })));
     } catch (err) {
       showPageError(err.message);

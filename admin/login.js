@@ -1,12 +1,12 @@
 (function () {
   if (Session.get()) {
-    location.replace('dashboard.html');
+    location.replace('home.html');
     return;
   }
 
   const MIN_PASSWORD_LENGTH = 8;
-  // Where a correct sign-in lands. Home becomes the start page in phase 3 (when it has real content).
-  const AFTER_SIGN_IN = 'dashboard.html';
+  // Where a correct sign-in lands.
+  const AFTER_SIGN_IN = 'home.html';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const page = document.getElementById('signin');
   const form = document.getElementById('loginForm');

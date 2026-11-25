@@ -35,7 +35,6 @@ h3 { font-size: var(--fs-16); font-weight: 600; margin: 0; }
 .btn-primary:hover { background: var(--primary-press); border-color: var(--primary-press); }
 .btn-gold { /* gold buttons removed: secondary look (asg.css .btn) */ }
 a.btn { text-decoration: none; }
-a.btn:not(.btn-primary):not(.btn--primary) { color: var(--ink); }
 .link-btn { background: none; border: 0; padding: 0; min-height: var(--tap); color: var(--primary); font-size: var(--fs-14); font-weight: 600; cursor: pointer; text-decoration: underline; }
 select.input { padding-right: 10px; }
 .name { font-weight: 600; }
