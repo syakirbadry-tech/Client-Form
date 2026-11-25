@@ -552,3 +552,12 @@ function mountPortalNav(active, session) {
     setTimeout(clickAddWhenReady, 0);
   }
 }
+
+// Show the page once its script has built it (app.css keeps it hidden until then). It fades in only
+// when the wait was long enough for an empty page to show; otherwise it appears at once.
+document.addEventListener('DOMContentLoaded', () => {
+  const nav = performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
+  const waited = nav ? performance.now() - nav.responseEnd : 0;
+  document.body.classList.add('is-ready');
+  if (waited > 150) document.body.classList.add('is-revealing');
+});

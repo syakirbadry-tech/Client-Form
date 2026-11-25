@@ -21,18 +21,24 @@
 .splash .skip{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 32px);animation-name:skip}
 .splash .status{position:absolute;left:24px;right:24px;bottom:calc(env(safe-area-inset-bottom) + 84px);text-align:center;color:var(--muted);font-size:14px}
 /* Sign-in content that slides in under the mark (lives in index.html) */
+/* The splash is in the page from the first paint, so :has() starts this before any script runs;
+   .is-splashing (set by splash.js) covers browsers without :has(). Kept as separate rules on purpose. */
+.signin-page:has(> .splash) .login-in{animation:login 4.5s cubic-bezier(.2,.8,.2,1) both}
+.signin-page:has(> .splash) .login-in-2{animation:login2 4.5s cubic-bezier(.2,.8,.2,1) both}
 .is-splashing .login-in{animation:login 4.5s cubic-bezier(.2,.8,.2,1) both}
 .is-splashing .login-in-2{animation:login2 4.5s cubic-bezier(.2,.8,.2,1) both}
 /* Slow network: the sheen keeps sweeping as the loader */
 .splash.is-waiting .sheen{animation:sweep 1.2s ease-in-out infinite}
 /* Skipped: jump to the end state */
 .splash.is-skipped,.splash.is-skipped .an,.is-skipped.is-splashing .login-in,.is-skipped.is-splashing .login-in-2{animation-delay:-4.5s !important}
+.signin-page:has(> .splash.is-skipped) .login-in,.signin-page:has(> .splash.is-skipped) .login-in-2{animation-delay:-4.5s !important}
 @media (prefers-reduced-motion: reduce){
   .splash{animation:none;background:transparent}
   .splash .an{animation:none}.splash .lt,.splash .cap,.splash .sheen,.splash .word,.splash .skip{display:none}
   .splash .pc{stroke-dashoffset:0;fill-opacity:1}
   .splash .mark-box{transform:translateY(-212px) scale(.42)}
   .is-splashing .login-in,.is-splashing .login-in-2{animation:fade .2s ease-out both}
+  .signin-page:has(> .splash) .login-in,.signin-page:has(> .splash) .login-in-2{animation:fade .2s ease-out both}
 }
 @keyframes ltA{0.00%{opacity:0;transform:translate(-50%,-30%)}4.44%,13.33%{opacity:1;transform:translate(-50%,-50%) scale(1)}24.44%,100.00%{opacity:0;transform:translate(-50%,-50%) scale(.55)}}
 @keyframes ltS{0.00%,3.33%{opacity:0;transform:translate(-50%,-30%)}7.78%,20.00%{opacity:1;transform:translate(-50%,-50%) scale(1)}31.11%,100.00%{opacity:0;transform:translate(-50%,-50%) scale(.55)}}
@@ -44,9 +50,9 @@
 @keyframes cap{0.00%,4.44%{opacity:0}8.89%,31.11%{opacity:1}40.00%,100.00%{opacity:0}}
 @keyframes word{0.00%,46.67%{opacity:0;transform:translateY(10px)}57.78%,68.89%{opacity:1;transform:none}75.56%,100.00%{opacity:0;transform:translateY(-6px)}}
 @keyframes fly{0.00%,71.11%{transform:translateY(0) scale(1)}88.89%,100.00%{transform:translateY(-212px) scale(.42)}}
-@keyframes login{0.00%,77.78%{opacity:0;transform:translateY(28px)}93.33%,100.00%{opacity:1;transform:none}}
-@keyframes login2{0.00%,82.22%{opacity:0;transform:translateY(40px)}97.78%,100.00%{opacity:1;transform:none}}
-@keyframes skip{0.00%,66.67%{opacity:1}73.33%,100.00%{opacity:0;visibility:hidden}}
+@keyframes login{0.00%,84.44%{opacity:0;transform:translateY(16px)}96.67%,100.00%{opacity:1;transform:none}}
+@keyframes login2{0.00%,86.67%{opacity:0;transform:translateY(24px)}100.00%{opacity:1;transform:none}}
+@keyframes skip{0.00%{opacity:0}6.67%,66.67%{opacity:1}73.33%,100.00%{opacity:0;visibility:hidden}}
 @keyframes sweep{0.00%{transform:translateX(-260px)}100.00%{transform:translateX(620px)}}
 
 /* ---- ASG Portal build additions (CSP: no inline styles, so these live here) ---- */
@@ -57,6 +63,7 @@
 .signin{position:relative;max-width:420px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 176px) 24px calc(env(safe-area-inset-bottom) + 40px)}
 .signin__mark{position:absolute;top:calc(env(safe-area-inset-top) + 74px);left:50%;width:101px;height:88px;margin-left:-50.5px}
 .is-splashing .signin__mark{visibility:hidden}
+.signin-page:has(> .splash) .signin__mark{visibility:hidden}
 .signin__head{text-align:center}
 .signin__title{font-size:var(--fs-24);line-height:1.2}
 .signin__lead{font-size:var(--fs-14);margin:4px 0 0}
@@ -69,5 +76,6 @@
 .btn[data-state="done"] .btn__label svg{stroke-dasharray:24;stroke-dashoffset:24;animation:tick .35s var(--ease-out) .05s forwards}
 @keyframes tick{to{stroke-dashoffset:0}}
 /* Correct ID → card slides down, then the portal opens */
+.signin.is-leaving .signin__mark{opacity:0;transition:opacity var(--t-slow) var(--ease-out)}
 .signin.is-leaving .signin__card,.signin.is-leaving .signin__head{transform:translateY(32px);opacity:0;transition:transform var(--t-slow) var(--ease-move),opacity var(--t-slow) var(--ease-out)}
 @media (prefers-reduced-motion: reduce){.btn[data-state="done"] .btn__label svg{animation:none;stroke-dashoffset:0}}
