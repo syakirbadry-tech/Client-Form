@@ -110,7 +110,7 @@
       ['followup', `Birthdays in ${BIRTHDAY_REMINDER_DAYS} days`, soon]
     ];
     $('stats').replaceChildren(...tiles.map(([cls, label, value]) =>
-      el('div', { class: `stat ${cls}` }, el('div', { class: 'stat-label', text: label }), el('div', { class: 'stat-value', text: value }))
+      el('div', { class: 'stat' }, el('div', { class: 'stat-label', text: label }), el('div', { class: 'stat-value', text: value }))
     ));
   }
 
@@ -122,9 +122,11 @@
       return;
     }
     const max = Math.max(...shown.map(([, n]) => n));
+    const total = shown.reduce((sum, [, n]) => sum + n, 0);
     $(target).replaceChildren(...shown.map(([label, n]) => {
-      const fill = el('div', { class: 'bar-fill' });
-      fill.style.width = `${Math.max(4, (n / max) * 100)}%`;
+      // Bar = share of the clients in this chart; the largest group carries the colour.
+      const fill = el('div', { class: n === max ? 'bar-fill is-top' : 'bar-fill' });
+      fill.style.width = `${Math.max(3, (n / total) * 100)}%`;
       return el('div', { class: 'bar' },
         el('div', { class: 'bar-label', text: label }),
         el('div', { class: 'bar-track' }, fill),
@@ -191,7 +193,7 @@
     $('rows').replaceChildren(...sorted().map((c) =>
       el('tr', {},
         el('td', { class: 'td-main' }, el('div', { class: 'name', text: c.name }), el('div', { class: 'sub num', text: c.phone })),
-        el('td', { class: 'num', 'data-label': 'Age', text: c.age == null ? '—' : c.age }),
+        el('td', { class: 'num right', 'data-label': 'Age', text: c.age == null ? '—' : c.age }),
         el('td', { 'data-label': 'Birthday' }, el('div', { text: birthdayText(c) }), c.daysToBirthday != null ? el('div', { class: 'sub', text: untilText(c.daysToBirthday) }) : null),
         el('td', { 'data-label': 'Occupation' }, el('div', { text: c.occupation || '—' }), el('div', { class: 'sub', text: [c.field, c.employmentType].filter(Boolean).join(' · ') })),
         el('td', { class: 'num right', 'data-label': 'Income / month', text: money(c.income) }),

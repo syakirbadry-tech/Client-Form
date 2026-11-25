@@ -303,7 +303,7 @@
   // On screen: label/value rows. Long values stack under their label.
   function renderDetailSection(title, fields, data) {
     return el('section', { class: 'cust-section' },
-      el('h3', { class: 'eyebrow', text: title }),
+      el('h3', { class: 'label', text: title }),
       el('dl', { class: 'kv-group' }, fields.map(([name, kind]) => {
         let text = valueText(data[name], kind);
         if (/NRIC/.test(name)) text = formatNric(text);
@@ -324,7 +324,7 @@
 
   function renderDocuments(data, onScreen) {
     return el('section', { class: onScreen ? 'cust-section' : 'section' },
-      el('h3', { class: onScreen ? 'eyebrow' : null, text: 'Documents' }),
+      el('h3', { class: onScreen ? 'label' : null, text: 'Documents' }),
       el('div', { class: 'docs' }, DOCUMENTS.map(([field, label]) => {
         const file = Array.isArray(data[field]) ? data[field][0] : null;
         const full = file && safeUrl(file.url);
@@ -410,7 +410,7 @@
         renderDocuments(f, true),
         ...SECTIONS.slice(CLIENT_SECTIONS).map(([title, fields]) => renderDetailSection(title, fields, f)),
         canDelete ? el('section', { class: 'cust-section' },
-          el('h3', { class: 'eyebrow', text: 'Owner only' }),
+          el('h3', { class: 'label', text: 'Owner only' }),
           el('button', { class: 'btn btn--danger btn--block', id: 'deleteBtn', type: 'button', onclick: async () => { if (await deleteCustomers([id])) closeDetail(); } },
             iconEl('trash', 20), 'Delete customer')) : null
       );

@@ -34,7 +34,7 @@
       const list = items.filter((i) => test(ASGAlerts.dayIndex(i.at)));
       if (!list.length) return null;
       return el('section', { 'aria-label': title },
-        el('h2', { class: 'eyebrow list-head', text: title }),
+        el('h2', { class: 'label list-head', text: title }),
         el('div', { class: 'list' }, list.map((i) => el('a', {
           class: `li alert-row${i.unread ? ' li--unread' : ''}`, href: i.href,
           onclick: () => ASGAlerts.markRead([i.id])

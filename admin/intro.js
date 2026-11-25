@@ -38,7 +38,7 @@
   // 1 · Welcome
   $('step1').replaceChildren(
     el('img', { class: 'intro__mark', src: 'asg-mark.svg', alt: '', width: '76', height: '66' }),
-    el('div', { class: 'eyebrow intro__eyebrow', text: first ? `Welcome to ASG, ${first}` : 'Welcome to ASG' }),
+    el('div', { class: 'label intro__eyebrow', text: first ? `Welcome to ASG, ${first}` : 'Welcome to ASG' }),
     title('Your clients, your pipeline, your day: in one place.'),
     el('ul', { class: 'intro__list' },
       [['bell', 'Get told when a client sends a form'], ['link', 'Share your own client form link'], ['useradd', 'Add your first VB name']]

@@ -19,7 +19,7 @@
   <title>Home</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&family=Poppins:wght@700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Poppins:wght@700&display=swap">
   <link rel="stylesheet" href="asg.css">
   <link rel="stylesheet" href="legacy.css">
   <link rel="stylesheet" href="app.css">
@@ -28,8 +28,8 @@
   <header class="topbar home-top" data-bell>
     <img class="home-mark" src="asg-mark.svg" alt="" width="46" height="40">
     <div class="topbar__title">
+      <h1 id="pageTitle">Today</h1>
       <div class="sub" id="today"></div>
-      <h1 id="greeting">Home</h1>
     </div>
     <button class="btn btn--primary home-create" id="createBtn" type="button"></button>
   </header>
@@ -38,20 +38,20 @@
     <div class="alert" id="pageError" role="alert" hidden></div>
     <div class="home-grid">
       <div class="home-col">
-        <section class="home-appt" id="nextAppt" aria-label="Next appointment"><div class="skel home-skel-hero"></div></section>
         <section class="card home-needs" id="needsYou" aria-labelledby="needsTitle">
           <div class="card__head"><h2 id="needsTitle">Needs you today</h2></div>
           <div class="home-pad"><div class="skel home-skel-row"></div><div class="skel home-skel-row"></div></div>
+        </section>
+        <section class="home-appt" id="nextAppt" aria-label="Next appointment"><div class="skel home-skel-hero"></div></section>
+        <section class="card card--pad home-week" id="thisWeek" aria-labelledby="weekTitle">
+          <h2 class="home-card-title" id="weekTitle">This week</h2>
+          <div class="skel home-skel-big"></div>
         </section>
       </div>
       <div class="home-col">
         <section class="card card--pad home-contest" id="contest" aria-labelledby="contestTitle">
           <h2 class="home-card-title" id="contestTitle">Contest progress</h2>
           <div class="skel home-skel-big"></div><div class="skel home-skel-row"></div>
-        </section>
-        <section class="card card--pad home-week" id="thisWeek" aria-labelledby="weekTitle">
-          <h2 class="home-card-title" id="weekTitle">This week</h2>
-          <div class="skel home-skel-big"></div>
         </section>
       </div>
     </div>

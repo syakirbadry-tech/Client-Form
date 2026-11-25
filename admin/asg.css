@@ -54,7 +54,7 @@
 
   /* type */
   --font-ui: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Playfair Display', Georgia, serif;     /* page titles only */
+  --font-display: var(--font-ui);                         /* titles use the UI face (two faces at most) */
   --font-brand: 'Poppins', system-ui, sans-serif;         /* "ASG ANSAR GROUP" wordmark only */
   --fs-11: 11px; --fs-12: 12px; --fs-13: 13px; --fs-14: 14px; --fs-15: 15px; --fs-16: 16px;
   --fs-17: 17px; --fs-20: 20px; --fs-24: 24px; --fs-30: 30px;
@@ -98,7 +98,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; }
 body {
-  font-family: var(--font-ui); font-size: var(--fs-15); line-height: 1.5;
+  font-family: var(--font-ui); font-size: var(--fs-15); line-height: 1.5; font-variant-numeric: tabular-nums;
   color: var(--ink); background: var(--bg);
   -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent;
 }
@@ -109,9 +109,8 @@ a { color: var(--primary); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .num { font-variant-numeric: tabular-nums; }
 
-h1, .h1 { font-family: var(--font-display); font-size: var(--fs-30); line-height: 1.2; margin: 0; }
+h1, .h1 { font-family: var(--font-display); font-size: var(--fs-24); font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; margin: 0; }
 h2, .h2 { font-size: var(--fs-16); font-weight: 600; margin: 0; }
-.eyebrow { font-size: var(--fs-13); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
 .sub { font-size: var(--fs-13); color: var(--muted); }
 
 /* ---------- 3. App shell ---------- */
@@ -270,7 +269,7 @@ h2, .h2 { font-size: var(--fs-16); font-weight: 600; margin: 0; }
 .statstrip > div { padding: 10px 12px; }
 .statstrip > div + div { border-left: 1px solid var(--line-2); }
 .statstrip b { display: block; font-size: var(--fs-20); font-weight: 600; font-variant-numeric: tabular-nums; }
-.statstrip span { font-size: var(--fs-12); color: var(--muted); display: inline-flex; align-items: center; gap: 5px; }
+.statstrip span { font-size: var(--fs-12); color: var(--muted); display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
 .dot { width: 7px; height: 7px; border-radius: 4px; display: inline-block; background: currentColor; }
 
 /* Stage tiles (VB1–VB4 segmented) */
@@ -290,7 +289,7 @@ h2, .h2 { font-size: var(--fs-16); font-weight: 600; margin: 0; }
 .milestone { position: absolute; top: 0; left: var(--at); width: 2px; height: 18px; background: var(--ink); }
 .milestone > span { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: var(--fs-11); color: var(--muted); white-space: nowrap; }
 .milestone:last-child > span { left: auto; right: 0; transform: none; }
-.note { border-radius: 10px; padding: 10px 12px; font-size: var(--fs-13); background: var(--gold-soft); color: var(--gold-ink); }
+.note { margin: 0; font-size: var(--fs-14); color: var(--ink); }
 
 /* Step indicator (quotation) + dots (intro) */
 .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
@@ -341,8 +340,9 @@ h2, .h2 { font-size: var(--fs-16); font-weight: 600; margin: 0; }
 /* ---------- 9. States: empty, loading, error ---------- */
 .empty { text-align: center; padding: 40px 24px; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .empty__title { font-weight: 600; color: var(--ink); }
-.skel { border-radius: 8px; background: linear-gradient(90deg, var(--line-2) 0%, var(--hover) 50%, var(--line-2) 100%); background-size: 200% 100%; animation: skel 1.4s linear infinite; }
-@keyframes skel { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+.skel { border-radius: 8px; background: var(--line-2); animation: skel 1.4s ease-in-out infinite alternate; }
+@keyframes skel { from { opacity: 1; } to { opacity: .55; } }
+@media (prefers-reduced-motion: reduce) { .skel { animation: none; } }
 .alert { border-radius: var(--r-md); padding: 10px 13px; font-size: var(--fs-14); background: var(--st-now-bg); color: var(--st-now-fg); }
 .route-progress { position: fixed; top: 0; left: 0; height: 3px; z-index: 90; background: var(--gold); width: var(--pct, 0%); transition: width var(--t-slow) var(--ease-out); }
 
@@ -362,11 +362,11 @@ h2, .h2 { font-size: var(--fs-16); font-weight: 600; margin: 0; }
 }
 .sb-nav { flex: 1; overflow-y: auto; margin-top: 10px; display: flex; flex-direction: column; gap: 14px; scrollbar-width: none; }
 .sb-nav::-webkit-scrollbar { display: none; }
-.sb-head { padding: 0 10px 4px; font-size: var(--fs-12); font-weight: 600; letter-spacing: .06em; color: var(--muted); text-transform: uppercase; }
+.sb-head { padding: 0 10px 4px; font-size: var(--fs-13); font-weight: 600; color: var(--muted); }
 .sb-item { min-height: var(--tap); border-radius: 10px; padding: 0 10px; display: flex; align-items: center; gap: 12px;
   text-decoration: none; color: var(--ink); font-weight: 500; position: relative; transition: background-color var(--t-fast); }
 .sb-item:hover { background: var(--hover); }
-.sb-item[aria-current="page"] { background: var(--primary-soft); color: var(--primary-soft-ink); font-weight: 600; }
+.sb-item[aria-current="page"] { background: var(--hover); color: var(--ink); font-weight: 600; }
 .sb-item .sb-label { flex: 1; white-space: nowrap; }
 .sb-chev { transition: transform var(--t-base) var(--ease-out); color: var(--muted); }
 .sb-item[aria-expanded="true"] .sb-chev { transform: rotate(90deg); }
