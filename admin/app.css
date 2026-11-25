@@ -73,3 +73,6 @@
   --av-1: #11706F; --av-2: #3B5E8F; --av-3: #6B4E9E; --av-4: #9A4A1F;
   --av-5: #1E6B43; --av-6: #8C2F4B; --av-7: #55602A; --av-8: #5E4B3C;
 }
+
+/* Dark mode: the green "done" button needs dark text (white on the light green is below 4.5:1). */
+@media (prefers-color-scheme: dark) { .btn[data-state="done"] { color: var(--on-primary); } }
