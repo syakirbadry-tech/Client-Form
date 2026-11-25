@@ -262,3 +262,34 @@ body.is-selecting .tabbar, body.is-selecting .fab { display: none; }
 .intro__link code { flex: 1; min-width: 0; font-size: var(--fs-14); background: var(--sunken); border-radius: var(--r-sm); padding: 12px; overflow-wrap: anywhere; }
 .intro__form { display: flex; flex-direction: column; gap: 14px; }
 .intro__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* ---------- Remaining pages (phase 7): cards, lists, stacked tables ---------- */
+.card--pad > h2 { font-size: var(--fs-17); margin-bottom: 10px; }
+.card--pad > h2 .sub { font-weight: 400; margin-left: 6px; }
+.card .insight-table-head h2 { font-size: var(--fs-17); }
+.card .forms-list li { padding: 12px 0; border-bottom: 1px solid var(--line-2); align-items: center; }
+.card .forms-list li:last-child { border-bottom: 0; }
+.cal-nav .icon-btn { flex: none; }
+.cal-bar .btn--primary { margin-left: auto; }
+@media (max-width: 600px) { .cal-bar .btn--primary { width: 100%; } }
+/* Insights: the client table becomes two-line rows on phones */
+@media (max-width: 600px) {
+  .insights-table table { min-width: 0; }
+  .insights-table thead { display: none; }
+  .insights-table tr { display: block; padding: 12px 16px; border-bottom: 1px solid var(--line-2); }
+  .insights-table tr:last-child { border-bottom: 0; }
+  .insights-table td { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 2px 0; border: 0; text-align: right; }
+  .insights-table td::before { content: attr(data-label); color: var(--muted); font-size: var(--fs-13); text-align: left; flex: none; }
+  .insights-table td.td-main { display: block; text-align: left; margin-bottom: 4px; }
+  .insights-table td.td-main::before { content: none; }
+}
+/* Team: members as cards in a card */
+.members .member { background: var(--card); }
+.member .btn { min-height: 40px; }
+@media (max-width: 600px) {
+  .insights-table td { display: grid; grid-template-columns: auto 1fr; column-gap: 12px; }
+  .insights-table td::before { grid-row: 1 / span 2; }
+  .insights-table td > * { grid-column: 2; text-align: right; }
+  .insights-table td.td-main { display: block; }
+  .insights-table td.td-main > * { text-align: left; }
+}

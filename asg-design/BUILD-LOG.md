@@ -91,3 +91,18 @@
   - add your first VB name (real `POST /admin/vb`), then Home.
   - **First sign-in (after choosing a password) now goes to the introduction.** More › "Help & introduction" opens it again.
 - **Not built (needs a server):** phone pop-ups and lock-screen notifications (P-17b), quiet hours, "Send a test alert", the status-change alert and the weekly result alert. Web Push needs the Worker to store push subscriptions and send them, plus a service worker. The alert-settings page says so.
+
+## Phase 7 · Remaining pages + iPad pass (25 Nov 2026)
+
+- Appointments, Presentation (staff set-up), Presentation answers, Forms, Insights, Team and Setup now use the shared system: `topbar__title`, `card` / `card--pad`, `btn--primary`, `btn--wa` for WhatsApp, and icons instead of ‹ ›. Gold buttons are gone everywhere.
+- Appointments: the add form is a bottom sheet (drawer on iPad) with swipe/✕/Esc. "+ → Book appointment" opens it directly.
+- Insights: the client table becomes two-line stacked rows on phones (labelled cells). Print / PDF has an icon and still prints light.
+- `legacy.css` trimmed. The old drawer, toolbar, panel, VB list, column-hiding and other unused rules were deleted. What remains is listed at the top of the file.
+- iPad (1194 × 834) and desktop (1440) checked on every page with the sidebar, in light and dark.
+
+### Still open (need decisions or a server change, not front-end work)
+1. **Delete customer:** Worker endpoint `DELETE /admin/submissions/<id>` (owner only), then `features.deleteCustomer: true`.
+2. **Phone pop-ups:** Web Push (Worker stores subscriptions and sends; the app needs a service worker).
+3. **Contest targets in a Settings screen:** needs a settings endpoint. Today they live in `admin/config.js`.
+4. **Team-wide contest totals for leaders:** the VB API returns weekly counts per agent, not yearly TPC.
+5. **Presentation stage (client-facing) and the client form restyle:** separate design round (client pages carry the PRUBSN logo).

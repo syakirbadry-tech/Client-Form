@@ -491,7 +491,7 @@
     const field = (label, name, autocomplete) => el('div', { class: 'field' },
       el('label', { for: `cp-${name}`, text: label }),
       el('input', { class: 'input', id: `cp-${name}`, name, type: 'password', autocomplete, required: true }));
-    const saveBtn = el('button', { class: 'btn btn-primary', type: 'submit' }, 'Save');
+    const saveBtn = el('button', { class: 'btn btn--primary', type: 'submit' }, 'Save');
     const cancelBtn = el('button', { class: 'btn', type: 'button' }, 'Cancel');
     const form = el('form', { class: 'reminder', novalidate: true },
       el('h2', { text: 'Change password' }),

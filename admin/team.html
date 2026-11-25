@@ -26,28 +26,28 @@
 </head>
 <body>
   <header class="topbar">
-    <div>
+    <div class="topbar__title">
       <h1>Team</h1>
-      <div class="topbar-sub" id="lastUpdated">Loading…</div>
+      <div class="sub" id="lastUpdated">Loading…</div>
     </div>
   </header>
 
   <main>
     <div class="alert" id="pageError" role="alert" hidden></div>
 
-    <section class="panel insight-panel">
+    <section class="card card--pad">
       <h2>Your form link</h2>
       <p class="sub team-help">Clients who fill in this link are yours. Leaders can see them; agents cannot.</p>
       <div id="ownerLink"></div>
     </section>
 
-    <section class="panel">
+    <section class="card">
       <div class="insight-table-head"><h2>Leaders &amp; agents</h2></div>
       <p class="sub team-help team-pad">Leaders see every client. Agents only see clients who used their own form link. To let someone sign in (or reset a forgotten password), tap <b>Temporary password</b> and send them the message. They sign in with it once and must then choose their own password.</p>
       <div id="members" class="members"></div>
     </section>
 
-    <section class="panel insight-panel">
+    <section class="card card--pad">
       <h2>Add a person</h2>
       <form id="addForm" class="add-form" novalidate>
         <div class="field"><label for="addName">Full name</label><input class="input" id="addName" name="name" required></div>
@@ -59,7 +59,7 @@
           </select>
         </div>
         <div class="alert" id="addError" role="alert" hidden></div>
-        <button class="btn btn-primary" id="addBtn" type="submit">Add person</button>
+        <button class="btn btn--primary" id="addBtn" type="submit">Add person</button>
       </form>
     </section>
   </main>

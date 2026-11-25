@@ -176,15 +176,15 @@
     const open = state.prospects.filter((p) => p.stage < 4).sort((a, b) => a.name.localeCompare(b.name));
     const box = el('div', { class: 'alert', role: 'alert', hidden: true });
     if (!open.length) {
-      $('drawerBody').replaceChildren(el('section', { class: 'section' },
+      $('drawerBody').replaceChildren(el('section', { class: 'cust-section' },
         el('p', { text: 'Add the person to your VB list first, then set the appointment here.' }),
-        el('a', { class: 'btn btn-primary', href: 'vb.html' }, 'Go to VB')));
+        el('a', { class: 'btn btn--primary', href: 'vb.html' }, 'Go to VB')));
     } else {
       const who = el('select', { class: 'input', id: 'fWho' }, open.map((p) => el('option', { value: p.id }, `${p.name} (VB${p.stage})`)));
       const day = state.view === 'day' ? state : today;
       const at = el('input', { class: 'input', id: 'fAt', type: 'datetime-local', value: `${day.y}-${String(day.m + 1).padStart(2, '0')}-${String(day.d).padStart(2, '0')}T10:00` });
-      const btn = el('button', { class: 'btn btn-primary', type: 'submit' }, 'Save appointment');
-      const form = el('form', { class: 'section vb-form', novalidate: true },
+      const btn = el('button', { class: 'btn btn--primary', type: 'submit' }, 'Save appointment');
+      const form = el('form', { class: 'vb-form', novalidate: true },
         el('div', { class: 'field' }, el('label', { for: 'fWho', text: 'Who' }), who),
         el('div', { class: 'field' }, el('label', { for: 'fAt', text: 'Date and time' }), at),
         el('p', { class: 'sub', text: 'Each name has one appointment; saving replaces any earlier time.' }),
@@ -212,11 +212,14 @@
     }
     $('drawer').hidden = false;
     $('scrim').hidden = false;
+    document.body.style.overflow = 'hidden';
+    $('closeDrawer').focus();
   }
 
   function closeDrawer() {
     $('drawer').hidden = true;
     $('scrim').hidden = true;
+    document.body.style.overflow = '';
   }
 
   async function load() {
@@ -240,6 +243,11 @@
   $('addBtn').addEventListener('click', openAdd);
   $('closeDrawer').addEventListener('click', closeDrawer);
   $('scrim').addEventListener('click', closeDrawer);
+  $('closeDrawer').replaceChildren(iconEl('x', 22));
+  $('prevBtn').replaceChildren(iconEl('back', 20));
+  $('nextBtn').replaceChildren(iconEl('chev', 20));
+  $('addBtn').prepend(iconEl('cal', 20));
+  enableSwipeClose($('drawer'), closeDrawer);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('drawer').hidden) closeDrawer(); });
 
   load();

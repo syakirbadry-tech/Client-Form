@@ -26,9 +26,9 @@
 </head>
 <body>
   <header class="topbar">
-    <div>
+    <div class="topbar__title">
       <h1>Appointments</h1>
-      <div class="topbar-sub" id="lastUpdated">Loading…</div>
+      <div class="sub" id="lastUpdated">Loading…</div>
     </div>
   </header>
 
@@ -37,33 +37,34 @@
 
     <div class="cal-bar">
       <div class="cal-nav">
-        <button class="btn" id="prevBtn" type="button" aria-label="Previous">‹</button>
+        <button class="icon-btn" id="prevBtn" type="button" aria-label="Previous"></button>
         <button class="btn" id="todayBtn" type="button">Today</button>
-        <button class="btn" id="nextBtn" type="button" aria-label="Next">›</button>
+        <button class="icon-btn" id="nextBtn" type="button" aria-label="Next"></button>
         <h2 class="cal-title" id="calTitle" aria-live="polite"></h2>
       </div>
       <div class="chips" role="group" aria-label="Calendar view" id="viewChips"></div>
-      <button class="btn btn-primary" id="addBtn" type="button">+ Appointment</button>
+      <button class="btn btn--primary" id="addBtn" type="button">Book appointment</button>
     </div>
 
-    <section class="panel cal-panel" id="calendar"></section>
+    <section class="card cal-panel" id="calendar"></section>
 
-    <section class="panel insight-panel">
+    <section class="card card--pad">
       <h2>Next 7 days</h2>
       <ul class="cal-upcoming" id="upcoming"></ul>
     </section>
   </main>
 
   <div class="scrim" id="scrim" hidden></div>
-  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
-    <div class="drawer-head">
+  <aside class="sheet cust-sheet" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
+    <div class="sheet__grabber" aria-hidden="true"></div>
+    <div class="sheet__head cust-sheet__head">
       <div class="grow">
-        <h2 id="drawerTitle">New appointment</h2>
+        <h2 class="cust-sheet__title" id="drawerTitle">New appointment</h2>
         <div class="sub">Pick a name from your VB list. It moves to VB3.</div>
       </div>
-      <button class="btn" id="closeDrawer" type="button">Close</button>
+      <button class="sheet__close" id="closeDrawer" type="button" aria-label="Close"></button>
     </div>
-    <div class="drawer-body" id="drawerBody"></div>
+    <div class="cust-body" id="drawerBody"></div>
   </aside>
 
   <script src="icons.js"></script>

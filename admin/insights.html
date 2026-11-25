@@ -26,12 +26,12 @@
 </head>
 <body>
   <header class="topbar">
-    <div>
+    <div class="topbar__title">
       <h1>Client Insights</h1>
-      <div class="topbar-sub" id="lastUpdated">Loading…</div>
+      <div class="sub" id="lastUpdated">Loading…</div>
     </div>
     <div class="topbar-right no-print">
-      <button class="btn btn-gold" id="printBtn" type="button">Print / PDF</button>
+      <button class="btn" id="printBtn" type="button">Print / PDF</button>
     </div>
   </header>
 
@@ -45,15 +45,15 @@
     <section class="stats" id="stats" aria-label="Summary"></section>
 
     <div class="insight-grid">
-      <section class="panel insight-panel"><h2>Monthly income</h2><div id="incomeChart"></div></section>
-      <section class="panel insight-panel"><h2>Age group</h2><div id="ageChart"></div></section>
-      <section class="panel insight-panel"><h2>Occupation</h2><div id="occupationChart"></div></section>
-      <section class="panel insight-panel"><h2>Employment type</h2><div id="employmentChart"></div></section>
-      <section class="panel insight-panel"><h2>Marital status</h2><div id="maritalChart"></div></section>
-      <section class="panel insight-panel"><h2>Has existing protection</h2><div id="coverageChart"></div></section>
+      <section class="card card--pad"><h2>Monthly income</h2><div id="incomeChart"></div></section>
+      <section class="card card--pad"><h2>Age group</h2><div id="ageChart"></div></section>
+      <section class="card card--pad"><h2>Occupation</h2><div id="occupationChart"></div></section>
+      <section class="card card--pad"><h2>Employment type</h2><div id="employmentChart"></div></section>
+      <section class="card card--pad"><h2>Marital status</h2><div id="maritalChart"></div></section>
+      <section class="card card--pad"><h2>Has existing protection</h2><div id="coverageChart"></div></section>
     </div>
 
-    <section class="panel">
+    <section class="card">
       <div class="insight-table-head">
         <h2>All clients</h2>
         <label class="sub no-print">Sort by
@@ -65,7 +65,7 @@
           </select>
         </label>
       </div>
-      <div class="table-scroll">
+      <div class="table-scroll insights-table">
         <table>
           <thead>
             <tr>

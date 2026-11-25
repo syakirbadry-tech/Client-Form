@@ -115,9 +115,9 @@
     const issued = state.codes[user.id];
     if (!issued) return null;
     const message = setupMessage(user, issued.code, issued.expiresAt);
-    const copyBtn = el('button', { class: 'btn btn-primary', type: 'button' }, 'Copy message');
+    const copyBtn = el('button', { class: 'btn btn--primary', type: 'button' }, 'Copy message');
     copyBtn.addEventListener('click', () => copy(message, copyBtn));
-    const wa = el('a', { class: 'btn btn-gold', href: `https://wa.me/?text=${encodeURIComponent(message)}`, target: '_blank', rel: 'noopener noreferrer' }, 'Send by WhatsApp');
+    const wa = el('a', { class: 'btn btn--wa', href: `https://wa.me/?text=${encodeURIComponent(message)}`, target: '_blank', rel: 'noopener noreferrer' }, 'Send by WhatsApp');
     return el('div', { class: 'code-box' },
       el('div', { class: 'sub', text: 'Temporary password (shown only now – send it to them):' }),
       el('div', { class: 'code', text: issued.code }),

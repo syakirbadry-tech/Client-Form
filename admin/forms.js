@@ -55,7 +55,7 @@
     $('formLink').replaceChildren(el('div', { class: 'link-row' }, el('code', { text: url }), copyBtn));
     const message = `Assalamualaikum / Hi, please fill in your details for your Takaful application here:\n${url}`;
     $('formActions').replaceChildren(
-      el('a', { class: 'btn btn-primary', href: `https://wa.me/?text=${encodeURIComponent(message)}`, target: '_blank', rel: 'noopener' }, 'Share on WhatsApp'),
+      el('a', { class: 'btn btn--wa', href: `https://wa.me/?text=${encodeURIComponent(message)}`, target: '_blank', rel: 'noopener' }, 'Share on WhatsApp'),
       el('a', { class: 'btn', href: url, target: '_blank', rel: 'noopener' }, 'Open the form')
     );
   }
