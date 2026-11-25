@@ -50,7 +50,7 @@
       t.remove();
     }
     const label = button.textContent;
-    button.textContent = 'Copied ✓';
+    button.textContent = 'Copied';
     setTimeout(() => { button.textContent = label; }, 1500);
   }
 

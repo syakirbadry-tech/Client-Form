@@ -1,0 +1,75 @@
+/* =====================================================================
+   app.css — app-shell pieces asg.css leaves to the build (phase 1).
+   Tokens only (from asg.css). Loaded after asg.css and legacy.css.
+   ===================================================================== */
+
+/* Fonts note: IBM Plex Sans (UI), Playfair Display (titles), Poppins (wordmark). */
+
+/* ---------- Sidebar head, foot, collapse ---------- */
+.sb-brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px 8px; min-height: 56px; }
+.sb-brand img { width: 40px; height: 35px; flex: none; }
+.sb-brand__text { min-width: 0; line-height: 1.25; }
+.sb-brand__name { font-family: var(--font-brand); font-weight: 700; font-size: var(--fs-16); color: var(--mark-leg); white-space: nowrap; }
+.sb-brand__sub { font-size: var(--fs-13); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (prefers-color-scheme: dark) { .sb-brand__name { color: var(--ink); } }
+.sb-item { border: 0; background: none; width: 100%; text-align: left; cursor: pointer; font-size: var(--fs-15); }
+.sb-item svg { flex: none; }
+.sb-item .pill { margin-left: auto; }
+.sb-item[aria-disabled="true"] { color: var(--muted); cursor: default; }
+.sb-item[aria-disabled="true"]:hover { background: none; }
+.sb-kbd { margin-left: auto; font-size: var(--fs-11); color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; }
+.sb-foot { border-top: 1px solid var(--line); padding-top: 10px; display: flex; flex-direction: column; gap: 2px; }
+.sb-item--danger { color: var(--danger); }
+.sb-me { display: flex; align-items: center; gap: 10px; padding: 8px 6px 0; min-width: 0; }
+.sb-me .avatar { width: 36px; height: 36px; font-size: var(--fs-13); }
+.sb-me__name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sb-group { display: flex; flex-direction: column; gap: 2px; }
+.sb-badge { margin-left: auto; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px; background: var(--danger); color: var(--on-danger);
+  font-size: var(--fs-12); font-weight: 600; display: inline-flex; align-items: center; justify-content: center; }
+@media (min-width: 768px) {
+  .sidebar[data-collapsed="true"] .sb-brand__text, .sidebar[data-collapsed="true"] .sb-kbd,
+  .sidebar[data-collapsed="true"] .sb-item .pill, .sidebar[data-collapsed="true"] .sb-me__text { display: none; }
+  .sidebar[data-collapsed="true"] .sb-brand, .sidebar[data-collapsed="true"] .sb-me { justify-content: center; padding-left: 0; padding-right: 0; }
+  .sidebar[data-collapsed="true"] .sb-badge { position: absolute; top: 6px; right: 10px; min-width: 10px; width: 10px; height: 10px; padding: 0; font-size: 0; border: 2px solid var(--card); }
+}
+.sb-toggle { display: none; }
+@media (min-width: 768px) { .sb-toggle { display: inline-flex; } }
+
+/* ---------- Tab bar label, FAB icon ---------- */
+.tabbar a:focus-visible { outline-offset: -4px; border-radius: 10px; }
+.fab svg { width: 26px; height: 26px; }
+
+/* ---------- Icon tile rows (Create sheet, More page) ---------- */
+.li--btn { width: 100%; border: 0; background: var(--card); text-align: left; cursor: pointer; font-size: var(--fs-16); }
+.li__icon { width: 44px; height: 44px; border-radius: var(--r-md); flex: none; display: inline-flex; align-items: center; justify-content: center;
+  background: var(--primary-soft); color: var(--primary-soft-ink); }
+.li__icon--danger { background: var(--st-now-bg); color: var(--danger); }
+.li__chev { color: var(--muted); flex: none; }
+.li--danger .li__title { color: var(--danger); }
+.li[aria-disabled="true"] { cursor: default; }
+.li[aria-disabled="true"]:active { background: none; }
+.sheet .list { box-shadow: none; border-radius: 0; }
+.sheet .li { padding-left: 4px; padding-right: 4px; }
+.sheet__title { font-size: var(--fs-24); font-weight: 600; }
+
+/* ---------- ⌘K command search ---------- */
+.cmdk__panel .search { border-bottom: 1px solid var(--line); }
+.cmdk__panel .search .input { border: 0; border-radius: 0; min-height: 56px; box-shadow: none; }
+.cmdk__list { list-style: none; margin: 0; padding: 6px; max-height: 50vh; overflow-y: auto; }
+.cmdk__list a { display: flex; align-items: center; gap: 12px; min-height: var(--tap); padding: 0 10px; border-radius: 10px; text-decoration: none; color: var(--ink); }
+.cmdk__list a[aria-selected="true"] { background: var(--primary-soft); color: var(--primary-soft-ink); }
+.cmdk__empty { padding: 16px; color: var(--muted); text-align: center; }
+
+/* ---------- More + Home pages ---------- */
+.list-head { padding: 14px 4px 6px; }
+.me-card { display: flex; align-items: center; gap: var(--s-3); padding: var(--s-4); }
+.me-card .avatar { width: 52px; height: 52px; font-size: var(--fs-17); }
+.page-narrow { width: 100%; max-width: 720px; margin: 0 auto; }
+.page h1 { padding-top: 12px; }
+@media (min-width: 768px) { .page { padding: 32px 32px 0; } }
+
+/* Avatar colours (stable per person; white text ≥ 4.5:1) */
+:root {
+  --av-1: #11706F; --av-2: #3B5E8F; --av-3: #6B4E9E; --av-4: #9A4A1F;
+  --av-5: #1E6B43; --av-6: #8C2F4B; --av-7: #55602A; --av-8: #5E4B3C;
+}

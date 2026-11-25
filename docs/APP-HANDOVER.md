@@ -30,7 +30,7 @@ Reference source for behaviour: `Client-Form/admin/`:
 - `dashboard.*`: client list, client detail, PDF
 - `insights.*` and `team.*`
 - `admin.js`: shared helpers and birthday logic
-- `admin.css`: current styles
+- `asg.css` (design system v2) + `legacy.css` (old page classes on new tokens, shrinks each phase) + `app.css` (app shell); old styles kept in `admin.v1.css` (not loaded)
 
 ---
 

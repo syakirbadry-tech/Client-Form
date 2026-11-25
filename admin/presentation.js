@@ -139,7 +139,7 @@
     if (p.storyUrl || p.quoteUrl) {
       box.replaceChildren(
         el('p', { text: `Ready for ${p.name}: ${[p.quotedProduct, p.quotedMonthly ? rm(p.quotedMonthly) + '/month' : ''].filter(Boolean).join(' · ') || 'quotation made'}` }),
-        p.storyUrl ? el('a', { class: 'btn btn-primary', href: p.storyUrl, target: '_blank', rel: 'noopener' }, '▶ Present story') : null,
+        p.storyUrl ? el('a', { class: 'btn btn-primary', href: p.storyUrl, target: '_blank', rel: 'noopener' }, 'Present story') : null,
         p.quoteUrl ? el('a', { class: 'btn', href: p.quoteUrl, target: '_blank', rel: 'noopener' }, 'Quotation') : null,
         el('a', { class: 'btn', href: quotationToolUrl(p.id) }, 'New quotation'));
       // Fill the plan from the quotation, without overwriting anything typed.
@@ -371,7 +371,7 @@
         const note = [p.note, text].filter(Boolean).join('\n\n').slice(-1000);
         const { prospect } = await api(`/admin/vb/${p.id}`, { method: 'PATCH', body: { action: 'edit', note } });
         Object.assign(p, prospect);
-        card.replaceChildren(el('h2', { text: 'Presentation notes' }), el('p', { class: 'saved', text: `Saved to ${p.name}'s note in VB ✓` }), el('a', { class: 'btn', href: `vb.html#open=${p.id}` }, 'Open in VB'));
+        card.replaceChildren(el('h2', { text: 'Presentation notes' }), el('p', { class: 'saved', text: `Saved to ${p.name}'s note in VB.` }), el('a', { class: 'btn', href: `vb.html#open=${p.id}` }, 'Open in VB'));
       } catch (err) {
         box.textContent = err.message;
         box.hidden = false;
