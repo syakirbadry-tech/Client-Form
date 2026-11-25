@@ -50,12 +50,6 @@
     if (mins < 24 * 60) return `in ${Math.round(mins / 60)} h`;
     return dayWord(iso).toLowerCase();
   }
-  function waNumber(phone) {
-    const d = String(phone || '').replace(/\D/g, '');
-    if (!d) return '';
-    if (d.startsWith('60')) return d;
-    return d.startsWith('0') ? `6${d}` : d;
-  }
   const shortPlan = (plan) => String(plan || '').replace(/^PruBSN\s+/i, '').replace(/\s+—\s+Medic TotalCare Plan\s+/i, ' ').trim();
 
   // ---------- Header ----------
@@ -233,6 +227,8 @@
     renderNextAppt(prospects);
     const p = renderContest(prospects);
     renderWeek(vb.status === 'fulfilled' ? vb.value.week : null, p);
+    const today = myDayIndex(Date.now());
+    setNavBadge('customers', submissions.filter((x) => (x.status || 'Received') === 'Received' && myDayIndex(Date.parse(x.submittedAt || x.createdTime)) === today).length);
     renderNeeds(needsItems(prospects, submissions),
       vb.status === 'rejected' ? 'VB names could not load, so follow-ups are missing.' : subs.status === 'rejected' ? 'Customers could not load, so new forms are missing.' : '');
     $('lastUpdated').textContent = `Updated ${timeText(new Date().toISOString())}`;

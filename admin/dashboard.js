@@ -80,6 +80,7 @@
   async function load() {
     $('refreshBtn').disabled = true;
     showPageError('');
+    if (!state.submissions.length) skeleton();
     try {
       const data = await call('/admin/submissions');
       state.submissions = data.submissions;
@@ -115,18 +116,32 @@
     return state.agent === 'All' ? state.submissions : state.submissions.filter((s) => agentLabel(s) === state.agent);
   }
 
+  const flags = (window.ASG_CONFIG && window.ASG_CONFIG.features) || {};
+  const canDelete = me.role === 'owner' && Boolean(flags.deleteCustomer);
+  const PILL = { 'Received': 'neutral', 'In Review': 'soon', 'Documents Verified': 'info', 'Approved': 'ok', 'Rejected': 'now', 'Needs Follow-up': 'now' };
+  const SHORT = { 'Documents Verified': 'Verified', 'Needs Follow-up': 'Follow-up', 'In Review': 'In review' };
+  const TEST = 'Test entries';
+  const shortPlan = (plan) => String(plan || '').replace(/^PruBSN\s+/i, '').replace(/\s+—\s+Medic TotalCare Plan\s+/i, ' ').trim();
+  const dayMonth = (iso) => (iso ? new Date(iso).toLocaleDateString('en-GB', { timeZone: TZ, day: 'numeric', month: 'short' }) : '');
+  const pill = (status) => el('span', { class: `pill pill--${PILL[status] || 'neutral'}`, text: SHORT[status] || status });
+  const isTest = (s) => isTestEntry(s.fullName);
+  state.selecting = false;
+  state.selected = new Set();
+
   function renderStats() {
     const count = (st) => pool().filter((s) => statusOf(s) === st).length;
-    const tiles = [
-      ['total', 'Total submissions', pool().length],
-      ['received', 'New (Received)', count('Received')],
-      ['review', 'In review', count('In Review') + count('Documents Verified')],
-      ['approved', 'Approved', count('Approved')],
-      ['followup', 'Needs follow-up', count('Needs Follow-up')]
+    const cells = [
+      ['Received', 'New', count('Received'), 'var(--muted)'],
+      ['In Review', 'Review', count('In Review') + count('Documents Verified'), 'var(--gold)'],
+      ['Approved', 'Approved', count('Approved'), 'var(--success)'],
+      ['Needs Follow-up', 'Follow-up', count('Needs Follow-up'), 'var(--danger)']
     ];
-    $('stats').replaceChildren(...tiles.map(([cls, label, value]) =>
-      el('div', { class: `stat ${cls}` }, el('div', { class: 'stat-label', text: label }), el('div', { class: 'stat-value', text: value }))
-    ));
+    $('stats').replaceChildren(...cells.map(([filter, label, n, colour]) => {
+      const dot = el('span', { class: 'dot', 'aria-hidden': 'true' });
+      dot.style.setProperty('color', colour);
+      return el('button', { class: 'statstrip__cell', type: 'button', 'aria-pressed': String(state.filter === filter), onclick: () => { state.filter = state.filter === filter ? 'All' : filter; render(); } },
+        el('b', { class: 'num', text: n }), el('span', {}, dot, label));
+    }));
   }
 
   function renderAgentFilter() {
@@ -142,37 +157,55 @@
   }
 
   function renderChips() {
-    $('chips').replaceChildren(...['All', ...STATUSES].map((st) => {
+    const tests = pool().filter(isTest).length;
+    const chips = ['All', ...STATUSES].map((st) => {
       const n = st === 'All' ? pool().length : pool().filter((s) => statusOf(s) === st).length;
-      return el('button', {
-        class: 'chip',
-        type: 'button',
-        'aria-pressed': String(state.filter === st),
-        onclick: () => { state.filter = st; render(); }
-      }, `${st} (${n})`);
-    }));
+      return el('button', { class: 'chip', type: 'button', 'aria-pressed': String(state.filter === st), onclick: () => { state.filter = st; render(); } },
+        `${st === 'All' ? 'All' : (SHORT[st] || st)} ${n}`);
+    });
+    if (tests) {
+      chips.push(el('button', { class: 'chip chip--test', id: 'testFilter', type: 'button', 'aria-pressed': String(state.filter === TEST), onclick: () => { state.filter = state.filter === TEST ? 'All' : TEST; render(); } },
+        iconEl('tag', 16), `${TEST} ${tests}`));
+    }
+    $('chips').replaceChildren(...chips);
   }
 
   function renderRows() {
-    const list = state.submissions.filter(matches);
-    $('rows').replaceChildren(...list.map((s) =>
-      el('tr', {
-        class: 'row',
-        tabindex: '0',
-        onclick: () => openDetail(s.id),
-        onkeydown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDetail(s.id); } }
-      },
-        el('td', {}, el('div', { class: 'name', text: s.fullName || '(no name)' }), el('div', { class: 'sub num', text: s.nric || '' })),
-        el('td', { class: 'col-hide-sm' }, el('div', { class: 'num', text: s.phone || '' }), el('div', { class: 'sub', text: s.email || '' })),
-        el('td', { class: 'col-hide-md', text: s.plan || '' }),
-        seesAll ? el('td', { class: 'col-hide-md sub', text: agentLabel(s) }) : null,
-        el('td', {}, el('span', { class: 'pill', 'data-status': statusOf(s), text: statusOf(s) })),
-        el('td', { class: 'col-hide-sm sub', text: formatDateTime(s.submittedAt || s.createdTime) })
-      )
-    ));
+    const list = state.filter === TEST
+      ? state.submissions.filter((s) => isTest(s) && (state.agent === 'All' || agentLabel(s) === state.agent) && (!state.query || matchesQuery(s)))
+      : state.submissions.filter(matches);
+    state.visible = list.map((s) => s.id);
+    $('rows').replaceChildren(...list.map((s) => {
+      const selected = state.selected.has(s.id);
+      const when = s.submittedAt || s.createdTime;
+      const sub = [shortPlan(s.plan), maskNric(s.nric)].filter(Boolean).join(' · ');
+      const main = el('div', { class: 'li__main' },
+        el('div', { class: 'li__title' }, s.fullName || '(no name)', isTest(s) ? el('span', { class: 'tag-test', text: 'TEST' }) : null),
+        el('div', { class: 'li__sub num', text: sub }),
+        seesAll ? el('div', { class: 'li__sub cust-agent', text: agentLabel(s) }) : null);
+      const meta = el('div', { class: 'cust-meta' }, el('span', { class: 'li__meta', text: dayMonth(when) }), pill(statusOf(s)));
+      const check = state.selecting ? el('span', { class: `checkcircle${selected ? ' is-on' : ''}`, 'aria-hidden': 'true' }, selected ? iconEl('check', 16) : null) : null;
+      return el('button', {
+        class: `li li--btn cust-row${selected ? ' is-selected' : ''}`, type: 'button', role: 'listitem',
+        'aria-pressed': state.selecting ? String(selected) : null,
+        'aria-label': state.selecting ? `${selected ? 'Deselect' : 'Select'} ${s.fullName || 'customer'}` : null,
+        onclick: () => (state.selecting ? toggleSelect(s.id) : openDetail(s.id))
+      }, check, main, meta);
+    }));
     const empty = $('empty');
     empty.hidden = list.length > 0;
-    empty.textContent = state.submissions.length ? 'No submissions match your search or filter.' : 'No submissions yet.';
+    $('rows').hidden = list.length === 0;
+    empty.replaceChildren(...(state.submissions.length
+      ? [el('div', { class: 'empty__title', text: 'No customers match' }), el('div', { text: 'Try another search or filter.' })]
+      : [el('div', { class: 'empty__title', text: 'No customers yet' }), el('div', { text: 'Share your form link and new applications appear here.' }), el('a', { class: 'btn btn--primary', href: 'forms.html' }, 'Share my form link')]));
+    if (state.selecting) renderBulk();
+  }
+
+  function matchesQuery(s) {
+    const q = state.query.toLowerCase();
+    const digits = q.replace(/\D/g, '');
+    return [s.fullName, s.email, s.plan, s.agentName].some((v) => v && String(v).toLowerCase().includes(q)) ||
+      (digits.length >= 3 && [s.nric, s.phone].some((v) => v && String(v).replace(/\D/g, '').includes(digits)));
   }
 
   function render() {
@@ -180,9 +213,69 @@
     renderStats();
     renderChips();
     renderRows();
+    const newToday = state.submissions.filter((s) => statusOf(s) === 'Received' && new Date(s.submittedAt || s.createdTime).toLocaleDateString('en-CA', { timeZone: TZ }) === new Date().toLocaleDateString('en-CA', { timeZone: TZ })).length;
+    setNavBadge('customers', newToday);
   }
 
-  // ---------- Detail drawer ----------
+  function skeleton() {
+    $('rows').replaceChildren(...[0, 1, 2, 3, 4].map(() => el('div', { class: 'li', 'aria-hidden': 'true' },
+      el('div', { class: 'li__main' }, el('div', { class: 'skel cust-skel-a' }), el('div', { class: 'skel cust-skel-b' })))));
+  }
+
+  // ---------- Select mode + delete (owner; behind config.features.deleteCustomer) ----------
+
+  function setSelecting(on) {
+    state.selecting = on;
+    state.selected.clear();
+    $('bulkHead').hidden = !on;
+    document.querySelector('.app-main > .topbar').hidden = on;
+    $('bulkBar').hidden = !on;
+    document.body.classList.toggle('is-selecting', on);
+    renderRows();
+    renderBulk();
+  }
+  function toggleSelect(id) {
+    if (state.selected.has(id)) state.selected.delete(id); else state.selected.add(id);
+    renderRows();
+  }
+  function renderBulk() {
+    const n = state.selected.size;
+    $('selectedCount').textContent = `${n} selected`;
+    $('selectAll').textContent = state.visible && n === state.visible.length && n ? 'Select none' : 'Select all';
+    $('bulkDeleteBtn').disabled = n === 0;
+    $('bulkDeleteBtn').replaceChildren(iconEl('trash', 20), n ? `Delete ${n} selected` : 'Select customers to delete');
+  }
+
+  async function deleteCustomers(ids) {
+    const names = ids.map((id) => (state.submissions.find((s) => s.id === id) || {}).fullName || 'this customer');
+    const one = ids.length === 1;
+    const ok = await confirmAction({
+      title: one ? `Delete ${names[0]}?` : `Delete ${ids.length} customers?`,
+      message: 'This removes the form, IC photos and signature. It can’t be undone.',
+      confirmLabel: one ? 'Delete customer' : `Delete ${ids.length} customers`
+    });
+    if (!ok) return false;
+    const done = [];
+    let error = null;
+    for (const id of ids) {
+      try {
+        await call(`/admin/submissions/${id}`, { method: 'DELETE' });
+        done.push(id);
+      } catch (err) {
+        error = err;
+        break;
+      }
+    }
+    state.submissions = state.submissions.filter((s) => !done.includes(s.id));
+    done.forEach((id) => state.selected.delete(id));
+    if (state.filter === TEST && !state.submissions.some(isTest)) state.filter = 'All';
+    render();
+    if (done.length) showToast(one ? `Deleted ${names[0]}` : `Deleted ${done.length} customers`);
+    if (error) showPageError(`Could not delete: ${error.message}`);
+    return done.length === ids.length;
+  }
+
+  // ---------- Detail sheet ----------
 
   function valueText(v, kind) {
     if (v == null || v === '') return '';
@@ -193,6 +286,7 @@
     return String(v);
   }
 
+  // Printed sheet: the original grid layout.
   function renderSection(title, fields, data) {
     return el('section', { class: 'section' },
       el('h3', { text: title }),
@@ -206,6 +300,19 @@
     );
   }
 
+  // On screen: label/value rows. Long values stack under their label.
+  function renderDetailSection(title, fields, data) {
+    return el('section', { class: 'cust-section' },
+      el('h3', { class: 'eyebrow', text: title }),
+      el('dl', { class: 'kv-group' }, fields.map(([name, kind]) => {
+        let text = valueText(data[name], kind);
+        if (/NRIC/.test(name)) text = formatNric(text);
+        return el('div', { class: `kv${kind === 'wide' ? ' kv--stack' : ''}` },
+          el('dt', { text: name }),
+          el('dd', { class: text ? null : 'blank', text: text || '—' }));
+      })));
+  }
+
   function safeUrl(url) {
     try {
       const u = new URL(url);
@@ -215,9 +322,9 @@
     }
   }
 
-  function renderDocuments(data) {
-    return el('section', { class: 'section' },
-      el('h3', { text: 'Documents' }),
+  function renderDocuments(data, onScreen) {
+    return el('section', { class: onScreen ? 'cust-section' : 'section' },
+      el('h3', { class: onScreen ? 'eyebrow' : null, text: 'Documents' }),
       el('div', { class: 'docs' }, DOCUMENTS.map(([field, label]) => {
         const file = Array.isArray(data[field]) ? data[field][0] : null;
         const full = file && safeUrl(file.url);
@@ -233,49 +340,60 @@
     );
   }
 
+  // One tap on a status saves it (no separate Update button).
   function renderStatusControl(id, current) {
-    const select = el('select', { 'aria-label': 'Submission status' },
-      STATUSES.map((st) => el('option', { value: st, selected: st === current }, st)));
-    const saveBtn = el('button', { class: 'btn btn-primary', type: 'button', disabled: true }, 'Update status');
-    const note = el('span', { class: 'saved', role: 'status' });
-
-    select.addEventListener('change', () => {
-      saveBtn.disabled = select.value === current;
-      note.textContent = '';
-    });
-    saveBtn.addEventListener('click', async () => {
-      saveBtn.disabled = true;
-      saveBtn.textContent = 'Saving…';
+    const saved = el('div', { class: 'cust-saved', id: 'statusSaved', role: 'status', 'aria-live': 'polite' });
+    const chips = el('div', { class: 'chips cust-status__chips', role: 'radiogroup', 'aria-label': 'Status' });
+    const draw = (busy) => chips.replaceChildren(...STATUSES.map((st) => el('button', {
+      class: 'chip', type: 'button', role: 'radio', 'aria-checked': String(st === current), 'aria-pressed': String(st === current), disabled: busy || null,
+      onclick: () => save(st)
+    }, st === current ? iconEl('check', 16) : null, SHORT[st] || st)));
+    async function save(st) {
+      if (st === current) return;
+      const before = current;
+      current = st;
+      draw(true);
+      saved.replaceChildren('Saving…');
       try {
-        const { submission } = await call(`/admin/submissions/${id}`, { method: 'PATCH', body: { status: select.value } });
+        const { submission } = await call(`/admin/submissions/${id}`, { method: 'PATCH', body: { status: st } });
         current = submission.status;
         const row = state.submissions.find((s) => s.id === id);
         if (row) row.status = current;
         render();
-        note.textContent = 'Saved';
+        saved.replaceChildren(iconEl('check', 16), `Saved · ${SHORT[current] || current}`);
       } catch (err) {
-        note.textContent = '';
-        alert(err.message);
-        saveBtn.disabled = false;
-      } finally {
-        saveBtn.textContent = 'Update status';
+        current = before;
+        saved.replaceChildren(el('span', { class: 'field__error', text: `Not saved: ${err.message}` }));
       }
-    });
+      draw(false);
+    }
+    draw(false);
+    $('statusRow').replaceChildren(el('div', { class: 'label', text: 'Status · saves on tap' }), chips, saved);
+  }
 
-    $('statusRow').replaceChildren(el('span', { class: 'sub', text: 'Status:' }), select, saveBtn, note);
+  function renderActions(f) {
+    const wa = waNumber(f['Phone Number']);
+    const tel = String(f['Phone Number'] || '').replace(/[^\d+]/g, '');
+    $('custActions').replaceChildren(
+      wa ? el('a', { class: 'btn btn--wa', href: `https://wa.me/${wa}`, target: '_blank', rel: 'noopener' }, iconEl('chat', 20), 'WhatsApp') : null,
+      tel ? el('a', { class: 'btn', href: `tel:${tel}` }, iconEl('phone', 20), 'Call') : null,
+      $('printBtn'));
+    $('printBtn').replaceChildren(iconEl('print', 20), 'Print');
   }
 
   async function openDetail(id) {
     const summary = state.submissions.find((s) => s.id === id) || {};
     state.openId = id;
-    $('drawerTitle').textContent = summary.fullName || 'Submission';
-    $('drawerSub').textContent = `Submitted ${formatDateTime(summary.submittedAt || summary.createdTime)}`;
+    $('drawerTitle').textContent = summary.fullName || 'Customer';
+    $('drawerSub').textContent = [shortPlan(summary.plan), `sent ${formatDateTime(summary.submittedAt || summary.createdTime)}`].filter(Boolean).join(' · ');
     $('statusRow').replaceChildren();
+    $('custActions').replaceChildren($('printBtn'));
     state.current = null;
     $('printBtn').hidden = true;
-    $('drawerBody').replaceChildren(el('div', { class: 'loading', text: 'Loading full details…' }));
+    $('drawerBody').replaceChildren(...[0, 1, 2].map(() => el('div', { class: 'skel cust-skel-block', 'aria-hidden': 'true' })));
     $('scrim').hidden = false;
     $('drawer').hidden = false;
+    $('drawer').scrollTop = 0;
     document.body.style.overflow = 'hidden';
     $('closeDrawer').focus();
 
@@ -286,10 +404,15 @@
       state.current = submission;
       $('printBtn').hidden = false;
       renderStatusControl(id, f['Submission Status'] || 'Received');
+      renderActions(f);
       $('drawerBody').replaceChildren(
-        ...SECTIONS.slice(0, CLIENT_SECTIONS).map(([title, fields]) => renderSection(title, fields, f)),
-        renderDocuments(f),
-        ...SECTIONS.slice(CLIENT_SECTIONS).map(([title, fields]) => renderSection(title, fields, f))
+        ...SECTIONS.slice(0, CLIENT_SECTIONS).map(([title, fields]) => renderDetailSection(title, fields, f)),
+        renderDocuments(f, true),
+        ...SECTIONS.slice(CLIENT_SECTIONS).map(([title, fields]) => renderDetailSection(title, fields, f)),
+        canDelete ? el('section', { class: 'cust-section' },
+          el('h3', { class: 'eyebrow', text: 'Owner only' }),
+          el('button', { class: 'btn btn--danger btn--block', id: 'deleteBtn', type: 'button', onclick: async () => { if (await deleteCustomers([id])) closeDetail(); } },
+            iconEl('trash', 20), 'Delete customer')) : null
       );
     } catch (err) {
       if (state.openId === id) $('drawerBody').replaceChildren(el('div', { class: 'alert', text: err.message }));
@@ -328,7 +451,7 @@
           el('img', { class: 'letterhead-partner', src: 'img/prubsn-takaful-logo.png', alt: 'Prudential BSN Takaful' }),
           el('div', { class: 'letterhead-title', text: 'Client Details' }),
           el('div', { text: formatDate(new Date().toISOString()) }),
-          f['Form Version'] ? el('div', { text: `Form v${f['Form Version']}` }) : null
+          f['Form Version'] ? el('div', { text: `Form v${String(f['Form Version']).replace(/^v/i, '')}` }) : null
         )
       ),
       el('div', { class: 'print-client' },
@@ -427,9 +550,11 @@
   // ---------- Wire up ----------
 
   mountPortalNav('customers', session);
+  $('refreshBtn').replaceChildren(iconEl('refresh', 20));
+  $('searchIcon').replaceWith(iconEl('search', 18));
+  $('closeDrawer').replaceChildren(iconEl('x', 22));
   $('passwordBtn').hidden = me.role === 'owner';
   $('passwordBtn').addEventListener('click', openChangePassword);
-  document.querySelector('th.col-agent').hidden = !seesAll;
   $('agentFilter').addEventListener('change', (e) => { state.agent = e.target.value; render(); });
   $('refreshBtn').addEventListener('click', load);
   $('exportBtn').addEventListener('click', exportCsv);
@@ -437,7 +562,27 @@
   $('closeDrawer').addEventListener('click', closeDetail);
   $('printBtn').addEventListener('click', printDetail);
   $('scrim').addEventListener('click', closeDetail);
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && state.openId) closeDetail(); });
+  enableSwipeClose($('drawer'), closeDetail);
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (state.openId && !document.getElementById('confirmSheet')) closeDetail();
+    else if (state.selecting) setSelecting(false);
+  });
+  if (canDelete) {
+    $('selectBtn').hidden = false;
+    $('selectBtn').addEventListener('click', () => setSelecting(true));
+    $('selectDone').addEventListener('click', () => setSelecting(false));
+    $('selectAll').addEventListener('click', () => {
+      const all = state.visible && state.selected.size === state.visible.length;
+      state.selected = new Set(all ? [] : state.visible);
+      renderRows();
+    });
+    $('bulkDeleteBtn').addEventListener('click', async () => {
+      if (await deleteCustomers([...state.selected])) setSelecting(false);
+    });
+  }
+  // dashboard.html#password (from More) opens "Change password".
+  if (location.hash === '#password' && me.role !== 'owner') { history.replaceState(null, '', location.pathname); openChangePassword(); }
 
   load();
 })();

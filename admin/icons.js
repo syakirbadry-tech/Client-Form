@@ -47,7 +47,8 @@
   "filter": "M3 5h18l-7 8v6l-4 2v-8z",
   "chevdown": "m6 9 6 6 6-6",
   "panel": "M4 4h16v16H4zM9 4v16",
-  "capslock": "m12 4-8 8h4v6h8v-6h4z"
+  "capslock": "m12 4-8 8h4v6h8v-6h4z",
+  "refresh": "M21 12a9 9 0 1 1-2.64-6.36L21 8M21 3v5h-5"
 };
   function icon(name, size, label) {
     var d = P[name]; if (!d) return '';
