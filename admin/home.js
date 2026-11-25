@@ -58,8 +58,8 @@
   const part = hour < 12 ? 'Good morning' : hour < 19 ? 'Good afternoon' : 'Good evening';
   const full = String(me.name || session.username || '').trim();
   const first = (full.split(/\s+/)[0] || '') + (/\(demo\)/.test(full) ? ' (demo)' : '');
-  $('greeting').textContent = first ? `${part}, ${first}` : part;
-  $('today').textContent = now.toLocaleDateString('en-GB', { timeZone: TZ, weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  const dateText = now.toLocaleDateString('en-GB', { timeZone: TZ, weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  $('today').replaceChildren(dateText, first ? el('span', { class: 'home-greet', text: ` · ${part}, ${first}` }) : '');
   $('createBtn').replaceChildren(iconEl('plus', 20), 'Create');
   $('createBtn').addEventListener('click', () => openCreateSheet('home'));
 
@@ -74,22 +74,22 @@
     if (!next) {
       box.className = 'home-appt card card--pad home-appt--empty';
       box.replaceChildren(
-        el('div', { class: 'eyebrow', text: 'Next appointment' }),
+        el('div', { class: 'label', text: 'Next appointment' }),
         el('p', { class: 'home-empty-text', text: 'No appointment today or tomorrow.' }),
-        el('a', { class: 'btn btn--primary', href: 'appointments.html?create' }, iconEl('cal', 20), 'Book appointment'));
+        el('a', { class: 'btn', href: 'appointments.html?create' }, iconEl('cal', 20), 'Book appointment'));
       return;
     }
     const wa = waNumber(next.phone);
-    box.className = 'home-appt card--hero';
+    box.className = 'home-appt card card--pad';
     box.replaceChildren(
       el('div', { class: 'home-appt__top' },
-        el('div', { class: 'home-appt__eyebrow', text: `Next appointment · ${untilText(next.appointmentAt)}` }),
-        el('span', { class: 'home-appt__stage', text: 'VB3' })),
+        el('h2', { class: 'label', text: `Next appointment · ${untilText(next.appointmentAt)}` }),
+        el('span', { class: 'pill pill--soon', text: 'VB3' })),
       el('div', { class: 'home-appt__name', text: next.name }),
       el('div', { class: 'home-appt__sub', text: [`${dayWord(next.appointmentAt)}, ${timeText(next.appointmentAt)}`, next.source].filter(Boolean).join(' · ') }),
       el('div', { class: 'home-appt__actions' },
-        wa ? el('a', { class: 'btn home-appt__btn', href: `https://wa.me/${wa}`, target: '_blank', rel: 'noopener' }, iconEl('chat', 20), 'WhatsApp') : null,
-        el('a', { class: 'btn home-appt__btn home-appt__btn--outline', href: `presentation.html#vb=${next.id}` }, 'Open presentation')));
+        wa ? el('a', { class: 'btn btn--wa', href: `https://wa.me/${wa}`, target: '_blank', rel: 'noopener' }, iconEl('chat', 20), 'WhatsApp') : null,
+        el('a', { class: 'btn', href: `presentation.html#vb=${next.id}` }, 'Open presentation')));
   }
 
   // ---------- Contest progress ----------
@@ -145,7 +145,7 @@
     $('contest').replaceChildren(
       el('div', { class: 'home-card-head' },
         el('h2', { class: 'home-card-title', id: 'contestTitle' }, iconEl('trophy', 22), `Contest progress ${CONFIG.year}`),
-        el('span', { class: 'pill pill--now', text: `${days} ${days === 1 ? 'day' : 'days'} left` })),
+        el('span', { class: 'sub', text: `${days} ${days === 1 ? 'day' : 'days'} left` })),
       el('div', { class: 'home-big' }, el('b', { class: 'num', text: num(tpc) }), el('span', { class: 'sub', text: 'your TPC this year' })),
       el('div', { class: 'milestones' }, bar, marks),
       el('div', { class: 'home-targets' }, rows),
@@ -171,7 +171,7 @@
       el('div', { class: 'home-card-head' },
         el('h2', { class: 'home-card-title', id: 'weekTitle', text: 'This week' }),
         p ? el('span', { class: 'sub', text: `Goal: ${p.cases} ${p.cases === 1 ? 'case' : 'cases'} · TPC ${num(p.weekly)}` }) : null),
-      el('div', { class: 'home-tiles' }, tile('VB1', c.vb1), tile('VB2', c.vb2), tile('VB3', c.vb3), tile('VB4', c.vb4)),
+      el('div', { class: 'home-tiles' }, tile('Added', c.vb1), tile('Contacted', c.vb2), tile('Booked', c.vb3), tile('Approved', c.vb4)),
       el('div', { class: 'home-week-line' },
         el('span', { text: `${num(c.cases)}${goalCases ? ` of ${goalCases}` : ''} ${goalCases === 1 ? 'case' : 'cases'} · TPC ${num(c.tpc)}` }),
         goalCases ? el('span', { class: 'sub', text: `${pct}%` }) : null),
@@ -207,8 +207,7 @@
         el('span', { class: `pill ${n.pill[0]}`, text: n.pill[1] }),
         el('div', { class: 'li__main' }, el('div', { class: 'li__title', text: n.title }), el('div', { class: 'li__sub', text: n.sub })),
         iconEl('chev', 20))))
-      : el('div', { class: 'empty' }, el('div', { class: 'empty__title', text: 'Nothing needs you right now' }),
-        el('div', { text: 'New forms and follow-ups show up here.' }));
+      : el('p', { class: 'home-needs__none' }, el('b', { text: 'Nothing needs you right now. ' }), 'New forms and follow-ups show up here.');
     $('needsYou').replaceChildren(...[head, list, partial ? el('p', { class: 'sub home-pad', text: partial }) : null].filter(Boolean));
   }
 

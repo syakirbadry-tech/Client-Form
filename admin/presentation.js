@@ -310,7 +310,7 @@
 
   function renderTools() {
     $('penBtn').setAttribute('aria-pressed', String(state.pen));
-    $('penBtn').textContent = state.pen ? '✋ Stop drawing' : '✏️ Draw';
+    $('penBtn').textContent = state.pen ? 'Stop drawing' : 'Draw';
     canvas.classList.toggle('active', state.pen);
     $('tools').hidden = !state.pen;
     $('tools').replaceChildren(

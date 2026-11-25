@@ -19,7 +19,7 @@
   <title>Customers</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&family=Poppins:wght@700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Poppins:wght@700&display=swap">
   <link rel="stylesheet" href="asg.css">
   <link rel="stylesheet" href="legacy.css">
   <link rel="stylesheet" href="app.css">
@@ -53,12 +53,12 @@
         <input class="input" id="search" type="search" placeholder="Search name, NRIC, phone or plan" autocomplete="off">
       </label>
       <select class="input agent-filter" id="agentFilter" aria-label="Filter by agent" hidden></select>
-      <button class="btn" id="exportBtn" type="button">Export CSV</button>
     </div>
     <div class="chips" id="chips" role="group" aria-label="Filter by status"></div>
 
     <div class="list cust-list" id="rows" role="list" aria-label="Customers"></div>
     <div class="empty" id="empty" hidden></div>
+    <div class="cust-foot"><button class="btn btn--ghost" id="exportBtn" type="button">Export CSV</button></div>
 
     <p class="cust-foot"><button class="btn btn--ghost" id="passwordBtn" type="button" hidden>Change my password</button></p>
   </main>

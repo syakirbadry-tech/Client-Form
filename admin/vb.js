@@ -249,7 +249,7 @@
     const share = p.storyUrl || p.quoteUrl;
     const answers = el('div', { class: 'vb-answers' });
     const section = el('section', { class: 'cust-section' },
-      el('h3', { class: 'eyebrow', text: 'Quotation & presentation' }),
+      el('h3', { class: 'label', text: 'Quotation & presentation' }),
       p.quotedAt
         ? el('p', { class: 'sub', text: [p.quotedProduct, p.quotedMonthly ? `RM${number(p.quotedMonthly)}/month` : '', `updated ${dateMY(p.quotedAt)}`].filter(Boolean).join(' · ') })
         : el('p', { class: 'sub', text: 'Upload their PRU Mobility quotation to make the client quotation and the animated story presentation. The links save here.' }),
@@ -294,7 +294,7 @@
     const markBtn = el('button', { class: 'btn btn--ghost', type: 'button' }, 'Mark contacted');
     markBtn.addEventListener('click', () => save(path, 'PATCH', { action: 'contacted' }, markBtn, contactBox));
     sections.push(el('section', { class: 'cust-section' },
-      el('h3', { class: 'eyebrow', text: 'Reach out' }),
+      el('h3', { class: 'label', text: 'Reach out' }),
       el('div', { class: 'vb-actions' },
         wa ? el('a', { class: 'btn btn--wa', href: `https://wa.me/${wa}`, target: '_blank', rel: 'noopener', onclick: logContacted }, iconEl('chat', 20), 'WhatsApp') : null,
         p.phone ? el('a', { class: 'btn', href: `tel:${p.phone.replace(/[^\d+]/g, '')}`, onclick: logContacted }, iconEl('phone', 20), 'Call') : null,
@@ -313,7 +313,7 @@
         if (!at.value) return showError(box, new Error('Please choose the appointment date and time.'));
         save(path, 'PATCH', { action: 'appointment', at: fromLocalInput(at.value) }, btn, box);
       });
-      sections.push(el('section', { class: 'cust-section' }, el('h3', { class: 'eyebrow', text: 'Appointment' }), field('Date and time', at), box, el('div', { class: 'vb-actions' }, btn)));
+      sections.push(el('section', { class: 'cust-section' }, el('h3', { class: 'label', text: 'Appointment' }), field('Date and time', at), box, el('div', { class: 'vb-actions' }, btn)));
     }
 
     // Policy approved (VB4): keyed in by the agent once Prudential approves it.
@@ -334,7 +334,7 @@
       const btn = el('button', { class: 'btn', type: 'button' }, iconEl('check', 20), p.stage === 4 ? 'Update policy' : 'Mark policy approved');
       btn.addEventListener('click', () => save(path, 'PATCH', { action: 'approved', product: product.value, premium: Number(premium.value), frequency: frequency.value }, btn, box));
       sections.push(el('section', { class: 'cust-section' },
-        el('h3', { class: 'eyebrow', text: p.stage === 4 ? `Policy approved ${dateMY(p.approvedAt)}` : 'Policy approved' }),
+        el('h3', { class: 'label', text: p.stage === 4 ? `Policy approved ${dateMY(p.approvedAt)}` : 'Policy approved' }),
         p.stage === 4 ? null : el('p', { class: 'sub', text: 'Only once Prudential has approved the policy. TPC of 1,800 or more counts as 1 case; below that, 0.5.' }),
         el('div', { class: 'vb-grid' }, field('Product', product), field('Premium (RM)', premium), field('Paid', frequency)),
         preview, box, el('div', { class: 'vb-actions' }, btn)));
@@ -352,7 +352,7 @@
         if (!ok) return;
         if (await save(path, 'DELETE', undefined, del, box)) { closeDrawer(); showToast(`Removed ${p.name}`); }
       });
-      sections.push(el('section', { class: 'cust-section vb-form' }, el('h3', { class: 'eyebrow', text: 'Details' }), f.nodes, box, el('div', { class: 'vb-actions' }, btn, del)));
+      sections.push(el('section', { class: 'cust-section vb-form' }, el('h3', { class: 'label', text: 'Details' }), f.nodes, box, el('div', { class: 'vb-actions' }, btn, del)));
     }
 
     openDrawer(p.name, `VB${p.stage} · ${STAGES[p.stage]} · added ${dateMY(p.createdAt)}`, sections);

@@ -6,7 +6,7 @@
 - `admin/asg.css` (exact copy of `design/asg.css`), `admin/icons.js`, `admin/asg-mark.svg`.
 - `admin/legacy.css`: the old page classes restyled on asg tokens. Delete each block when its page is rebuilt.
 - `admin/app.css`: shell pieces asg.css leaves to the build (sidebar head/foot, icon-tile rows, ⌘K list, avatar colour tokens `--av-1…8`).
-- `admin/admin.v1.css`: backup of the old `admin.css` (not loaded).
+- `admin/admin.v1.css`: old `admin.css` backup, removed in the unslop pass (in git history).
 - App shell in `mountPortalNav()` (admin.js): wraps each page in `.app` > `.sidebar` + `.app-main`; phone `.tabbar` (Home · Customers · VB · More) + `#fab` → Create sheet (`#createSheet`); ≥ 768 px sidebar with `#sbCollapse` (remembered in localStorage), ⌘K / Ctrl K page search (`#cmdk`). `setNavBadge(id, n)` ready for phase 3+.
 - `?create` on `vb.html` / `appointments.html` opens the page's own `#addBtn` form after its data loads.
 - New pages: `home.html` (placeholder: greeting + quick links; real Home is phase 3), `more.html` (P-18).
@@ -106,3 +106,15 @@
 3. **Contest targets in a Settings screen:** needs a settings endpoint. Today they live in `admin/config.js`.
 4. **Team-wide contest totals for leaders:** the VB API returns weekly counts per agent, not yearly TPC.
 5. **Presentation stage (client-facing) and the client form restyle:** separate design round (client pages carry the PRUBSN logo).
+
+## Unslop pass (25 Nov 2026, after the taste-skill audit)
+
+- Home answers "what do I do today" first: Needs you today, then the next appointment, This week, then the contest. Title is "Today"; the greeting moved into the date line (hidden on small phones).
+- Colour only on data and the main action: the appointment card is a plain card, the selected menu item is a neutral grey, icon boxes and the red Sign out are gone, "days left" is plain text, the yellow notes are plain text.
+- Sentence-case labels everywhere (no spaced capitals), table headers without a band.
+- Two typefaces: IBM Plex Sans for all text and titles, Poppins for the wordmark only. Playfair Display is no longer loaded.
+- Insights: the five figures sit in one divided strip with no coloured edges; bars show each group's share of the clients, and the largest group carries the colour.
+- Loading placeholders are flat (no moving gradient); the presentation Draw button has no emoji.
+- Customers: Export CSV moved under the list; filter chips wrap on iPad. More uses two columns on desktop; Alerts and More are left-aligned.
+- Removed the unused `admin.v1.css`.
+- Still open: emoji on the client-facing presentation stage (part of the presentation restyle).
