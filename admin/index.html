@@ -16,40 +16,43 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="ASG Portal">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <title>Staff Sign In</title>
+  <title>Sign in · ASG Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&family=Poppins:wght@700&display=swap">
   <link rel="stylesheet" href="asg.css">
   <link rel="stylesheet" href="legacy.css">
   <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="splash.css">
 </head>
-<body>
-  <div class="login-wrap">
-    <form class="login-card" id="loginForm" novalidate>
-      <div>
-        <h1>Staff Sign In</h1>
-        <p>PruBSN client submissions dashboard</p>
-      </div>
-      <div class="alert" id="loginError" role="alert" hidden></div>
+<body class="signin-page">
+  <main class="signin" id="signin">
+    <img class="signin__mark" id="signinMark" src="asg-mark.svg" alt="" width="101" height="88">
+    <div class="signin__head login-in">
+      <h1 class="wordmark signin__title">ASG ANSAR GROUP</h1>
+      <p class="sub signin__lead" id="signinLead">Sign in to the Agent Portal</p>
+    </div>
+
+    <form class="card signin__card login-in-2" id="loginForm" novalidate>
       <div class="field">
         <label for="username">Email</label>
-        <input class="input" id="username" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+        <input class="input" id="username" name="username" type="email" inputmode="email" autocomplete="username" autocapitalize="none" spellcheck="false" required>
       </div>
       <div class="field">
         <label for="password">Password</label>
         <input class="input" id="password" name="password" type="password" autocomplete="current-password" required>
+        <div class="field__hint" id="capsHint" hidden></div>
       </div>
-      <button class="btn btn-primary" id="loginBtn" type="submit">Sign in</button>
-      <div class="login-foot">Authorised staff only. Sessions end after 8 hours or when you close this tab.</div>
+      <div class="field__error" id="loginError" role="alert" hidden></div>
+      <button class="btn btn--primary btn--lg btn--block" id="loginBtn" type="submit"><span class="btn__label">Sign in</span></button>
+      <p class="signin__foot">Staff only. You stay signed in for 8 hours or until you close this tab.</p>
     </form>
 
-    <form class="login-card" id="setupForm" novalidate hidden>
+    <form class="card signin__card" id="setupForm" novalidate hidden>
       <div>
-        <h1>Choose your password</h1>
-        <p>You signed in with a temporary password. Choose your own password to continue – nobody else will see it.</p>
+        <h2>Choose your password</h2>
+        <p class="sub">You signed in with a temporary password. Choose your own to continue. Nobody else will see it.</p>
       </div>
-      <div class="alert" id="setupError" role="alert" hidden></div>
       <input type="email" name="email" autocomplete="username" hidden>
       <div class="field">
         <label for="newPassword">New password (at least 8 characters)</label>
@@ -59,12 +62,36 @@
         <label for="newPassword2">Type it again</label>
         <input class="input" id="newPassword2" name="password2" type="password" autocomplete="new-password" minlength="8" required>
       </div>
-      <button class="btn btn-primary" id="setupBtn" type="submit">Save password and sign in</button>
-      <button class="link-btn" id="showLogin" type="button">Back to sign in</button>
+      <div class="field__error" id="setupError" role="alert" hidden></div>
+      <button class="btn btn--primary btn--lg btn--block" id="setupBtn" type="submit"><span class="btn__label">Save password and sign in</span></button>
+      <button class="btn btn--ghost btn--block" id="showLogin" type="button">Back to sign in</button>
     </form>
+  </main>
+
+  <!-- Start animation (plays once per tab; tap to skip). Timeline: asg-design/design/splash/README.md -->
+  <div class="splash" id="splash" hidden>
+    <div class="mark-box an">
+      <svg viewBox="40 40 560 490" width="240" height="210" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="asgGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F2D27A"/><stop offset=".5" stop-color="#C9A227"/><stop offset="1" stop-color="#9C7A14"/></linearGradient>
+          <clipPath id="asgClip"><polygon points="320,52 432,245 398,302 320,170 275,245 430,518 210,518 180,460 330,460 208,245"/><polygon points="174,302 207,357 117,518 51,518"/><polygon points="466,302 589,518 523,518 431,357"/></clipPath>
+        </defs>
+        <polygon class="pc pc-a pc-leg an" pathLength="1" points="174,302 207,357 117,518 51,518" stroke="#C9A227" stroke-width="4" stroke-linejoin="round"/>
+        <polygon class="pc pc-s an" pathLength="1" points="320,52 432,245 398,302 320,170 275,245 430,518 210,518 180,460 330,460 208,245" fill="url(#asgGold)" stroke="#B08A1C" stroke-width="5" stroke-linejoin="round"/>
+        <polygon class="pc pc-g pc-leg an" pathLength="1" points="466,302 589,518 523,518 431,357" stroke="#C9A227" stroke-width="4" stroke-linejoin="round"/>
+        <g clip-path="url(#asgClip)"><rect class="sheen an" x="0" y="0" width="90" height="600" fill="#fff" fill-opacity=".55" transform="skewX(-20)"/></g>
+      </svg>
+      <span class="lt lt-a an" aria-hidden="true">A</span><span class="lt lt-s an" aria-hidden="true">S</span><span class="lt lt-g an" aria-hidden="true">G</span>
+    </div>
+    <div class="cap an" aria-hidden="true">A · S · G</div>
+    <div class="word an" aria-hidden="true"><div class="wordmark">ASG ANSAR GROUP</div><div class="tag">Agent Portal</div></div>
+    <div class="status" role="status" aria-live="polite"></div>
+    <button type="button" class="btn btn--ghost skip an">Tap anywhere to skip</button>
   </div>
+
   <script src="icons.js"></script>
   <script src="admin.js"></script>
+  <script src="splash.js"></script>
   <script src="login.js"></script>
 </body>
 </html>

@@ -37,7 +37,6 @@ h3 { font-size: var(--fs-16); font-weight: 600; margin: 0; }
 a.btn { text-decoration: none; }
 a.btn:not(.btn-primary):not(.btn--primary) { color: var(--ink); }
 .link-btn { background: none; border: 0; padding: 0; min-height: var(--tap); color: var(--primary); font-size: var(--fs-14); font-weight: 600; cursor: pointer; text-decoration: underline; }
-.input:not(textarea) { min-height: var(--tap); }
 select.input { padding-right: 10px; }
 .name { font-weight: 600; }
 .grow { flex: 1; min-width: 0; }
@@ -137,7 +136,7 @@ dl.kv dd.blank { color: var(--muted); }
 .doc .missing { aspect-ratio: 4 / 3; border: 1.5px dashed var(--line); border-radius: var(--r-sm); display: grid; place-items: center; font-weight: 400; }
 @media (max-width: 600px) { dl.kv { grid-template-columns: 1fr; } .docs { grid-template-columns: 1fr 1fr; } .drawer-head, .drawer-body { padding-left: 16px; padding-right: 16px; } }
 
-/* ---------- Sign in (replaced by the splash in phase 2) ---------- */
+/* ---------- Setup page (owner tool; sign-in moved to splash.css in phase 2) ---------- */
 .login-wrap { min-height: 100dvh; display: grid; place-items: center; padding: 24px 16px; }
 .login-card { width: 100%; max-width: 400px; background: var(--card); border-radius: var(--r-lg); box-shadow: var(--shadow-2); padding: 32px 24px; display: flex; flex-direction: column; gap: 18px; }
 .login-card h1 { font-size: var(--fs-24); }
