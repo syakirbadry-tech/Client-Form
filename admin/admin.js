@@ -308,6 +308,7 @@ function iconEl(name, size = 20, label) {
 
 // Sections still being built are listed so agents can see what is coming, but are not links yet.
 const NAV_HOME = { id: 'home', label: 'Home', href: 'home.html', icon: 'home' };
+const NAV_ALERTS = { id: 'alerts', label: 'Alerts', href: 'alerts.html', icon: 'bell' };
 const NAV_GROUPS = [
   ['Client journey', [
     { id: 'customers', label: 'Customers', href: 'dashboard.html', icon: 'users' },
@@ -430,7 +431,7 @@ function openCreateSheet(active) {
 function openCmdk(me) {
   if (document.getElementById('cmdk')) return;
   const opener = document.activeElement;
-  const pages = [NAV_HOME, ...NAV_GROUPS.flatMap(([, items]) => items)].filter((n) => !n.soon && navVisible(n, me));
+  const pages = [NAV_HOME, NAV_ALERTS, ...NAV_GROUPS.flatMap(([, items]) => items), { id: 'alertsettings', label: 'Alert settings', href: 'alert-settings.html', icon: 'gear' }, { id: 'intro', label: 'Help & introduction', href: 'intro.html?again', icon: 'help' }].filter((n) => !n.soon && navVisible(n, me));
   const input = el('input', { class: 'input', type: 'search', placeholder: 'Go to a page', 'aria-label': 'Search pages', autocomplete: 'off', role: 'combobox', 'aria-controls': 'cmdkList', 'aria-expanded': 'true' });
   const list = el('ul', { class: 'cmdk__list', id: 'cmdkList', role: 'listbox', 'aria-label': 'Pages' });
   let sel = 0;
@@ -466,7 +467,7 @@ function setNavBadge(id, count) {
   document.querySelectorAll(`[data-nav="${id}"]`).forEach((a) => {
     let b = a.querySelector('.badge, .sb-badge');
     if (!count) { if (b) b.remove(); return; }
-    if (!b) { b = el('span', { class: a.closest('.tabbar') ? 'badge' : 'sb-badge' }); a.append(b); }
+    if (!b) { b = el('span', { class: a.closest('.sidebar') ? 'sb-badge' : 'badge' }); a.append(b); }
     b.textContent = count > 99 ? '99+' : String(count);
     b.setAttribute('aria-label', `${count} need attention`);
   });
@@ -497,7 +498,7 @@ function mountPortalNav(active, session) {
     el('button', { class: 'sb-item', type: 'button', title: 'Search', 'aria-label': 'Search pages', onclick: () => openCmdk(me) },
       iconEl('search', 22), el('span', { class: 'sb-label', text: 'Search' }), el('kbd', { class: 'sb-kbd', text: isMac ? '⌘K' : 'Ctrl K' })),
     el('div', { class: 'sb-nav' },
-      el('div', { class: 'sb-group' }, sbItem(NAV_HOME)),
+      el('div', { class: 'sb-group' }, sbItem(NAV_HOME), sbItem(NAV_ALERTS)),
       NAV_GROUPS.map(([title, items]) => el('div', { class: 'sb-group' }, el('div', { class: 'sb-head', text: title }), items.filter((n) => navVisible(n, me)).map(sbItem)))),
     el('div', { class: 'sb-foot' },
       el('button', { class: 'sb-item sb-item--danger', type: 'button', title: 'Sign out', 'aria-label': 'Sign out', onclick: signOut }, iconEl('signout', 22), el('span', { class: 'sb-label', text: 'Sign out' })),
@@ -523,6 +524,14 @@ function mountPortalNav(active, session) {
   setCollapsed(collapsed);
   const bar = main.querySelector('.topbar');
   if (bar) bar.prepend(toggle);
+  // Bell (Home, Customers): opens the Alerts inbox; the number is unread alerts on this device.
+  if (bar && bar.hasAttribute('data-bell') && active !== 'alerts') {
+    bar.append(el('a', { class: 'icon-btn bell', href: 'alerts.html', 'data-nav': 'alerts', 'aria-label': 'Alerts' }, iconEl('bell', 22)));
+  }
+  try {
+    const key = `asg-alerts-unread:${String((me.email) || session.username || 'me').toLowerCase()}`;
+    setNavBadge('alerts', Number(JSON.parse(localStorage.getItem(key))) || 0);
+  } catch (e) { /* ignore */ }
 
   document.addEventListener('keydown', (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openCmdk(me); }
