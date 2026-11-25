@@ -64,3 +64,13 @@
 - More › "Change password" (leaders and agents) opens it via `dashboard.html#password`.
 - Shared helpers in admin.js: `showToast`, `confirmAction`, `enableSwipeClose`, `maskNric`, `formatNric`, `waNumber`, `isTestEntry`. Added a `refresh` icon to icons.js in the same stroke style.
 - Print sheet unchanged (still light in dark mode). Fixed "Form vv3.4".
+
+## Phase 5 · VB pipeline (25 Nov 2026)
+
+- `vb.html` / `vb.js` rebuilt on P-05. Kept IDs: `stats search chips rows empty pageError lastUpdated addBtn teamPanel teamRows scrim drawer drawerTitle drawerSub drawerBody closeDrawer`. New: `weekNote listTitle listSort`.
+- **Stage tiles** (names now at VB1–VB4) are the filter; tap again for all. `#chips` is kept but unused.
+- Gold note: cases and TPC this week, plus a "Team" link for leaders and the owner.
+- **Rows:** avatar, name, phone · source, and a coloured next-step line (today = teal; overdue, contacted ≥ 3 days ago, or VB3 with no time = red), with a WhatsApp button on every row. A WhatsApp tap on a VB1 name logs "contacted", as before. Sorted "next step first".
+- **Detail** is a bottom sheet (drawer on iPad) with eyebrow sections. **One primary button per stage:** set appointment for VB1–2, make quotation for VB3. "Remove this name" uses the action sheet plus a toast (no browser `confirm()` any more).
+- Skeleton and empty states ("Your VB list is empty" → Add name).
+- The "+" Create sheet (phase 1) already covers Add VB name / New quotation / Book appointment / Share form link.

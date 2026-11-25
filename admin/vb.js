@@ -38,13 +38,6 @@
   const dateMY = (iso) => (iso ? new Date(iso).toLocaleDateString('en-MY', { timeZone: TZ, day: 'numeric', month: 'short', year: 'numeric' }) : '');
   const number = (n) => Number(n || 0).toLocaleString('en-MY', { maximumFractionDigits: 2 });
 
-  // Malaysian numbers for wa.me: 012-345 6789 -> 60123456789.
-  function waNumber(phone) {
-    const d = String(phone || '').replace(/\D/g, '');
-    if (!d) return '';
-    if (d.startsWith('60')) return d;
-    return d.startsWith('0') ? `6${d}` : d;
-  }
 
   // <input type="datetime-local"> value for an ISO time, in Malaysia time.
   function localInputValue(iso) {
@@ -57,12 +50,17 @@
   // ---------- Load & render ----------
 
   async function load() {
+    if (!state.prospects.length && !state.week) {
+      $('rows').replaceChildren(...[0, 1, 2, 3].map(() => el('div', { class: 'li', 'aria-hidden': 'true' },
+        el('div', { class: 'skel vb-skel-av' }), el('div', { class: 'li__main' }, el('div', { class: 'skel cust-skel-a' }), el('div', { class: 'skel cust-skel-b' })))));
+    }
     try {
       const data = await call('/admin/vb');
       state.prospects = data.prospects;
       state.week = data.week;
       state.team = data.team;
       $('lastUpdated').textContent = `Week of ${dateMY(data.week.start)}`;
+      $('lastUpdated').dataset.ready = '1';
       $('pageError').hidden = true;
       render();
     } catch (err) {
@@ -83,47 +81,76 @@
     }
   }
 
+  const SHORT_STAGE = { 1: 'New', 2: 'Contacted', 3: 'Appt', 4: 'Approved' };
+  const LIST_TITLE = { All: 'All names', 1: 'VB1 · New names', 2: 'VB2 · Contacted', 3: 'VB3 · Appointments', 4: 'VB4 · Approved' };
+  const timeOnly = (iso) => new Date(iso).toLocaleTimeString('en-MY', { timeZone: TZ, hour: 'numeric', minute: '2-digit' }).replace(/\s?([ap])\.?m\.?/i, ' $1m').toLowerCase();
+  const dayIndex = (t) => Math.floor((t + 8 * 3600000) / 86400000);
+  function whenText(iso) {
+    const diff = dayIndex(Date.parse(iso)) - dayIndex(Date.now());
+    const day = diff === 0 ? 'Today' : diff === 1 ? 'Tomorrow' : diff === -1 ? 'Yesterday'
+      : new Date(iso).toLocaleDateString('en-GB', { timeZone: TZ, weekday: 'short', day: 'numeric', month: 'short' });
+    return `${day}, ${timeOnly(iso)}`;
+  }
+
+  // Stage tiles double as the filter (tap again for all names).
   function renderStats() {
+    const at = (n) => state.prospects.filter((p) => p.stage === n).length;
+    $('stats').replaceChildren(...[1, 2, 3, 4].map((n) => el('button', {
+      class: 'stage', type: 'button', 'aria-pressed': String(state.stage === String(n)),
+      'aria-label': `VB${n} ${STAGES[n]}: ${at(n)}`,
+      onclick: () => { state.stage = state.stage === String(n) ? 'All' : String(n); renderStats(); renderRows(); }
+    }, el('b', { text: at(n) }), el('span', { text: SHORT_STAGE[n] }))));
     const c = state.week.counts;
-    const tile = (cls, label, value, sub) => el('div', { class: `stat ${cls}` },
-      el('div', { class: 'stat-label', text: label }), el('div', { class: 'stat-value', text: value }), sub ? el('div', { class: 'sub', text: sub }) : null);
-    $('stats').replaceChildren(
-      tile('vb1', 'VB1 · new names', c.vb1),
-      tile('vb2', 'VB2 · contacted', c.vb2),
-      tile('vb3', 'VB3 · appointments', c.vb3),
-      tile('vb4', 'VB4 · approved', c.vb4),
-      tile('total', 'Cases this week', number(c.cases), `TPC ${number(c.tpc)}`)
-    );
+    const note = $('weekNote');
+    note.hidden = false;
+    note.replaceChildren(iconEl('trophy', 18), el('span', {}, el('b', { text: `${number(c.cases)} ${c.cases === 1 ? 'case' : 'cases'}` }), ` this week · TPC ${number(c.tpc)}`),
+      state.team ? el('a', { href: '#teamPanel', class: 'vb-weeknote__link' }, 'Team') : null);
   }
 
-  function renderChips() {
-    const options = [['All', `All (${state.prospects.length})`], ...Object.entries(STAGES).map(([n, label]) => [n, `VB${n} ${label} (${state.prospects.filter((p) => String(p.stage) === n).length})`])];
-    $('chips').replaceChildren(...options.map(([value, label]) => el('button', {
-      class: 'chip', type: 'button', 'aria-pressed': String(state.stage === value),
-      onclick: () => { state.stage = value; renderChips(); renderRows(); }
-    }, label)));
-  }
+  function renderChips() { /* stage filter lives on the tiles (phase 5); #chips kept for older links */ }
 
+  // What to do next, and when. Sort key: the most urgent first.
   function nextStep(p) {
-    if (p.stage === 4) return `${p.product} · TPC ${number(p.tpc)} · ${p.cases} case`;
-    if (p.stage === 3) return `Appointment ${formatDateTime(p.appointmentAt)}`;
-    if (p.stage === 2) return 'Next: set an appointment';
-    return 'Next: call or WhatsApp';
+    if (p.stage === 4) return { text: `${p.product || 'Policy'} · TPC ${number(p.tpc)} · ${p.cases} ${p.cases === 1 ? 'case' : 'cases'}`, key: 4e15 - (Date.parse(p.approvedAt) || 0) };
+    if (p.stage === 3) {
+      if (!p.appointmentAt) return { text: 'No time set · tap to book', cls: 'is-alert', key: 0 };
+      const t = Date.parse(p.appointmentAt);
+      const past = t < Date.now() - 2 * 3600000;
+      return { text: past ? `${whenText(p.appointmentAt)} · update the outcome` : whenText(p.appointmentAt), cls: past ? 'is-alert' : dayIndex(t) === dayIndex(Date.now()) ? 'is-today' : '', key: past ? 1 : t };
+    }
+    if (p.stage === 2) {
+      const days = dayIndex(Date.now()) - dayIndex(Date.parse(p.contactedAt));
+      return { text: days >= 3 ? `Contacted ${days} days ago · set an appointment` : 'Next: set an appointment', cls: days >= 3 ? 'is-alert' : '', key: 2e15 - (Date.parse(p.contactedAt) || 0) };
+    }
+    return { text: 'Next: call or WhatsApp', key: 3e15 - (Date.parse(p.createdAt) || 0) };
   }
 
   function renderRows() {
     const q = state.query.toLowerCase();
-    const shown = state.prospects.filter((p) => (state.stage === 'All' || String(p.stage) === state.stage)
-      && (!q || p.name.toLowerCase().includes(q) || p.phone.includes(q)));
-    $('rows').replaceChildren(...shown.map((p) => el('li', {},
-      el('button', { class: 'vb-row', type: 'button', onclick: () => openDetail(p.id) },
-        el('span', { class: 'vb-badge', 'data-stage': p.stage, text: `VB${p.stage}` }),
-        el('span', { class: 'grow' },
-          el('span', { class: 'name', text: p.name }),
-          el('span', { class: 'sub', text: [p.phone, p.source].filter(Boolean).join('  ·  ') })),
-        el('span', { class: 'sub vb-next', text: nextStep(p) })))));
+    const shown = state.prospects
+      .filter((p) => (state.stage === 'All' || String(p.stage) === state.stage) && (!q || p.name.toLowerCase().includes(q) || String(p.phone || '').includes(q)))
+      .map((p) => ({ p, next: nextStep(p) }))
+      .sort((x, y) => x.next.key - y.next.key);
+    $('listTitle').textContent = LIST_TITLE[state.stage] || 'All names';
+    $('rows').replaceChildren(...shown.map(({ p, next }) => {
+      const wa = waNumber(p.phone);
+      return el('div', { class: 'li vb-prow', role: 'listitem' },
+        el('button', { class: 'vb-prow__open', type: 'button', onclick: () => openDetail(p.id) },
+          avatarEl({ id: p.id }, p.name),
+          el('div', { class: 'li__main' },
+            el('div', { class: 'li__title' }, p.name),
+            el('div', { class: 'li__sub', text: [p.phone, p.source].filter(Boolean).join(' · ') || `VB${p.stage} · ${STAGES[p.stage]}` }),
+            el('div', { class: `vb-next ${next.cls || ''}`, text: next.text })),
+          el('span', { class: `pill pill--${['', 'neutral', 'info', 'soon', 'ok'][p.stage]}`, text: `VB${p.stage}` })),
+        wa ? el('a', { class: 'icon-btn btn--wa vb-wa', href: `https://wa.me/${wa}`, target: '_blank', rel: 'noopener', 'aria-label': `WhatsApp ${p.name}`,
+          onclick: () => { if (p.stage < 2) call(`/admin/vb/${p.id}`, { method: 'PATCH', body: { action: 'contacted' } }).then(load).catch(() => {}); } }, iconEl('chat', 20)) : null);
+    }));
+    $('rows').hidden = shown.length === 0;
     $('empty').hidden = shown.length > 0;
-    $('empty').textContent = state.prospects.length ? 'No names match.' : 'No names yet. Tap "+ Add name" to start your VB list.';
+    $('empty').replaceChildren(...(state.prospects.length
+      ? [el('div', { class: 'empty__title', text: 'No names match' }), el('div', { text: 'Try another search or stage.' })]
+      : [el('div', { class: 'empty__title', text: 'Your VB list is empty' }), el('div', { text: 'Add the first person you want to talk to.' }),
+        el('button', { class: 'btn btn--primary', type: 'button', onclick: openAdd }, iconEl('useradd', 20), 'Add name')]));
   }
 
   function renderTeam() {
@@ -140,17 +167,21 @@
   // ---------- Drawer (add name / one name's detail) ----------
 
   function openDrawer(title, sub, body) {
+    const wasOpen = !$('drawer').hidden;
     $('drawerTitle').textContent = title;
     $('drawerSub').textContent = sub;
     $('drawerBody').replaceChildren(...body);
     $('drawer').hidden = false;
     $('scrim').hidden = false;
+    document.body.style.overflow = 'hidden';
+    if (!wasOpen) { $('drawer').scrollTop = 0; $('closeDrawer').focus(); }
   }
 
   function closeDrawer() {
     state.openId = null;
     $('drawer').hidden = true;
     $('scrim').hidden = true;
+    document.body.style.overflow = '';
   }
 
   function errorBox() {
@@ -193,8 +224,8 @@
   function openAdd() {
     const f = detailsFields();
     const box = errorBox();
-    const btn = el('button', { class: 'btn btn-primary', type: 'submit' }, 'Add to VB1');
-    const form = el('form', { class: 'section vb-form', novalidate: true }, f.nodes, box, btn);
+    const btn = el('button', { class: 'btn btn--primary btn--block', type: 'submit' }, 'Add to VB1');
+    const form = el('form', { class: 'vb-form', novalidate: true }, f.nodes, box, btn);
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const data = await save('/admin/vb', 'POST', { name: f.name.value, phone: f.phone.value, source: f.source.value, note: f.note.value }, btn, box);
@@ -217,13 +248,13 @@
     const first = p.name.split(/\s+/)[0];
     const share = p.storyUrl || p.quoteUrl;
     const answers = el('div', { class: 'vb-answers' });
-    const section = el('section', { class: 'section' },
-      el('h3', { text: 'Quotation & presentation' }),
+    const section = el('section', { class: 'cust-section' },
+      el('h3', { class: 'eyebrow', text: 'Quotation & presentation' }),
       p.quotedAt
         ? el('p', { class: 'sub', text: [p.quotedProduct, p.quotedMonthly ? `RM${number(p.quotedMonthly)}/month` : '', `updated ${dateMY(p.quotedAt)}`].filter(Boolean).join(' · ') })
         : el('p', { class: 'sub', text: 'Upload their PRU Mobility quotation to make the client quotation and the animated story presentation. The links save here.' }),
       el('div', { class: 'vb-actions' },
-        el('a', { class: 'btn btn-primary', href: quotationToolUrl(p.id) }, p.quotedAt ? 'New quotation' : 'Make quotation'),
+        el('a', { class: `btn${p.stage === 3 ? ' btn--primary' : ''}`, href: quotationToolUrl(p.id) }, iconEl('file', 20), p.quotedAt ? 'New quotation' : 'Make quotation'),
         p.storyUrl ? el('a', { class: 'btn', href: p.storyUrl, target: '_blank', rel: 'noopener' }, 'Story presentation') : null,
         p.quoteUrl ? el('a', { class: 'btn', href: p.quoteUrl, target: '_blank', rel: 'noopener' }, 'Quotation') : null,
         share && wa ? el('a', { class: 'btn', target: '_blank', rel: 'noopener',
@@ -260,13 +291,13 @@
     const contactBox = errorBox();
     const logContacted = () => { if (p.stage < 2) call(path, { method: 'PATCH', body: { action: 'contacted' } }).then(load).catch((err) => showError(contactBox, err)); };
     const wa = waNumber(p.phone);
-    const markBtn = el('button', { class: 'btn', type: 'button' }, 'Mark contacted');
+    const markBtn = el('button', { class: 'btn btn--ghost', type: 'button' }, 'Mark contacted');
     markBtn.addEventListener('click', () => save(path, 'PATCH', { action: 'contacted' }, markBtn, contactBox));
-    sections.push(el('section', { class: 'section' },
-      el('h3', { text: 'Reach out' }),
+    sections.push(el('section', { class: 'cust-section' },
+      el('h3', { class: 'eyebrow', text: 'Reach out' }),
       el('div', { class: 'vb-actions' },
-        p.phone ? el('a', { class: 'btn btn-primary', href: `tel:${p.phone.replace(/[^\d+]/g, '')}`, onclick: logContacted }, 'Call') : null,
-        wa ? el('a', { class: 'btn btn-primary', href: `https://wa.me/${wa}`, target: '_blank', rel: 'noopener', onclick: logContacted }, 'WhatsApp') : null,
+        wa ? el('a', { class: 'btn btn--wa', href: `https://wa.me/${wa}`, target: '_blank', rel: 'noopener', onclick: logContacted }, iconEl('chat', 20), 'WhatsApp') : null,
+        p.phone ? el('a', { class: 'btn', href: `tel:${p.phone.replace(/[^\d+]/g, '')}`, onclick: logContacted }, iconEl('phone', 20), 'Call') : null,
         p.stage < 2 ? markBtn : el('span', { class: 'saved', text: `Contacted ${formatDateTime(p.contactedAt)}` })),
       p.phone ? null : el('p', { class: 'sub', text: 'Add a phone number below to call or WhatsApp from here.' }),
       contactBox));
@@ -277,12 +308,12 @@
     if (p.stage < 4) {
       const at = el('input', { class: 'input', id: 'fAt', type: 'datetime-local', value: localInputValue(p.appointmentAt) });
       const box = errorBox();
-      const btn = el('button', { class: 'btn btn-primary', type: 'button' }, p.appointmentAt ? 'Change appointment' : 'Set appointment');
+      const btn = el('button', { class: `btn${p.stage <= 2 ? ' btn--primary' : ''}`, type: 'button' }, iconEl('cal', 20), p.appointmentAt ? 'Change appointment' : 'Set appointment');
       btn.addEventListener('click', () => {
         if (!at.value) return showError(box, new Error('Please choose the appointment date and time.'));
         save(path, 'PATCH', { action: 'appointment', at: fromLocalInput(at.value) }, btn, box);
       });
-      sections.push(el('section', { class: 'section' }, el('h3', { text: 'Appointment' }), field('Date and time', at), box, el('div', { class: 'vb-actions' }, btn)));
+      sections.push(el('section', { class: 'cust-section' }, el('h3', { class: 'eyebrow', text: 'Appointment' }), field('Date and time', at), box, el('div', { class: 'vb-actions' }, btn)));
     }
 
     // Policy approved (VB4): keyed in by the agent once Prudential approves it.
@@ -300,10 +331,10 @@
       frequency.addEventListener('change', update);
       update();
       const box = errorBox();
-      const btn = el('button', { class: 'btn btn-gold', type: 'button' }, p.stage === 4 ? 'Update policy' : 'Mark policy approved');
+      const btn = el('button', { class: 'btn', type: 'button' }, iconEl('check', 20), p.stage === 4 ? 'Update policy' : 'Mark policy approved');
       btn.addEventListener('click', () => save(path, 'PATCH', { action: 'approved', product: product.value, premium: Number(premium.value), frequency: frequency.value }, btn, box));
-      sections.push(el('section', { class: 'section' },
-        el('h3', { text: p.stage === 4 ? `Policy approved ${dateMY(p.approvedAt)}` : 'Policy approved' }),
+      sections.push(el('section', { class: 'cust-section' },
+        el('h3', { class: 'eyebrow', text: p.stage === 4 ? `Policy approved ${dateMY(p.approvedAt)}` : 'Policy approved' }),
         p.stage === 4 ? null : el('p', { class: 'sub', text: 'Only once Prudential has approved the policy. TPC of 1,800 or more counts as 1 case; below that, 0.5.' }),
         el('div', { class: 'vb-grid' }, field('Product', product), field('Premium (RM)', premium), field('Paid', frequency)),
         preview, box, el('div', { class: 'vb-actions' }, btn)));
@@ -315,12 +346,13 @@
       const box = errorBox();
       const btn = el('button', { class: 'btn', type: 'button' }, 'Save details');
       btn.addEventListener('click', () => save(path, 'PATCH', { action: 'edit', name: f.name.value, phone: f.phone.value, source: f.source.value, note: f.note.value }, btn, box));
-      const del = el('button', { class: 'link-btn vb-delete', type: 'button' }, 'Remove this name');
+      const del = el('button', { class: 'btn btn--danger', type: 'button' }, iconEl('trash', 20), 'Remove this name');
       del.addEventListener('click', async () => {
-        if (!confirm(`Remove ${p.name} from your VB list?`)) return;
-        if (await save(path, 'DELETE', undefined, del, box)) closeDrawer();
+        const ok = await confirmAction({ title: `Remove ${p.name}?`, message: 'They leave your VB list, with their notes and appointment. It can’t be undone.', confirmLabel: 'Remove name' });
+        if (!ok) return;
+        if (await save(path, 'DELETE', undefined, del, box)) { closeDrawer(); showToast(`Removed ${p.name}`); }
       });
-      sections.push(el('section', { class: 'section vb-form' }, el('h3', { text: 'Details' }), f.nodes, box, el('div', { class: 'vb-actions' }, btn, del)));
+      sections.push(el('section', { class: 'cust-section vb-form' }, el('h3', { class: 'eyebrow', text: 'Details' }), f.nodes, box, el('div', { class: 'vb-actions' }, btn, del)));
     }
 
     openDrawer(p.name, `VB${p.stage} · ${STAGES[p.stage]} · added ${dateMY(p.createdAt)}`, sections);
@@ -328,7 +360,11 @@
 
   // ---------- Wire up ----------
 
+  $('addBtn').replaceChildren(iconEl('useradd', 20), 'Add name');
   $('addBtn').addEventListener('click', openAdd);
+  $('searchIcon').replaceWith(iconEl('search', 18));
+  $('closeDrawer').replaceChildren(iconEl('x', 22));
+  enableSwipeClose($('drawer'), closeDrawer);
   $('search').addEventListener('input', (e) => { state.query = e.target.value.trim(); renderRows(); });
   $('closeDrawer').addEventListener('click', closeDrawer);
   $('scrim').addEventListener('click', closeDrawer);
