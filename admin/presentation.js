@@ -144,7 +144,7 @@
     if (p.storyUrl || p.quoteUrl) {
       box.replaceChildren(
         el('p', { text: `Ready for ${p.name}: ${[p.quotedProduct, p.quotedMonthly ? rm(p.quotedMonthly) + '/month' : ''].filter(Boolean).join(' · ') || 'quotation made'}` }),
-        p.storyUrl ? el('a', { class: 'btn btn-primary', href: p.storyUrl, target: '_blank', rel: 'noopener' }, 'Present story') : null,
+        p.storyUrl ? el('a', { class: 'btn btn--primary', href: p.storyUrl, target: '_blank', rel: 'noopener' }, 'Present story') : null,
         p.quoteUrl ? el('a', { class: 'btn', href: p.quoteUrl, target: '_blank', rel: 'noopener' }, 'Quotation') : null,
         el('a', { class: 'btn', href: quotationToolUrl(p.id) }, 'New quotation'));
       // Fill the plan from the quotation, without overwriting anything typed.
@@ -155,7 +155,7 @@
     } else {
       box.replaceChildren(
         el('p', { text: `No quotation for ${p.name} yet. Upload their PRU Mobility PDF to make the quotation and the story presentation.` }),
-        el('a', { class: 'btn btn-primary', href: quotationToolUrl(p.id) }, 'Make quotation'));
+        el('a', { class: 'btn btn--primary', href: quotationToolUrl(p.id) }, 'Make quotation'));
     }
   }
 
@@ -364,8 +364,8 @@
     const text = summary();
     if (!text.includes('\n')) return;
     const box = el('div', { class: 'alert', role: 'alert', hidden: true });
-    const saveBtn = el('button', { class: 'btn btn-primary', type: 'button' }, `Save to ${p.name}'s VB note`);
-    const card = el('section', { class: 'panel insight-panel pres-summary' },
+    const saveBtn = el('button', { class: 'btn btn--primary', type: 'button' }, `Save to ${p.name}'s VB note`);
+    const card = el('section', { class: 'card card--pad pres-summary' },
       el('h2', { text: 'Presentation notes' }),
       el('pre', { class: 'code-message', text }),
       box,

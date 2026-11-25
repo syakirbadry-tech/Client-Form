@@ -26,16 +26,16 @@
 </head>
 <body>
   <header class="topbar">
-    <div>
+    <div class="topbar__title">
       <h1>Presentation</h1>
-      <div class="topbar-sub" id="lastUpdated">Loading…</div>
+      <div class="sub" id="lastUpdated">Loading…</div>
     </div>
   </header>
 
   <main>
     <div class="alert" id="pageError" role="alert" hidden></div>
 
-    <section class="panel insight-panel">
+    <section class="card card--pad">
       <h2>1. Client</h2>
       <div class="pres-grid">
         <div class="field"><label for="client">Who are you presenting to?</label><select class="input" id="client"></select></div>
@@ -44,14 +44,14 @@
       <div class="pres-quote" id="quoteBox" hidden></div>
     </section>
 
-    <section class="panel insight-panel">
+    <section class="card card--pad">
       <h2>2. Financial check <span class="sub">monthly, RM</span></h2>
       <p class="sub pres-help">Before the client takes on another commitment, see what they can comfortably set aside. Nothing here is saved to the server.</p>
       <div class="pres-grid pres-money" id="money"></div>
       <div class="pres-result" id="moneyResult" role="status"></div>
     </section>
 
-    <section class="panel insight-panel">
+    <section class="card card--pad">
       <h2>3. Recommended plan</h2>
       <div class="pres-grid">
         <div class="field"><label for="planName">Plan</label><input class="input" id="planName" placeholder="e.g. PRUBSN Protect" maxlength="100"></div>
@@ -60,11 +60,11 @@
       <div class="field pres-gap"><label for="planPoints">Key benefits <span class="sub">one per line</span></label><textarea class="input vb-note" id="planPoints" rows="4" maxlength="1000" placeholder="Medical card up to RM 1.5 million a year&#10;RM 200,000 death and disability cover"></textarea></div>
     </section>
 
-    <section class="panel insight-panel">
+    <section class="card card--pad">
       <h2>4. Ready?</h2>
       <ul class="pres-checks" id="checks"></ul>
       <div class="forms-actions">
-        <button class="btn btn-primary pres-start" id="startBtn" type="button">Start presentation</button>
+        <button class="btn btn--primary pres-start" id="startBtn" type="button">Start presentation</button>
         <button class="btn" id="boardBtn" type="button">Blank blackboard</button>
       </div>
     </section>

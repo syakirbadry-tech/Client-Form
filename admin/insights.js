@@ -190,12 +190,12 @@
   function renderRows() {
     $('rows').replaceChildren(...sorted().map((c) =>
       el('tr', {},
-        el('td', {}, el('div', { class: 'name', text: c.name }), el('div', { class: 'sub num', text: c.phone })),
-        el('td', { class: 'num', text: c.age == null ? '—' : c.age }),
-        el('td', {}, el('div', { text: birthdayText(c) }), c.daysToBirthday != null ? el('div', { class: 'sub', text: untilText(c.daysToBirthday) }) : null),
-        el('td', {}, el('div', { text: c.occupation || '—' }), el('div', { class: 'sub', text: [c.field, c.employmentType].filter(Boolean).join(' · ') })),
-        el('td', { class: 'num right', text: money(c.income) }),
-        el('td', { class: 'num right', text: c.income == null ? '—' : money(c.income * BUDGET_SHARE) })
+        el('td', { class: 'td-main' }, el('div', { class: 'name', text: c.name }), el('div', { class: 'sub num', text: c.phone })),
+        el('td', { class: 'num', 'data-label': 'Age', text: c.age == null ? '—' : c.age }),
+        el('td', { 'data-label': 'Birthday' }, el('div', { text: birthdayText(c) }), c.daysToBirthday != null ? el('div', { class: 'sub', text: untilText(c.daysToBirthday) }) : null),
+        el('td', { 'data-label': 'Occupation' }, el('div', { text: c.occupation || '—' }), el('div', { class: 'sub', text: [c.field, c.employmentType].filter(Boolean).join(' · ') })),
+        el('td', { class: 'num right', 'data-label': 'Income / month', text: money(c.income) }),
+        el('td', { class: 'num right', 'data-label': 'Est. budget / month', text: c.income == null ? '—' : money(c.income * BUDGET_SHARE) })
       )
     ));
   }
@@ -209,6 +209,7 @@
 
   $('agentFilter').addEventListener('change', (e) => { state.agent = e.target.value; render(); });
   $('sortBy').addEventListener('change', (e) => { state.sortBy = e.target.value; renderRows(); });
+  $('printBtn').prepend(iconEl('print', 20));
   $('printBtn').addEventListener('click', () => window.print());
 
   load();
