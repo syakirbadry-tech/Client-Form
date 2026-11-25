@@ -8,7 +8,7 @@
   const $ = (id) => document.getElementById(id);
   mountPortalNav('more', session);
   const me = Session.user(session);
-  const name = me.name || session.username || '';
+  const name = me.name;
 
   $('meCard').replaceChildren(avatarEl(me, name),
     el('div', { class: 'li__main' }, el('div', { class: 'li__title', text: name }), el('div', { class: 'li__sub', text: ROLE_LABELS[me.role] || '' })));

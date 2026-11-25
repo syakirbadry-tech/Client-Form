@@ -158,7 +158,7 @@
     if (!state.team) return;
     const cell = (v) => el('td', { class: 'right num', text: v });
     $('teamRows').replaceChildren(...(state.team.length ? state.team.map((t) => el('tr', {},
-      el('td', { class: 'name', text: t.agent }),
+      el('td', { class: 'name', text: personName(t.agent) }),
       cell(t.week.vb1), cell(t.week.vb2), cell(t.week.vb3), cell(t.week.vb4), cell(number(t.week.cases)), cell(number(t.week.tpc)),
       cell(`${t.byStage.vb1} / ${t.byStage.vb2} / ${t.byStage.vb3} / ${t.byStage.vb4}`)))
       : [el('tr', {}, el('td', { colspan: '8', class: 'sub', text: 'Nobody has added names yet.' }))]));

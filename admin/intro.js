@@ -11,7 +11,7 @@
   const DONE_KEY = `asg-intro-done:${String(me.email || session.username || 'me').toLowerCase()}`;
   const SOURCES = ['Family & friends', 'Referral', 'Social media', 'Walk-in', 'Event', 'Other'];
   const FORM_URL = new URL('../client-detail-form.html', location.href).href;
-  const full = String(me.name || session.username || '').trim();
+  const full = String(me.name || '').trim();
   const first = (full.split(/\s+/)[0] || '') + (/\(demo\)/.test(full) ? ' (demo)' : '');
   let step = 1;
 

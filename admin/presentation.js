@@ -181,7 +181,7 @@
         el('img', { src: 'img/asg-ansar-logo.jpg', alt: '', class: 'pres-logo' }),
         el('div', { class: 'pres-kicker', text: 'Protection plan' }),
         el('h1', { text: clientName() ? `Prepared for ${name}` : 'Your protection plan' }),
-        el('p', { text: `${me.name || session.username} · ASG Ansar Group · ${today}` })),
+        el('p', { text: `${me.name} · ASG Ansar Group · ${today}` })),
       () => el('div', {},
         el('div', { class: 'pres-kicker', text: 'Why protection matters' }),
         el('h1', { text: 'What could stop your income?' }),
