@@ -31,6 +31,11 @@
     el('section', { 'aria-label': 'Account' },
       el('h2', { class: 'eyebrow list-head', text: 'Account' }),
       el('div', { class: 'list' },
+        [['alerts.html', 'bell', 'Alerts'], ['alert-settings.html', 'gear', 'Alert settings'], ['intro.html?again', 'help', 'Help & introduction']].map(([href, icon, label]) =>
+          el('a', { class: 'li', href, 'data-nav': href === 'alerts.html' ? 'alerts' : null },
+            el('span', { class: 'li__icon' }, iconEl(icon, 22)),
+            el('div', { class: 'li__main' }, el('div', { class: 'li__title', text: label })),
+            iconEl('chev', 20))),
         me.role !== 'owner' ? el('a', { class: 'li', href: 'dashboard.html#password' },
           el('span', { class: 'li__icon' }, iconEl('lock', 22)),
           el('div', { class: 'li__main' }, el('div', { class: 'li__title', text: 'Change password' })),

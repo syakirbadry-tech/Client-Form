@@ -74,3 +74,20 @@
 - **Detail** is a bottom sheet (drawer on iPad) with eyebrow sections. **One primary button per stage:** set appointment for VB1–2, make quotation for VB3. "Remove this name" uses the action sheet plus a toast (no browser `confirm()` any more).
 - Skeleton and empty states ("Your VB list is empty" → Add name).
 - The "+" Create sheet (phase 1) already covers Add VB name / New quotation / Book appointment / Share form link.
+
+## Phase 6 · Alerts, alert settings, introduction (25 Nov 2026)
+
+- `admin/alerts.js` (shared): in-app alerts worked out in the browser from `/admin/submissions`, `/admin/vb` and `/admin/presentation-answers` (no server change).
+  - Alert types: new client forms (Received, last 14 days), today's appointments (morning summary), VB follow-ups (contacted ≥ 3 days, no appointment), and presentation answers.
+  - First names and plan names only.
+  - Read state, unread count and per-type settings are kept on this device, per person.
+- `alerts.html` (P-17a): Today / Yesterday / Earlier, unread dots, "Mark all read", and a link to settings. Skeleton, empty and error states.
+- `alert-settings.html` (P-17c): a switch per alert type, plus a "This device" section (added to Home Screen or not, with how-to steps).
+- Bell with an unread number on the Home and Customers headers. "Alerts" in the sidebar under Home, in More, and in ⌘K search.
+- `intro.html` (P-16a–d), 4 steps, with Skip on every step and Back on steps 2–4:
+  - welcome;
+  - alerts plus how to add the app to the Home Screen;
+  - your client form link (copy or WhatsApp);
+  - add your first VB name (real `POST /admin/vb`), then Home.
+  - **First sign-in (after choosing a password) now goes to the introduction.** More › "Help & introduction" opens it again.
+- **Not built (needs a server):** phone pop-ups and lock-screen notifications (P-17b), quiet hours, "Send a test alert", the status-change alert and the weekly result alert. Web Push needs the Worker to store push subscriptions and send them, plus a service worker. The alert-settings page says so.

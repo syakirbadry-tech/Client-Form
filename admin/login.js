@@ -38,12 +38,13 @@
     setTimeout(() => { if (btn.dataset.state === 'failed') delete btn.dataset.state; }, 400);
   }
 
-  function startSession(data, username, btn) {
+  function startSession(data, username, btn, firstTime) {
     Session.set({ token: data.token, expiresAt: data.expiresAt, username, user: data.user || null });
     const first = String((data.user && data.user.name) || '').trim().split(/\s+/)[0];
     setButton(btn, 'done', first ? `Welcome back, ${first}` : 'Signed in', 'check');
     setTimeout(() => page.classList.add('is-leaving'), reduceMotion ? 150 : 700);
-    setTimeout(() => location.replace(AFTER_SIGN_IN), reduceMotion ? 300 : 1050);
+    // First sign-in (just chose a password) → the introduction; otherwise Home.
+    setTimeout(() => location.replace(firstTime ? 'intro.html' : AFTER_SIGN_IN), reduceMotion ? 300 : 1050);
   }
 
   let notice = '';
@@ -137,7 +138,7 @@
     setButton(setupBtn, 'busy', 'Saving…');
     try {
       const data = await api('/admin/set-password', { method: 'POST', body: { username: pending.username, code: pending.code, password }, auth: false });
-      startSession(data, pending.username, setupBtn);
+      startSession(data, pending.username, setupBtn, true);
     } catch (err) {
       showError(setupError, err.message);
       fail(setupBtn, 'Save password and sign in');

@@ -215,7 +215,7 @@
   // ---------- Load ----------
   async function load() {
     $('pageError').hidden = true;
-    const [vb, subs] = await Promise.allSettled([call('/admin/vb'), call('/admin/submissions')]);
+    const [vb, subs, ans] = await Promise.allSettled([call('/admin/vb'), call('/admin/submissions'), call('/admin/presentation-answers')]);
     if (vb.status === 'rejected' && subs.status === 'rejected') {
       $('pageError').replaceChildren(`${vb.reason.message} `, el('button', { class: 'btn btn--ghost', type: 'button', onclick: load }, 'Try again'));
       $('pageError').hidden = false;
@@ -227,6 +227,7 @@
     renderNextAppt(prospects);
     const p = renderContest(prospects);
     renderWeek(vb.status === 'fulfilled' ? vb.value.week : null, p);
+    if (window.ASGAlerts) ASGAlerts.build({ submissions, prospects, answers: ans.status === 'fulfilled' ? ans.value.answers || [] : [] });
     const today = myDayIndex(Date.now());
     setNavBadge('customers', submissions.filter((x) => (x.status || 'Received') === 'Received' && myDayIndex(Date.parse(x.submittedAt || x.createdTime)) === today).length);
     renderNeeds(needsItems(prospects, submissions),
