@@ -49,3 +49,18 @@
 - **Sign-in now lands on Home** (the design's hand-over).
 - `admin/config.js` holds the contest targets, the average case TPC and feature flags (`deleteCustomer: false`). A Settings screen needs a server endpoint, so for now the owner changes this file.
 - Leaders and the owner see their own TPC. The API returns only weekly counts per agent, not yearly totals.
+
+## Phase 4 · Customers (25 Nov 2026)
+
+- `dashboard.html` / `dashboard.js` rebuilt. Kept IDs: `stats search agentFilter chips exportBtn rows empty pageError lastUpdated refreshBtn passwordBtn scrim drawer drawerTitle drawerSub statusRow printBtn closeDrawer drawerBody printSheet`. New: `selectBtn selectAll selectDone selectedCount bulkHead bulkBar bulkDeleteBtn testFilter statusSaved deleteBtn custActions toast confirmSheet confirmDeleteBtn confirmCancelBtn`.
+- List: 4-cell stat strip (tap to filter), search, agent filter, sideways status chips, and two-line rows. Each row shows name, short plan and **masked NRIC** (`900101-14-••••`), with date and status pill on the right; the agent also shows on wide screens. Skeleton while loading; empty states that invite the next step.
+- **TEST tag** and a "Test entries" chip for names containing test/testing/dummy.
+- Detail: a **bottom sheet** on phones (swipe down, ✕ or Esc to close), a right drawer at ≥ 768 px.
+  - **One-tap status** chips that save immediately ("Saved · In review"; if it fails, the old status comes back with the reason).
+  - WhatsApp, Call and Print buttons. Full NRIC is shown only here.
+- **Delete customer (owner only) is built but switched OFF** (`config.js → features.deleteCustomer: false`). The flows are ready: detail "Delete customer", and select mode → "Delete N selected". Both use the action sheet (destructive on top, Cancel below), then a toast.
+  - Both call `DELETE /admin/submissions/<recId>`. **The Worker does not have this endpoint yet.** Add it (owner only; delete the Airtable record, attachments included), deploy it, then set the flag to `true`.
+- Customers tab badge = forms received today (set on Home and Customers).
+- More › "Change password" (leaders and agents) opens it via `dashboard.html#password`.
+- Shared helpers in admin.js: `showToast`, `confirmAction`, `enableSwipeClose`, `maskNric`, `formatNric`, `waNumber`, `isTestEntry`. Added a `refresh` icon to icons.js in the same stroke style.
+- Print sheet unchanged (still light in dark mode). Fixed "Form vv3.4".

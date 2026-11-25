@@ -204,6 +204,97 @@ function showBirthdayReminder(clients) {
   okBtn.focus();
 }
 
+// ---------- Shared UI helpers (sheets, toast, confirm) ----------
+
+// Swipe down from the top of a bottom sheet to close it (phones only).
+function enableSwipeClose(sheet, onClose) {
+  let startY = null;
+  sheet.addEventListener('touchstart', (e) => {
+    startY = sheet.scrollTop <= 0 && window.innerWidth < 768 ? e.touches[0].clientY : null;
+  }, { passive: true });
+  sheet.addEventListener('touchmove', (e) => {
+    if (startY == null) return;
+    const dy = Math.max(0, e.touches[0].clientY - startY);
+    sheet.style.transform = dy ? `translateY(${dy}px)` : '';
+  }, { passive: true });
+  sheet.addEventListener('touchend', (e) => {
+    if (startY == null) return;
+    const dy = e.changedTouches[0].clientY - startY;
+    startY = null;
+    sheet.style.transform = '';
+    if (dy > 90) onClose();
+  });
+}
+
+// Short confirmation at the bottom of the screen (one at a time).
+function showToast(message, { icon = 'check', action } = {}) {
+  document.querySelectorAll('.toast[data-shell]').forEach((t) => t.remove());
+  const toast = el('div', { class: 'toast', id: 'toast', 'data-shell': '', role: 'status' },
+    el('span', { class: 'toast__icon' }, iconEl(icon, 18)),
+    el('span', { class: 'grow', text: message }),
+    action ? el('button', { type: 'button', onclick: () => { toast.remove(); action.onClick(); } }, action.label) : null);
+  document.body.append(toast);
+  setTimeout(() => toast.remove(), 4000);
+}
+
+// Apple-style action sheet for destructive choices: destructive button on top, Cancel at the bottom.
+// Resolves true when confirmed.
+function confirmAction({ title, message, confirmLabel, icon = 'trash' }) {
+  return new Promise((resolve) => {
+    const opener = document.activeElement;
+    const scrim = el('div', { class: 'scrim', 'data-shell': '' });
+    const ok = el('button', { class: 'actionsheet__btn actionsheet__btn--destructive', id: 'confirmDeleteBtn', type: 'button' }, confirmLabel);
+    const cancel = el('button', { class: 'actionsheet__btn', id: 'confirmCancelBtn', type: 'button' }, 'Cancel');
+    const sheet = el('div', { class: 'actionsheet', id: 'confirmSheet', role: 'alertdialog', 'aria-modal': 'true', 'aria-labelledby': 'confirmTitle', 'aria-describedby': 'confirmMsg' },
+      el('div', { class: 'actionsheet__group' },
+        el('div', { class: 'actionsheet__msg' },
+          el('span', { class: 'confirm-icon' }, iconEl(icon, 22)),
+          el('div', { class: 'confirm-title', id: 'confirmTitle', text: title }),
+          el('div', { class: 'sub', id: 'confirmMsg', text: message })),
+        ok),
+      el('div', { class: 'actionsheet__group' }, cancel));
+    const done = (v) => {
+      scrim.remove(); sheet.remove();
+      document.removeEventListener('keydown', onKey);
+      if (opener && opener.focus) opener.focus();
+      resolve(v);
+    };
+    const onKey = (e) => { if (e.key === 'Escape') done(false); };
+    ok.addEventListener('click', () => done(true));
+    cancel.addEventListener('click', () => done(false));
+    scrim.addEventListener('click', () => done(false));
+    document.addEventListener('keydown', onKey);
+    document.body.append(scrim, sheet);
+    cancel.focus();
+  });
+}
+
+// NRIC in lists: 900101-14-•••• (full number only in the customer detail).
+function maskNric(nric) {
+  const d = String(nric || '').replace(/\D/g, '');
+  if (d.length < 8) return d ? '••••' : '';
+  return `${d.slice(0, 6)}-${d.slice(6, 8)}-••••`;
+}
+
+// NRIC in full, formatted 900101-14-5678.
+function formatNric(nric) {
+  const d = String(nric || '').replace(/\D/g, '');
+  return d.length === 12 ? `${d.slice(0, 6)}-${d.slice(6, 8)}-${d.slice(8)}` : String(nric || '');
+}
+
+// Malaysian numbers for wa.me: 012-345 6789 -> 60123456789.
+function waNumber(phone) {
+  const d = String(phone || '').replace(/\D/g, '');
+  if (!d) return '';
+  if (d.startsWith('60')) return d;
+  return d.startsWith('0') ? `6${d}` : d;
+}
+
+// Dummy / test entries (shown with a TEST tag and their own filter).
+function isTestEntry(name) {
+  return /\b(test|testing|dummy)\b/i.test(String(name || ''));
+}
+
 // ---------- Icons (design/icons.js; no emoji in the UI) ----------
 
 // Returns the SVG node for an ASG_ICON name. Icon strings are fixed markup from icons.js, never user text.
@@ -296,20 +387,7 @@ function openSheet({ id, title, body }) {
   closeBtn.addEventListener('click', close);
   scrim.addEventListener('click', close);
   document.addEventListener('keydown', onKey);
-  // Swipe down from the top of the sheet to close.
-  let startY = null;
-  sheet.addEventListener('touchstart', (e) => { startY = sheet.scrollTop <= 0 ? e.touches[0].clientY : null; }, { passive: true });
-  sheet.addEventListener('touchmove', (e) => {
-    if (startY == null) return;
-    const dy = Math.max(0, e.touches[0].clientY - startY);
-    sheet.style.transform = dy ? `translateY(${dy}px)` : '';
-  }, { passive: true });
-  sheet.addEventListener('touchend', (e) => {
-    if (startY == null) return;
-    const dy = e.changedTouches[0].clientY - startY;
-    startY = null;
-    if (dy > 90) close(); else sheet.style.transform = '';
-  });
+  enableSwipeClose(sheet, close);
   document.body.append(scrim, sheet);
   closeBtn.focus();
   return { close };

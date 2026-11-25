@@ -31,6 +31,10 @@
     el('section', { 'aria-label': 'Account' },
       el('h2', { class: 'eyebrow list-head', text: 'Account' }),
       el('div', { class: 'list' },
+        me.role !== 'owner' ? el('a', { class: 'li', href: 'dashboard.html#password' },
+          el('span', { class: 'li__icon' }, iconEl('lock', 22)),
+          el('div', { class: 'li__main' }, el('div', { class: 'li__title', text: 'Change password' })),
+          iconEl('chev', 20)) : null,
         el('button', { class: 'li li--btn li--danger', type: 'button', onclick: signOut },
           el('span', { class: 'li__icon li__icon--danger' }, iconEl('signout', 22)),
           el('div', { class: 'li__main' }, el('div', { class: 'li__title', text: 'Sign out' })))))
