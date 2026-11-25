@@ -120,13 +120,18 @@
     try {
       const { prospects } = await api('/admin/vb');
       state.prospects = prospects.slice().sort((a, b) => (b.appointmentAt || '').localeCompare(a.appointmentAt || '') || a.name.localeCompare(b.name));
+      // presentation.html#vb=<id> (from Home's next appointment) picks that name.
+      const linked = (/^#vb=([0-9a-f-]{36})$/.exec(location.hash) || [])[1];
+      if (linked && state.prospects.some((p) => p.id === linked)) prep.client = linked;
       select.replaceChildren(el('option', { value: '' }, state.prospects.length ? 'Choose from your VB list…' : 'No names in VB yet'),
         ...state.prospects.map((p) => el('option', { value: p.id, selected: p.id === prep.client }, `${p.name} · VB${p.stage}${p.appointmentAt ? ` · ${formatDateTime(p.appointmentAt)}` : ''}`)));
     } catch (err) {
       if (err.status === 401) return signOut(err.message);
       select.replaceChildren(el('option', { value: '' }, 'Could not load VB names'));
     }
-    renderQuoteBox(false);
+    const linkedNow = (/^#vb=([0-9a-f-]{36})$/.exec(location.hash) || [])[1];
+    renderQuoteBox(Boolean(linkedNow && select.value === linkedNow));
+    if (linkedNow) { history.replaceState(null, '', location.pathname); savePrep(); }
     $('lastUpdated').textContent = 'Prepare, then present full screen';
   }
 

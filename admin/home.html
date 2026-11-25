@@ -25,20 +25,40 @@
   <link rel="stylesheet" href="app.css">
 </head>
 <body>
-  <header class="topbar">
+  <header class="topbar home-top">
+    <img class="home-mark" src="asg-mark.svg" alt="" width="46" height="40">
     <div class="topbar__title">
       <div class="sub" id="today"></div>
       <h1 id="greeting">Home</h1>
     </div>
+    <button class="btn btn--primary home-create" id="createBtn" type="button"></button>
   </header>
 
-  <main class="page-narrow">
-    <section class="card card--pad" aria-labelledby="homeNoteTitle">
-      <h2 id="homeNoteTitle">Your day in one place</h2>
-      <p class="sub">Next appointment, contest progress and follow-ups will show here in the next update. For now, jump straight in:</p>
-    </section>
-    <nav class="list" id="quickLinks" aria-label="Quick links"></nav>
+  <main class="home">
+    <div class="alert" id="pageError" role="alert" hidden></div>
+    <div class="home-grid">
+      <div class="home-col">
+        <section class="home-appt" id="nextAppt" aria-label="Next appointment"><div class="skel home-skel-hero"></div></section>
+        <section class="card home-needs" id="needsYou" aria-labelledby="needsTitle">
+          <div class="card__head"><h2 id="needsTitle">Needs you today</h2></div>
+          <div class="home-pad"><div class="skel home-skel-row"></div><div class="skel home-skel-row"></div></div>
+        </section>
+      </div>
+      <div class="home-col">
+        <section class="card card--pad home-contest" id="contest" aria-labelledby="contestTitle">
+          <h2 class="home-card-title" id="contestTitle">Contest progress</h2>
+          <div class="skel home-skel-big"></div><div class="skel home-skel-row"></div>
+        </section>
+        <section class="card card--pad home-week" id="thisWeek" aria-labelledby="weekTitle">
+          <h2 class="home-card-title" id="weekTitle">This week</h2>
+          <div class="skel home-skel-big"></div>
+        </section>
+      </div>
+    </div>
+    <p class="sub home-updated" id="lastUpdated">Loading…</p>
   </main>
+
+  <script src="config.js"></script>
   <script src="icons.js"></script>
   <script src="admin.js"></script>
   <script src="home.js"></script>
