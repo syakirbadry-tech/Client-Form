@@ -553,11 +553,26 @@ function mountPortalNav(active, session) {
   }
 }
 
-// Show the page once its script has built it (app.css keeps it hidden until then). It fades in only
-// when the wait was long enough for an empty page to show; otherwise it appears at once.
+// Show the page once its script has built it (app.css keeps it hidden until then). Where the browser
+// keeps the last page on screen until the scripts are in (blocking="render"), the new page simply
+// replaces it. It fades in only if an empty page was already on screen.
 document.addEventListener('DOMContentLoaded', () => {
-  const nav = performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
+  const perf = performance.getEntriesByType ? performance : null;
+  const nav = perf ? perf.getEntriesByType('navigation')[0] : null;
+  const painted = perf ? perf.getEntriesByType('paint').length > 0 : false;
+  const held = 'blocking' in HTMLScriptElement.prototype && !!document.querySelector('script[blocking]');
   const waited = nav ? performance.now() - nav.responseEnd : 0;
   document.body.classList.add('is-ready');
-  if (waited > 150) document.body.classList.add('is-revealing');
+  if (painted || (!held && waited > 150)) document.body.classList.add('is-revealing');
+});
+
+// A tap shows at once: the tapped tab or menu item lights up before the next page loads.
+// (The empty touchstart listener lets iPhone Safari show :active pressed states.)
+document.addEventListener('touchstart', () => {}, { passive: true });
+document.addEventListener('click', (e) => {
+  const link = e.target.closest && e.target.closest('.tabbar a[href], .sb-item[href]');
+  if (!link || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || link.getAttribute('aria-current') === 'page') return;
+  const bar = link.closest('.tabbar, .sidebar');
+  bar.querySelectorAll('[aria-current="page"]').forEach((a) => a.removeAttribute('aria-current'));
+  link.setAttribute('aria-current', 'page');
 });
