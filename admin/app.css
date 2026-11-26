@@ -306,17 +306,16 @@ body.is-selecting .tabbar, body.is-selecting .fab { display: none; }
    half-built. admin.js adds .is-ready; if a script never runs, the page still shows after 3 s. */
 body:not(.signin-page):not(.is-ready) { animation: shell-hold 3s; }
 @keyframes shell-hold { from, to { opacity: 0; } }
-body.is-revealing { animation: fade var(--t-base) var(--ease-out); }
-/* Crossfade from page to page where the browser supports it; the menus stay still. */
+/* Page to page: the browser keeps the last page on screen until the next one is built, then swaps
+   at once (no crossfade to wait through). */
 @view-transition { navigation: auto; }
 .tabbar { view-transition-name: tabbar; }
 .sidebar { view-transition-name: sidebar; }
-::view-transition-old(root), ::view-transition-new(root) { animation-duration: var(--t-base); }
+::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none; }
 /* Home: each card's content fades in when its data arrives (titles stay put). */
 @media (prefers-reduced-motion: no-preference) {
   .home-col > section > :not(h2):not(.card__head) { animation: fade var(--t-base) var(--ease-out); }
 }
 @media (prefers-reduced-motion: reduce) {
   @view-transition { navigation: none; }
-  body.is-revealing { animation: none; }
 }
