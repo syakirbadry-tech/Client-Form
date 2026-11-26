@@ -136,6 +136,8 @@ h2, .h2 { font-size: var(--fs-16); font-weight: 600; margin: 0; }
 .tabbar a { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
   text-decoration: none; color: var(--muted); font-size: var(--fs-11); font-weight: 600; min-height: var(--tap); }
 .tabbar a[aria-current="page"] { color: var(--primary); }
+.tabbar a:active svg { transform: scale(.88); }
+.tabbar svg { transition: transform var(--t-fast) var(--ease-out); }
 .tabbar svg { width: 24px; height: 24px; }
 
 /* Separate "+" create button (kept OUT of the tab bar) */
@@ -185,6 +187,9 @@ h2, .h2 { font-size: var(--fs-16); font-weight: 600; margin: 0; }
 .icon-btn { width: var(--tap); height: var(--tap); border-radius: 22px; border: 1px solid var(--line); background: var(--card);
   color: var(--ink); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; position: relative; padding: 0; }
 .icon-btn--plain { border-color: transparent; background: transparent; }
+.icon-btn:active, .chip:active, .sb-item[href]:active, .actionsheet__btn:active { background: var(--hover); }
+.icon-btn:active, .chip:active { transform: scale(.94); }
+.icon-btn, .chip { transition: transform var(--t-fast) var(--ease-out), background-color var(--t-fast); }
 
 /* Busy → done → failed (one feedback language) */
 .btn[data-state="busy"] { pointer-events: none; }
