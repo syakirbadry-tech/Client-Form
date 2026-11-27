@@ -223,6 +223,11 @@
   }
 
   async function load() {
+    const cached = !state.prospects.length && DataCache.get('/admin/vb');
+    if (cached) {
+      state.prospects = cached.prospects;
+      render();
+    }
     try {
       const data = await call('/admin/vb');
       state.prospects = data.prospects;

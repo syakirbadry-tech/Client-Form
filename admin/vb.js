@@ -54,6 +54,13 @@
       $('rows').replaceChildren(...[0, 1, 2, 3].map(() => el('div', { class: 'li', 'aria-hidden': 'true' },
         el('div', { class: 'skel vb-skel-av' }), el('div', { class: 'li__main' }, el('div', { class: 'skel cust-skel-a' }), el('div', { class: 'skel cust-skel-b' })))));
     }
+    const cached = !state.prospects.length && !state.week && DataCache.get('/admin/vb');
+    if (cached) {
+      state.prospects = cached.prospects;
+      state.week = cached.week;
+      state.team = cached.team;
+      render();
+    }
     try {
       const data = await call('/admin/vb');
       state.prospects = data.prospects;

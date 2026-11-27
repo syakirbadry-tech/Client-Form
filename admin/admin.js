@@ -36,15 +36,56 @@ const Session = {
     }
   },
   set(value) {
+    DataCache.clear();
     try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(value)); } catch (e) { /* private mode: session lasts for this page only */ }
   },
   clear() {
     try { sessionStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
+    DataCache.clear();
   },
   // Sessions from before team accounts existed were always the owner. The server enforces access; this only shapes the UI.
   user(s) {
     const u = (s && s.user) || { name: s ? s.username : '', role: 'owner' };
     return { ...u, name: personName(u.name || (s && s.username)) };
+  }
+};
+
+// The last copy of each main list, so a page can show it at once and then refresh
+// from the server (owner's OK, 27 Nov 2026). It lives in sessionStorage only: it is
+// tied to this sign-in, gone when the app is closed, and wiped on sign-out.
+const DataCache = {
+  PREFIX: 'asg-data:',
+  PATHS: ['/admin/vb', '/admin/submissions', '/admin/presentation-answers'],
+  MAX_AGE: 12 * 3600 * 1000,
+  key(path) {
+    const s = Session.get();
+    return s && this.PATHS.includes(path) ? `${this.PREFIX}${s.expiresAt}:${path}` : null;
+  },
+  get(path) {
+    try {
+      const k = this.key(path);
+      const v = k && JSON.parse(sessionStorage.getItem(k) || 'null');
+      return v && Date.now() - v.t < this.MAX_AGE ? v.d : null;
+    } catch (e) {
+      return null;
+    }
+  },
+  set(path, data) {
+    const k = this.key(path);
+    if (!k) return;
+    try {
+      sessionStorage.setItem(k, JSON.stringify({ t: Date.now(), d: data }));
+    } catch (e) {
+      this.clear(); // storage full or blocked: keep nothing rather than half
+    }
+  },
+  clear() {
+    try {
+      for (let i = sessionStorage.length - 1; i >= 0; i--) {
+        const k = sessionStorage.key(i);
+        if (k && k.startsWith(DataCache.PREFIX)) sessionStorage.removeItem(k);
+      }
+    } catch (e) { /* ignore */ }
   }
 };
 
@@ -86,6 +127,7 @@ async function api(path, { method = 'GET', body, auth = true } = {}) {
   if (!res.ok || !data.success) {
     throw new ApiError(data.error || `Request failed (HTTP ${res.status}).`, res.status, data.code);
   }
+  if (method === 'GET' && auth) DataCache.set(path, data);
   return data;
 }
 
