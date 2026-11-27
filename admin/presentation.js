@@ -27,7 +27,7 @@
     'Plan and benefits entered above',
     'Client reminded to bring IC',
   ];
-  const PEN_COLOURS = [['#FFFFFF', 'White'], ['#F5C542', 'Yellow'], ['#5FD3C6', 'Teal'], ['#FF6B6B', 'Red']];
+  const PEN_COLOURS = [['#2C2A28', 'Black'], ['#11706F', 'Teal'], ['#B3261E', 'Red'], ['#C9A227', 'Gold']];
   // The prep is kept for this browser tab only (closing the tab clears it): it can hold a client's finances.
   const PREP_KEY = 'prubsn-presentation-prep';
 
@@ -181,16 +181,17 @@
         el('img', { src: 'img/asg-ansar-logo.jpg', alt: '', class: 'pres-logo' }),
         el('div', { class: 'pres-kicker', text: 'Protection plan' }),
         el('h1', { text: clientName() ? `Prepared for ${name}` : 'Your protection plan' }),
-        el('p', { text: `${me.name} · ASG Ansar Group · ${today}` })),
+        el('p', { text: `${me.name} · ASG Ansar Group · ${today}` }),
+        el('div', { class: 'pres-rule', 'aria-hidden': 'true' })),
       () => el('div', {},
         el('div', { class: 'pres-kicker', text: 'Why protection matters' }),
         el('h1', { text: 'What could stop your income?' }),
         el('div', { class: 'pres-cards' },
-          [['🏥', 'Hospital bills', 'Medical costs rise every year, and one stay can wipe out savings.'],
-            ['🎗️', 'Critical illness', 'Cancer, heart attack or stroke: months off work while bills continue.'],
-            ['🛡️', 'Death or disability', 'Who would keep paying the house, the car and the children\'s school?'],
-            ['👨‍👩‍👧', 'Your family\'s plans', 'Protection keeps their plans going, whatever happens to you.']]
-            .map(([icon, title, text]) => el('div', { class: 'pres-card' }, el('div', { class: 'pres-icon', text: icon }), el('h3', { text: title }), el('p', { text }))))),
+          [['hospital', 'Hospital bills', 'Medical costs rise every year, and one stay can wipe out savings.'],
+            ['pulse', 'Critical illness', 'Cancer, heart attack or stroke: months off work while bills continue.'],
+            ['shield', 'Death or disability', 'Who would keep paying the house, the car and the children\'s school?'],
+            ['heart', 'Your family\'s plans', 'Protection keeps their plans going, whatever happens to you.']]
+            .map(([icon, title, text]) => el('div', { class: 'pres-card' }, el('span', { class: 'pres-icon' }, iconEl(icon, 32)), el('h3', { text: title }), el('p', { text }))))),
       () => el('div', {},
         el('div', { class: 'pres-kicker', text: 'Let\'s talk' }),
         el('h1', { text: 'Do you already have any protection?' }),
@@ -214,7 +215,9 @@
         el('h1', { text: $('planName').value || 'Your plan' }),
         $('planAmount').value ? el('div', { class: 'pres-price' }, el('b', { text: rm($('planAmount').value) }), el('span', { text: ' / month' })) : null,
         points.length ? el('ul', { class: 'pres-points' }, points.map((p) => el('li', { text: p }))) : el('p', { class: 'pres-small', text: 'Add the key benefits on the prep page.' }),
-        f.budget && $('planAmount').value ? el('p', { class: 'pres-small', text: num($('planAmount').value) <= f.budget ? '✓ Within the comfortable amount from your numbers.' : 'Above the comfortable amount; we can adjust the cover to fit.' }) : null),
+        f.budget && $('planAmount').value ? (num($('planAmount').value) <= f.budget
+          ? el('p', { class: 'pres-small pres-fit' }, iconEl('check', 20), 'Within the comfortable amount from your numbers.')
+          : el('p', { class: 'pres-small', text: 'Above the comfortable amount; we can adjust the cover to fit.' })) : null),
       () => el('div', {},
         el('div', { class: 'pres-kicker', text: 'Next steps' }),
         el('h1', { text: 'Getting started is simple' }),

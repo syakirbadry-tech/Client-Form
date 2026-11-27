@@ -319,3 +319,96 @@ body:not(.signin-page):not(.is-ready) { animation: shell-hold 3s; }
 @media (prefers-reduced-motion: reduce) {
   @view-transition { navigation: none; }
 }
+
+/* ---------- Presentation (restyled 27 Nov 2026) ----------
+   Set-up page is staff-side and follows the theme. The stage is what the
+   client sees: always light, calm teal, icons instead of emoji. */
+.pres-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-3); }
+.pres-money { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pres-help { margin: -6px 0 var(--s-3); }
+.pres-gap { margin-top: var(--s-3); }
+.pres-result { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-3); margin-top: 14px; background: var(--sunken); border-radius: var(--r-md); padding: var(--s-3); }
+.pres-result > div { display: flex; flex-direction: column; }
+.pres-result b { font-size: var(--fs-17); font-variant-numeric: tabular-nums; }
+.pres-good { color: var(--success); }
+.pres-neg { color: var(--danger); }
+.pres-warn { grid-column: 1 / -1; margin: 0; color: var(--st-now-fg); font-size: var(--fs-14); }
+.pres-checks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--s-1); }
+.pres-checks label { display: flex; align-items: center; gap: 10px; min-height: var(--tap); cursor: pointer; }
+.pres-checks input { width: 20px; height: 20px; accent-color: var(--primary); }
+.pres-summary pre { margin: 0 0 10px; }
+.pres-quote { margin-top: 14px; padding: var(--s-3) 14px; border-radius: var(--r-md); background: var(--primary-soft); display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.pres-quote p { margin: 0; flex: 1 1 240px; font-size: var(--fs-14); }
+
+/* Stage: fixed light palette, whatever the phone's theme. */
+body.presenting { overflow: hidden; }
+.pres-stage {
+  --p-bg: #F7F4F0; --p-card: #FFFFFF; --p-line: #E4DED8; --p-track: #EEEAE5;
+  --p-ink: #2C2A28; --p-muted: #6B6560; --p-primary: #11706F; --p-primary-soft: #E2F1F1;
+  --p-gold: #C9A227; --p-warn: #9A221B;
+  position: fixed; inset: 0; z-index: 90; display: flex; flex-direction: column;
+  background: var(--p-bg); color: var(--p-ink); font-family: var(--font-ui); color-scheme: light;
+}
+/* margin:auto centres short slides but lets tall ones scroll from the top (align-items:center would cut the top off). */
+.pres-slide { flex: 1; overflow-y: auto; padding: clamp(24px, 5vw, 64px) clamp(20px, 5vw, 64px); display: flex; }
+.pres-slide > div { width: min(920px, 100%); margin: auto; }
+.pres-slide h1 { color: var(--p-ink); font-size: clamp(28px, 4.4vw, 48px); font-weight: 600; line-height: 1.15; letter-spacing: -.01em; margin: 6px 0 24px; text-wrap: balance; }
+.pres-slide h2, .pres-slide h3 { color: var(--p-ink); font-family: var(--font-ui); font-weight: 600; }
+.pres-slide p { font-size: clamp(16px, 2vw, 20px); line-height: 1.5; color: var(--p-muted); }
+.pres-kicker { color: var(--p-primary); font-weight: 600; font-size: var(--fs-15); }
+.pres-cover { text-align: center; }
+.pres-cover h1 { margin-bottom: var(--s-3); }
+.pres-logo { width: 88px; height: 88px; border-radius: var(--r-lg); margin-bottom: var(--s-5); box-shadow: var(--shadow-1); }
+.pres-rule { width: 48px; height: 3px; border-radius: 2px; background: var(--p-gold); margin: var(--s-5) auto 0; }
+.pres-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.pres-card { background: var(--p-card); border: 1px solid var(--p-line); border-radius: var(--r-lg); padding: var(--s-5); box-shadow: var(--shadow-1); }
+.pres-card h3 { font-size: var(--fs-20); margin: var(--s-3) 0 6px; }
+.pres-card p { margin: 0; font-size: var(--fs-16); }
+.pres-icon { color: var(--p-primary); display: block; }
+.pres-answers { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.pres-answer { background: var(--p-card); color: var(--p-ink); border: 1.5px solid var(--p-line); border-radius: var(--r-pill); padding: 12px 22px; font: inherit; font-size: 18px; font-weight: 500; cursor: pointer; min-height: 52px; transition: background var(--t-fast) var(--ease-out), border-color var(--t-fast) var(--ease-out); }
+.pres-answer:hover { border-color: var(--p-primary); }
+.pres-answer[aria-pressed="true"] { background: var(--p-primary); border-color: var(--p-primary); color: #fff; }
+.pres-note { width: 100%; background: var(--p-card); color: var(--p-ink); border: 1px solid var(--p-line); border-radius: var(--r-md); padding: var(--s-3); font: inherit; font-size: 16px; resize: vertical; }
+.pres-note::placeholder { color: var(--p-muted); }
+.pres-q2 { font-size: clamp(20px, 2.6vw, 28px); margin: 28px 0 var(--s-3); }
+.pres-bars { display: flex; flex-direction: column; gap: 18px; }
+.pres-bar-label { display: flex; justify-content: space-between; gap: var(--s-3); font-size: clamp(16px, 2vw, 19px); margin-bottom: 6px; color: var(--p-ink); }
+.pres-bar-label b { font-variant-numeric: tabular-nums; }
+.pres-bar-track { background: var(--p-track); border-radius: var(--r-pill); height: 14px; overflow: hidden; }
+.pres-bar-fill { height: 100%; border-radius: var(--r-pill); background: #A9A096; }
+.pres-bar-fill.committed { background: #D98A80; }
+.pres-bar-fill.left { background: #7FB8B6; }
+.pres-bar-fill.budget { background: var(--p-primary); }
+.pres-slide .pres-small { font-size: var(--fs-15); color: var(--p-muted); }
+.pres-fit { display: inline-flex; align-items: center; gap: 6px; color: var(--success) !important; }
+.pres-price { font-size: clamp(20px, 2.6vw, 26px); color: var(--p-muted); margin-bottom: var(--s-5); }
+.pres-price b { font-size: clamp(36px, 5vw, 56px); color: var(--p-primary); font-weight: 600; font-variant-numeric: tabular-nums; }
+.pres-points { font-size: clamp(18px, 2.3vw, 22px); line-height: 1.5; padding-left: 1.2em; color: var(--p-ink); }
+.pres-points li + li { margin-top: 10px; }
+.pres-points li::marker { color: var(--p-primary); font-weight: 600; }
+.pres-canvas { position: absolute; inset: 0 0 64px 0; width: 100%; height: calc(100% - 64px); pointer-events: none; touch-action: none; }
+.pres-canvas.active { pointer-events: auto; cursor: crosshair; }
+.pres-slide.blank { background: var(--p-card); }
+.pres-controls { height: calc(64px + env(safe-area-inset-bottom)); padding: 0 12px env(safe-area-inset-bottom); flex: none; display: flex; align-items: center; gap: 8px; background: var(--p-card); border-top: 1px solid var(--p-line); overflow-x: auto; position: relative; z-index: 1; }
+.pres-btn { background: var(--p-card); color: var(--p-ink); border: 1px solid var(--p-line); border-radius: var(--r-md); min-height: 44px; min-width: 44px; padding: 0 12px; font: inherit; font-weight: 500; font-size: 15px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.pres-btn:disabled { opacity: .35; cursor: default; }
+.pres-btn[aria-pressed="true"] { background: var(--p-primary); color: #fff; border-color: var(--p-primary); }
+.pres-btn:focus-visible, .pres-answer:focus-visible, .pres-swatch:focus-visible { outline: 3px solid var(--p-primary); outline-offset: 2px; }
+.pres-count { min-width: 64px; text-align: center; font-variant-numeric: tabular-nums; color: var(--p-muted); }
+.pres-sep { flex: 1; }
+.pres-tools { display: flex; gap: 8px; align-items: center; }
+.pres-swatch { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--p-line); cursor: pointer; flex: none; }
+.pres-swatch[aria-pressed="true"] { outline: 3px solid var(--p-ink); outline-offset: 2px; }
+@media (max-width: 600px) {
+  .pres-grid { grid-template-columns: 1fr; }
+  .pres-money { grid-template-columns: 1fr 1fr; }
+  .pres-result { grid-template-columns: 1fr; }
+  .pres-cards { grid-template-columns: 1fr; }
+  .pres-card { padding: var(--s-4); display: grid; grid-template-columns: 32px 1fr; column-gap: 14px; align-items: start; }
+  .pres-card h3 { margin: 2px 0 4px; font-size: var(--fs-17); }
+  .pres-card p { grid-column: 2; font-size: var(--fs-15); }
+  .pres-cards { gap: 10px; }
+  .pres-sep { flex: 0 0 4px; }
+}
+@media (prefers-reduced-motion: reduce) { .pres-answer { transition: none; } }
