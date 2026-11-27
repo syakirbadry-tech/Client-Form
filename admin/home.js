@@ -212,9 +212,17 @@
   }
 
   // ---------- Load ----------
+  let painted = false;
   async function load() {
     $('pageError').hidden = true;
+    if (!painted) {
+      const c = ['/admin/vb', '/admin/submissions', '/admin/presentation-answers'].map((p) => DataCache.get(p));
+      if (c[0] && c[1]) paint(...c.map((v) => (v ? { status: 'fulfilled', value: v } : { status: 'rejected', reason: new Error('') })), true);
+    }
     const [vb, subs, ans] = await Promise.allSettled([call('/admin/vb'), call('/admin/submissions'), call('/admin/presentation-answers')]);
+    paint(vb, subs, ans, false);
+  }
+  function paint(vb, subs, ans, fromPhone) {
     if (vb.status === 'rejected' && subs.status === 'rejected') {
       $('pageError').replaceChildren(`${vb.reason.message} `, el('button', { class: 'btn btn--ghost', type: 'button', onclick: load }, 'Try again'));
       $('pageError').hidden = false;
@@ -226,12 +234,13 @@
     renderNextAppt(prospects);
     const p = renderContest(prospects);
     renderWeek(vb.status === 'fulfilled' ? vb.value.week : null, p);
-    if (window.ASGAlerts) ASGAlerts.build({ submissions, prospects, answers: ans.status === 'fulfilled' ? ans.value.answers || [] : [] });
+    if (window.ASGAlerts && !fromPhone) ASGAlerts.build({ submissions, prospects, answers: ans.status === 'fulfilled' ? ans.value.answers || [] : [] });
     const today = myDayIndex(Date.now());
     setNavBadge('customers', submissions.filter((x) => (x.status || 'Received') === 'Received' && myDayIndex(Date.parse(x.submittedAt || x.createdTime)) === today).length);
     renderNeeds(needsItems(prospects, submissions),
       vb.status === 'rejected' ? 'VB names could not load, so follow-ups are missing.' : subs.status === 'rejected' ? 'Customers could not load, so new forms are missing.' : '');
-    $('lastUpdated').textContent = `Updated ${timeText(new Date().toISOString())}`;
+    $('lastUpdated').textContent = fromPhone ? 'Updating…' : `Updated ${timeText(new Date().toISOString())}`;
+    painted = true;
   }
   load();
 })();

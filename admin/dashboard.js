@@ -80,7 +80,11 @@
   async function load() {
     $('refreshBtn').disabled = true;
     showPageError('');
-    if (!state.submissions.length) skeleton();
+    const cached = !state.submissions.length && DataCache.get('/admin/submissions');
+    if (cached) {
+      state.submissions = cached.submissions;
+      render();
+    } else if (!state.submissions.length) skeleton();
     try {
       const data = await call('/admin/submissions');
       state.submissions = data.submissions;

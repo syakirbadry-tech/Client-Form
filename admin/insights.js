@@ -55,6 +55,12 @@
   }
 
   async function load() {
+    const cached = !state.all.length && DataCache.get('/admin/submissions');
+    if (cached) {
+      state.all = cached.submissions.map((s) => toClient(s, todayMY()));
+      renderAgentFilter();
+      render();
+    }
     try {
       // The list already carries every column this page needs (and only the signed-in person's clients).
       const { submissions } = await call('/admin/submissions');
